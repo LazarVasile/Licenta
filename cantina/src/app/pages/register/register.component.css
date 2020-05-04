@@ -1,0 +1,109 @@
+/* @import url("../../../assets/styles/common.css");    */
+@import url("https://fonts.googleapis.com/css?family=Bitter");
+.container {
+   display: flex;
+   flex-direction: column;
+}
+
+.div-form{
+    width: 400px;
+    height: 80%;
+    border-radius: 5px;
+    margin: 2% auto;
+    padding: 2%;
+    /* background-image: linear-gradient(to top, var(--gray) 0%, var(--blue) 100%); */
+    background-image: linear-gradient(-225deg,var(--white) 70%,#b300cf 30%);
+
+    background-repeat: no-repeat;
+ }
+
+.error {
+    padding-top: 2%;
+    align-self: center;
+    width : 80%;
+    background-color: purple;
+    text-align: center;
+    font-size: 20px;
+    color: white;
+    font-weight: 700;
+}
+
+header {
+    margin: 2% auto 10% auto;
+    text-align: center;
+}
+
+header h2 {
+    font-size: 250%;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: black;
+}
+
+header p {
+    color: black;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    
+}
+
+b {
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
+.input-fields {
+    margin: 2% auto;
+}
+
+
+.input-field{
+    width: 270px;
+    height: 30px;
+    background-color: #c9f4f5;
+    
+    /* margin-top: 2%; */
+    padding: 10px;
+    
+    font-size: 16px;
+    font-family: Impact;
+    color: #5E6472;
+  
+    outline: none;
+    border: none;
+  
+    border-radius: 5px;
+    transition: 0.4s linear;
+    margin-bottom: 15px;
+    
+}
+
+input {
+    margin-top: 5px;
+    color: var(--gray);
+    width: 200px;
+}
+
+button {
+    margin-top: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
+    color: #fff;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    height: 42px;
+    border: 0px;
+    border-radius: 21px;
+    background: var(--blue);    
+    transition: all 0.4s;
+}
+
+.register {
+    width:100%;
+}
+button:hover{
+    background: var(--gray);
+    box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
+}

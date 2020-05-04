@@ -1,0 +1,51 @@
+<div class="header">
+    <a href="#Home" class="nav-right" style="background-color: #6c757d;">Home</a>
+    <a href="#Info" class="nav-right">Info</a>
+    <a href="user.html" class="nav-right">Users</a>
+    <h1>Cantina Gaudeamus</h1>
+    <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
+</div>
+
+<div class = "overlay">
+    <app-nav-bar></app-nav-bar>
+    <div class = "container" id = "cnt">
+        <div class="form-fields" id="add_product_fields">
+            <h1 style = "display:none;" id = "msg">Produsul a fost adaugat cu succes</h1>
+            <div class="field2">
+                <label class="fields-inline"><b>Nume produs</b></label>
+                <input type="text" placeholder="Introduceti nume produs" #name_product>
+            </div>
+            <div class="categorie-produs">
+                <label class="fields-inline"><b>Categorie produs</b></label>
+                <select #category_product>
+                    <option *ngFor = "let category of categories" value="{{category}}">{{category}}</option>
+                </select>
+            </div>
+
+            <div class="pret">
+                <label class="fields-inline"><b>Pret profesor</b></label>
+                <input type="number" placeholder="pret" #professor_price>
+            </div>
+
+            <div class="pret">
+                <label class="fields-inline"><b>Pret student</b></label>
+                <input type="number" placeholder="pret" #student_price>
+            </div>
+
+            <div class="gramaj">
+                <label class="fields-inline"><b>Gramaj</b></label>
+                <input type="number" placeholder="Introduceti gramaj" #product_weight>            
+            </div>
+            <div class="descriere">
+                <label class="fields-inline"><b>Descriere</b></label>
+                <textarea placeholder="Descriere / Ingrediente" #product_description></textarea>
+            </div>
+            <!-- <div class="imagine">
+                <label class="fields-inline"><b>Imagine(jpg/png)</b></label>
+                <input type="file" placeholder="Choose an image">
+            </div> -->
+            <button (click) = "addProduct(name_product.value, category_product.value, professor_price.value, student_price.value, product_weight.value, product_description.value)">Adauga produs</button>
+
+        </div>
+    </div>
+</div>

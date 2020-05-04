@@ -1,0 +1,37 @@
+<!-- <p>user works!</p>
+<p>{{username}}</p>
+<br>
+<p>{{password}}</p> -->
+<div class="total-price" id="total_price">
+    <h3>Pret Total</h3>
+    <p>15.67 lei</p>
+    <button>Cumpara</button>
+
+</div> 
+<h1> {{categories}} </h1>
+<div class="header">
+    <a href="#Info" class="nav-right">Info</a>
+    <h1>Cantina Gaudeamus</h1>
+    <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
+</div>
+
+<div class="overlay">
+    <div class = "container" id="cnt">
+        <h1>Meniu 15/02/2020</h1>
+        <div class="menu" *ngFor = "let category of categories; let index as i">
+            <p class="dish">{{category}}</p>
+            <ul>
+                <li><p>Nume</p></li>
+                <li><p>Ingrediente</p></li>
+                <li><p>Pret</p></li>
+                <li><button><b>+</b></button></li>
+            </ul>
+            <ul>
+                <li><p>Nume</p></li>
+                <li><p>Ingrediente</p></li>
+                <li><p>Pret</p></li>
+                <li><button><b>+</b></button></li>
+            </ul>
+        </div>
+    </div>
+</div>
