@@ -1,0 +1,39 @@
+<div class="header">
+    <a href="#Home" class="nav-right" style="background-color: #6c757d;">Home</a>
+    <a href="#Info" class="nav-right">Info</a>
+    <a href="user.html" class="nav-right">Users</a>
+    <h1>Cantina Gaudeamus</h1>
+    <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
+</div>
+<div class="overlay">
+    <app-nav-bar></app-nav-bar>
+    <div class = "container" id="cnt">
+
+        <div class="form-fields" id="create_menu">
+            <div>
+                <div>
+                    <label class="fields-inline"><b>Selectati data</b></label>
+                    <input type="date" (input) = "date_menu = $event.target.value">
+                </div>
+                <div id = "add_product_menu" *ngFor = "let category of categories; let i as index">
+                    <label class="fields-inline" ><b>{{category}}</b></label>
+                        <div *ngFor = "let a of counter_categories[category]; let k as index">
+                            <select [(ngModel)] = "productsToAdd[category][k-1]">
+                                <!-- <option></option> -->
+                                <ng-container *ngFor = "let product of products;">
+                                    <option [ngValue]="product._id" *ngIf = "product.category == category">{{product.name}}</option>
+                                    <!-- {{productsToAdd}} -->
+                                </ng-container>
+                            </select>
+                            <input placeholder = "Cantitate" type = "number" (change) = "onChangeInput($event, productsToAdd[category][k-1])">
+                        </div>
+                        
+                    <button class="create-menu-btn" (click) = "addMoreProducts(category)">Adauga inca un produs</button>
+                    </div>
+                <br>
+                <button (click) = "createMenu()">Creare Meniu</button>
+            </div>
+        </div>
+    </div>
+    
+</div>

@@ -34,22 +34,34 @@ namespace Api.Controllers
 
         // POST: api/Menu
         [HttpPost]
-        public string Post([FromBody] CreateMenu value)
+        public string Post([FromBody] CreateMenu request)
         {
             List<Menu> menus = _menuService.GetMenus();
-
+            Console.WriteLine("dsa");
+            Console.WriteLine(request.products.GetType());
             IMongoCollection<Menu> collection = _menuService.GetCollectionMenu();
             //Console.WriteLine(value.dateMenu);
-            var number = menus.Count;
-            for (int i = 0; i <value.listIds.Count; i++)
+            //var number = menus.Count;
+            foreach(KeyValuePair<string, int> item in request.products)
             {
                 var newMenu = new Menu();
-                newMenu._id = menus.Count + i;
-                newMenu.dateMenu = value.dateMenu;
-                newMenu.productId = value.listIds[i];
+                newMenu._id = menus.Count + 1;
+                newMenu.dateMenu = request.dateMenu;
+                newMenu.productId = Int32.Parse(item.Key);
+                Console.WriteLine(newMenu.productId);
+                
+                newMenu.productCantity = item.Value;
                 collection.InsertOneAsync(newMenu);
-
             }
+            //for (int i = 0; i <value.listIds.Count; i++)
+            //{
+            //    var newMenu = new Menu();
+            //    newMenu._id = menus.Count + i;
+            //    newMenu.dateMenu = value.dateMenu;
+            //    newMenu.productId = value.listIds[i];
+            //    collection.InsertOneAsync(newMenu);
+
+            //}
 
             return "true";
 

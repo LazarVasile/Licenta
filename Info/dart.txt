@@ -1,0 +1,132 @@
+Toturial for Beginners
+#5
+    Text, AppBar, Scaffold, MaterialApp, Button toate sunt niste widgeturi, care la randul lor sunt clase
+    Putem crea si noi un widget, creand o clasa
+    Scaffold este in general folosit pentru a avea un arbore de widgeturi, in el pot fi adaugate cele mai multe widgeturi, proprietati
+    Scaffold(
+        appbar:
+        body:
+        floatiingActionButton:
+    )
+    AppBar(
+        title:
+        centerTitle:
+        backgoundColor:
+    )
+    Fiecare widget are anumit priprietati (vezi documentatie pe pagina flutter)
+    Wdigeturile pot avea ca si proprietati si alte wigeturi
+    Center(child: ) - Widget folosit pentru a aranja anumite widgeturi in centru
+    floatiingActionButton(
+        onPressed: (){}
+        child: Text()
+        backgoundColor:
+    )
+    - aproape fiecare widget are proprietatea child in care putem adauga alt widget
+
+#6 Colors and fonts
+    fonturi pe google: fonts.google.com
+    culori: Colors.color sau sub format #ffffff
+    style text: Text(
+        text string,
+        style: TextStyle(
+            // vezi documentatie pentru proprietati TextStyle, sau dand sau pui controlerul pe el si press CTRL+q
+            fontSize:
+            fontWeight: fontWeight.bold
+            letterSpacing: 
+            color: 
+            fontFamily: 
+        )
+    )
+
+    adaugare font now: creare folder nou "fonts" in myapp si import si din pubsec.yaml decomentam fonts: line 59
+
+#7 StatelessWidget and Hot reload
+    stless + tab - creare automat clasa StatelessWidget
+    Statless Widget: starea widgetului nu se poate schimba in timp
+        - datele, layout, tot ce folosim in statelesswidget trebuie sa fie de tip "final" - oarecum constante si sa nu se modifice in aplicatie
+        - contine date, dar acele date nu pot fi modificate dupa ce widgetul a fost initializat
+        
+    Stateful Widget: starea widgetului se poate schimba in timp
+        - datele, fotul, layout-ul se poate modifica in timp
+        - de exemplu: un counter, sau altceva
+
+
+#8 Images and Assets
+    Image(
+        image: NetworkImage('url'),
+        image: AssetImage('cale')
+    )
+    sau
+    Image.network('url')
+    Image.asset('cale')
+    - adaugare imagine dintr-un folder - AssetImage('cale'): creare folder cu imaginile respective, si adaugare in assets in pubsec.yaml folder/images.ext sau adaugare folder intreg folder/
+
+#9 Buttons and Icons
+    Icons:
+        child: Icon(Icons.name) - icons sunt predefinite sau putem adauga noi unele noi
+    Button:
+        child: RaisedButton(
+            onPressed: () {},
+            child: Text()
+            color:
+        )
+    RaisedButton.Icon(
+        onPressed:
+        icon: Icon()
+        label: text (ceea ce sa fie in interior)
+    )
+
+#10 Containers and Padding
+    Container vine cu proprietati din css precum : pading, margin, etc si este folosit pentru a stiliza un anumit widget
+    Folosim: Container(
+        child: widget
+        proprietati: 
+        padding: insisde space
+        padding: numar sau EdgeInsets.all(peste tot acelasi numar), .symetric(horizontal, vertical: ), .fromLTRB(left, top, right, bottom)
+        margin: la fel ca la padding 
+        margin: outside space
+    )
+
+    Padding poate fi folosit si ca wiget:
+        Paddin(padding:, child:, margin)
+
+#11 Rows
+    Row() - Widget
+    Row - nu are proprietatea child, ci are proprietatea children, pune widgeturile pe line, sub forma unei linii
+    - este folosit pentru a avea mai multe widgeturi unul dupa altul in aplicatie
+    Row(
+        mainAxisAligment:MaineAxisAligment. (ce urmeaza dupa punct functioneaza ca si justify-content: css) (controleaza cum sunt aliniate widgeturile) - functioneaza ca si ca si flex direction: row in css
+        crossAxisAligment: CrossAxisAligment. (aliniaza pe verticala)
+        children: <Widget>[
+            Widget1(),
+            Widget2(),
+            Widget3(),
+            ...
+            Widgetn()
+        ],
+    ),
+
+#12 Columns
+    Column() - Widget 
+    Column - funtioneaza la fel ca rows doar ca pune widgeturile pe verticala, sub forma unei coloane
+
+#13 Outline and Shorcuts
+    Putem modifica anumite stilizari, proprietati, ordinea unui widget dand click pe beculet si alegem o anumita optiune
+
+#14 Expanded Widgets - similar cu flex box
+    Expanded(
+        flex: 1
+        child: widget 
+    )
+    - ia tot spatiul care este disponibil, pentru a nu lasa spatiu liber
+    - cand avem mai multe widgeturi in linie/coloane si daca vrem sa aiba aceeasi marime toate, folosim Expaended la toate, pentru a fi incadrate egal si corect
+    - flex: 1, 2, 3 - cat sa ocupe widgetul din lungimea, latimea layoutului
+    - suma din flex de la fiecare widget e cate portiuni au toate widgeturile adunate, iar numarul de la fiecare flex pentru fiecare widget reprezinta cat ocupa widgetul respectiv
+    - default: flex: 1
+
+#15
+    Pentru a avea spatiu liber intre widgeturi putem folosi:
+    SisedBox(height:, weight:)
+    Divider(height:, color:) - linie folosita pentru a desparti anumite widgeturi
+
+

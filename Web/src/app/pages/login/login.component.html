@@ -1,0 +1,45 @@
+<div class="body-div">
+    <div class = "div-form">
+        <div class="container">
+            
+            <header class="head-form">
+                <h2>Login</h2>
+                <p>Login here using your name and password</p>
+            </header>
+
+            <div class = "error"  #error_message [style.display] = "displayError">
+                <p>{{error}}</p>
+            </div>
+            
+            <form (submit) = "loginUser(login_email.value, login_password.value)" class="input-fields">
+                <!-- username-input  -->
+                <div>
+                    <b>Email</b>
+                </div>
+                <input type="text" class="input-field" #login_email type="text" placeholder="Enter your email" required >                            
+                <!-- end username-input -->
+                
+                <!-- password-input -->
+                <div>
+                    <b>Password</b>
+                </div>
+                <input type="password" class="input-field" #login_password placeholder="Enter password" name="password" required>
+                <!-- end password-input -->
+                <br>
+                
+                <!-- login button -->
+                <button type = "submit" class="log-in submit" id = "input-field">Login</button>
+                    <!-- end login button -->
+                    <br><br>
+                    <!-- forgot password and register buttons -->
+                    <div class="other">
+                        <button class="bttn submit frgt-pass">Forgot Passwod</button>
+                        <button class="bttn submit sign-up" routerLink = "/register">Sign-up</button>
+                    </div>
+                    <!-- end forgor password and register buttons -->
+                </form>
+                <!-- end input fields class -->
+                <br>
+        </div> 
+    </div>
+</div>

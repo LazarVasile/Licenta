@@ -1,0 +1,26 @@
+
+<div class="header">
+    <a href="#Home" class="nav-right" style="background-color: #6c757d;">Home</a>
+    <a href="#Info" class="nav-right">Info</a>
+    <a href="user.html" class="nav-right">Users</a>
+    <h1>Cantina Gaudeamus</h1>
+    <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
+</div>
+
+<div class = "overlay">
+    <app-nav-bar></app-nav-bar>
+    <div class = "container" id = "cnt">
+        <form class="form-fields" id="add_admin_fields" >
+            <div>
+                <label class="fields-inline"><b>Nume Admin</b></label>
+                <input type = "text" placeholder= "Introduceti nume">
+            </div>
+            <div>
+                <label class="fields-inline"><b>Adresa de email</b></label>
+                <input type = "text" placeholder = "Introduceti email">
+            </div>
+            <button onclick = "addAdmin()">Adauga admin</button>
+
+        </form>
+    </div>
+</div>
