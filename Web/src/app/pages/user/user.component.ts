@@ -13,10 +13,12 @@ import { HttpClient} from '@angular/common/http';
 export class UserComponent implements OnInit {
   public username;
   public typeUser;
-  public categories;
   public pipe = new DatePipe('en-US'); // Use your own locale
   public formatDate = this.pipe.transform(Date.now(), "yyyy-MM-dd")
-  private _url = "https://localhost:5001/api/usermenu";
+  public myProducts = [];
+  private _url = "https://localhost:5001/api/usermenu/";
+  public categories = ["Ciorbe si supe / Soups", "Garnituri / Side dishes", "Felul II", "Desert / Deserts", "Salate / Salads", "Paine / Bread", "Bauturi / Drinks"];
+  public productsByCategory = {"Ciorbe si supe / Soups" : [], "Garnituri / Side dishes" : [], "Felul II" : [], "Desert / Deserts" :[], "Salate / Salads" : [], "Paine / Bread" : [], "Bauturi / Drinks": []};
   
   constructor(private _router : Router, private _http: HttpClient,  private _route : ActivatedRoute, public _UserService : UserService, public _productService : ProductService) {
     // this.myDate = this._datePipe.transform(this.myDate, "yyyy-MM-dd");
@@ -25,19 +27,31 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
    this.username = localStorage.getItem("loggedUser");
    this.typeUser = localStorage.getItem("type");
-   this.categories = this._productService.getCategories();
+  //  this.categories = this._productService.getCategories();
+  console.log("dsaa");
    this.getProducts(this.formatDate);
 
   }
 
+
+
   getProducts(date) {
-    var data = {"myDate" : date};
-    this._http.post<any>(this._url, data, {headers:{'Accept' : 'application/json', 'Content-Type' : 'application/json'}})
-    .subscribe({next:data =>
+    // console.log(date);
+    var url = this._url + date;
+    // console.log(url);    
+    this._http.get<any>(url)
+    .subscribe(data =>
     {
-      console.log(data);
+      this.myProducts = data;
+      for (let i = 0; i < this.myProducts.length; i++){
+        this.productsByCategory[this.myProducts[i].category].push(this.myProducts[i]);
+      }
+      console.log(this.productsByCategory);
+      // console.log("dskkk");
+      // console.log(this.myProducts);
     },
-    })
+    );
+
   }
 
 }

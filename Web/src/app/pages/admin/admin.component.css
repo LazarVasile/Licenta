@@ -112,7 +112,7 @@
 }
 
 .container {
-    background-image: url("../../../assets/images/food1.jpg");
+    background-color: whitesmoke;
     /* background-color:white; */
     /* background-image: linear-gradient(-225deg,var(--white) 70%,#b300cf 30%); */
     background-size: 100%  100%;
@@ -233,6 +233,8 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    /* flex-wrap: wrap; */
+    justify-content: center;
 }
 
 .form-fields .input-code input{
@@ -244,19 +246,24 @@
     margin-bottom: 20px;
 }
 
+
+
 .sell-products {
-    width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+
 }
 
+
 .card {
+    position: relative;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     background-color: white;
     /* max-width: 300px; */
-    width: 150px;
-    height: 267px;
+    /* height: 100%; */
+    height: 270px;
+    width: 20%;
     /* margin: auto; */
     text-align: center;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
@@ -267,24 +274,28 @@
 }
   
 .price {
-    color: var(--gray);
+    color: var(--blue);
     font-size: 15px;
 }
 
 
 .card button {
+    position: absolute;
     border: none;
-    outline: 0;
     color: white;
     background-color: var(--blue);
     text-align: center;
     cursor: pointer;
     width: 100%;
     margin-left: 0px;
+    bottom: 0;
+    right: 0;
+    /* margin-bottom: 0px; */
     font-size: 18px;
     border-radius: 5px;
-    margin-bottom: 0px;
 }
+
+
 
 
 .card button:hover {

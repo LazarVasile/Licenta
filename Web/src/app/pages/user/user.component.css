@@ -80,6 +80,7 @@
 
     width: 90%;
     height: 90%;
+    margin-top: 0;
     margin-left: 5%;
     margin-right: 5%;
     margin-bottom: 5%;
@@ -164,11 +165,13 @@ ul li button {
     background: var(--blue);    
     transition: all 0.4s;
     border-radius: 5px; 
-    width: 100%;
+    width: 80%;
     height: 30px;
 }
 
-
+#elsteBlock {
+    display:none;
+}
 .total-price {
     text-align: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;

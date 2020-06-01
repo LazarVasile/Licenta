@@ -71,6 +71,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           child: TextField(
                             controller: nameController,
                             decoration: InputDecoration(
+                              suffixIcon: Icon(Icons.email,
+                                color: Colors.blue[600],
+                              ),
                               hoverColor: Colors.purple,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue[800], width: 1),

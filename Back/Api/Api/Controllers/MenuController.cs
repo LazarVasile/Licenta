@@ -41,17 +41,24 @@ namespace Api.Controllers
             Console.WriteLine(request.products.GetType());
             IMongoCollection<Menu> collection = _menuService.GetCollectionMenu();
             //Console.WriteLine(value.dateMenu);
-            //var number = menus.Count;
+            var number = menus.Count;
             foreach(KeyValuePair<string, int> item in request.products)
             {
+                number++;
+                Console.WriteLine(item.Key);
                 var newMenu = new Menu();
-                newMenu._id = menus.Count + 1;
+                newMenu._id = number;
                 newMenu.dateMenu = request.dateMenu;
                 newMenu.productId = Int32.Parse(item.Key);
-                Console.WriteLine(newMenu.productId);
                 
                 newMenu.productCantity = item.Value;
-                collection.InsertOneAsync(newMenu);
+                try
+                {
+                    collection.InsertOneAsync(newMenu);
+                } catch (Exception)
+                {
+                    Console.WriteLine("Nu s-a putut adauga produs in meniu!");
+                }
             }
             //for (int i = 0; i <value.listIds.Count; i++)
             //{

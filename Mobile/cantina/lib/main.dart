@@ -5,7 +5,8 @@ import 'user.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: Menu(),
+    // home: Menu(),
+    home: Login(),
   ));
 }
 
@@ -83,6 +84,9 @@ class _LoginState extends State<Login> {
                           child: TextField(
                             controller: nameController,
                             decoration: InputDecoration(
+                              suffixIcon: Icon(Icons.email,
+                                color: Colors.blue[600],
+                              ),
                               hoverColor: Colors.purple,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue[800], width:1)
@@ -100,6 +104,9 @@ class _LoginState extends State<Login> {
                             obscureText: true,
                             controller: passwordController,
                             decoration: InputDecoration(
+                              suffixIcon: Icon(Icons.lock,
+                                color: Colors.blue[600],
+                              ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue[800], width: 1),
                                 borderRadius: BorderRadius.circular(5),
@@ -125,6 +132,7 @@ class _LoginState extends State<Login> {
                               color: Colors.purple,
                               child: Text("Login", style: TextStyle(fontSize: 20)),
                               onPressed: () {
+                                print(nameController.text);
                                 print("Login");
                               },
                             ),

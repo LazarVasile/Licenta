@@ -8,7 +8,7 @@
     <button>Cumpara</button>
 
 </div> 
-<h1> {{categories}} </h1>
+<!-- <h1> {{categories}} </h1> -->
 <div class="header">
     <a href="#Info" class="nav-right">Info</a>
     <h1>Cantina Gaudeamus</h1>
@@ -18,20 +18,25 @@
 <div class="overlay">
     <div class = "container" id="cnt">
         <h1>Meniu 15/02/2020</h1>
-        <div class="menu" *ngFor = "let category of categories; let index as i">
-            <p class="dish">{{category}}</p>
-            <ul>
-                <li><p>Nume</p></li>
-                <li><p>Ingrediente</p></li>
-                <li><p>Pret</p></li>
-                <li><button><b>+</b></button></li>
-            </ul>
-            <ul>
-                <li><p>Nume</p></li>
-                <li><p>Ingrediente</p></li>
-                <li><p>Pret</p></li>
-                <li><button><b>+</b></button></li>
-            </ul>
+        <div *ngFor = "let category of categories;">
+            <div *ngIf = "productsByCategory[category].length>0; then thenBlock; else elseBlock"></div>
+                <!-- <ng-container class="dish" *ngIf = "productsByCategory[category].length>0; then thenBlock; else elseBlock"></ng-container> -->
+                <ng-template #thenBlock>
+                    <div class = "menu">
+                        
+                        <p class="dish">{{category}}</p>
+                        <ul *ngFor="let product of productsByCategory[category];">
+                            <li><p>{{product.name}}</p></li>
+                            <li><p>{{product.description}}</p></li>
+                            <li><p>{{product.student_price}}</p></li>
+                            <li><button><b>-</b></button></li>
+                            <li><button><b>+</b></button></li>
+                        </ul>
+                    </div>
+                </ng-template>
+                <ng-template class = "menu" #elseBlock style = "display: none">
+                </ng-template>
+
         </div>
     </div>
 </div>

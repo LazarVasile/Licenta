@@ -27,7 +27,8 @@ class _RegisterState extends State<Register> {
                   bottom: MediaQuery.of(context).viewInsets.bottom
                   ),
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(20, 40, 20, 40),
+                padding: EdgeInsets.fromLTRB(20, 40, 20, 40),
+                    
                     child: Container(
                     // height: MediaQuery.of(context).size.height / 2,
                     // width: MediaQuery.of(context).size.width / 2,
@@ -73,6 +74,9 @@ class _RegisterState extends State<Register> {
                           child: TextField(
                             controller: nameController,
                             decoration: InputDecoration(
+                              suffixIcon: Icon(Icons.email,
+                                color: Colors.blue[600],
+                              ),
                               hoverColor: Colors.purple,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue[800], width:1),
@@ -89,6 +93,9 @@ class _RegisterState extends State<Register> {
                             obscureText: true,
                             controller: passwordController,
                             decoration: InputDecoration(
+                              suffixIcon: Icon(Icons.lock,
+                                color: Colors.blue[600],
+                              ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue[800], width:1),
                                 borderRadius: BorderRadius.circular(5),
@@ -104,6 +111,9 @@ class _RegisterState extends State<Register> {
                             obscureText: true,
                             controller: confirmPasswordController,
                             decoration: InputDecoration(
+                              suffixIcon: Icon(Icons.lock_outline,
+                                color: Colors.blue[600],
+                              ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue[800], width:1),
                                 borderRadius: BorderRadius.circular(5),

@@ -1,7 +1,7 @@
 <!-- <app-admin-menu></app-admin-menu> -->
 <div class="total-price" id="total_price">
     <h3>Pret Total</h3>
-    <p>15.67 lei</p>
+    <p>{{totalPrice}}</p>
     <button>Cumpara</button>
 
 </div>
@@ -23,66 +23,12 @@
                 <input type="text" placeholder="Introduceti cod">
             </div>
             <div class="sell-products">
-                <div class="card">
+                <div class="card" *ngFor = "let product of myProducts; let i as index">
                     <img src = "../../../assets/images/food1.jpg" alt="img1" style="width:100%;">
-                    <h3>Nume</h3>
-                    <p class="price">7.88 lei</p>
-                    <p><button>Adauga</button></p>
-                </div>
-                <div class="card">
-                    <img src = "../../../assets/images/food1.jpg" alt="img1" style="width:100%;">
-                    <h3>Nume</h3>
-                    <p class="price">7.88 lei</p>
-                    <p><button>Adauga</button></p>
-                </div>
-                <div class="card">
-                    <img src = "../../../assets/images/food1.jpg" alt="img1" style="width:100%;">
-                    <h3>Nume</h3>
-                    <p class="price">7.88 lei</p>
-                    <p><button>Adauga</button></p>
-                </div>
-                <div class="card">
-                    <img src = "../../../assets/images/food1.jpg" alt="img1" style="width:100%;">
-                    <h3>Nume</h3>
-                    <p class="price">7.88 lei</p>
-                    <p><button>Adauga</button></p>
-                </div>
-
-                <div class="card">
-                    <img src = "../../../assets/images/food1.jpg" alt="img1" style="width:100%;">
-                    <h3>Nume</h3>
-                    <p class="price">7.88 lei</p>
-                    <p><button>Adauga</button></p>
-                </div>
-                <div class="card">
-                    <img src = "../../../assets/images/food1.jpg" alt="img1" style="width:100%;">
-                    <h3>Nume</h3>
-                    <p class="price">7.88 lei</p>
-                    <p><button>Adauga</button></p>
-                </div>
-                <div class="card">
-                    <img src = "../../../assets/images/food1.jpg" alt="img1" style="width:100%;">
-                    <h3>Nume</h3>
-                    <p class="price">7.88 lei</p>
-                    <p><button>Adauga</button></p>
-                </div>
-                <div class="card">
-                    <img src = "../../../assets/images/food1.jpg" alt="img1" style="width:100%;">
-                    <h3>Nume</h3>
-                    <p class="price">7.88 lei</p>
-                    <p><button>Adauga</button></p>
-                </div>
-                <div class="card">
-                    <img src = "../../../assets/images/food1.jpg" alt="img1" style="width:100%;">
-                    <h3>Nume</h3>
-                    <p class="price">7.88 lei</p>
-                    <p><button>Adauga</button></p>
-                </div>
-                <div class="card">
-                    <img src = "../../../assets/images/food1.jpg" alt="img1" style="width:100%;">
-                    <h3>Nume</h3>
-                    <p class="price">7.88 lei</p>
-                    <p><button>Adauga</button></p>
+                    <h3>{{product.name}}</h3>
+                    <!-- <p>{{product.student_price}}</p> -->
+                    <p class="price">{{product.student_price}}</p>
+                    <p><button (click) = "addProduct(product)">Adauga</button></p>
                 </div>
             </div>    
         </div>
