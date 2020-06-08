@@ -3,7 +3,9 @@ import { UserService } from '../../services/user/user.service';
 import { HttpClient } from '@angular/common/http';
 import {Product, SellProduct} from '../../classes/product';
 import { DatePipe } from '@angular/common';
-
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+import { Route } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-admin',
@@ -15,13 +17,18 @@ export class AdminComponent implements OnInit {
   public username = "";
   public pipe = new DatePipe('en-US'); // Use your own local
   private _url = "https://localhost:5001/api/usermenu/";
-  public formatDate = this.pipe.transform(Date.now(), "yyyy-MM-dd")
+  public formatDate = this.pipe.transform(Date.now(), "dd-MM-yyyy")
   public myProducts = [];
   public sellProducts = [];
   public totalPrice = 0;
   public categories = {"Ciorbe si supe / Soups" : [], "Garnituri / Side dishes" : [], "Felul II" : [], "Desert / Deserts" :[], "Salate / Salads" : [], "Paine / Bread" : [], "Bauturi / Drinks": []};
+  public urlCodes = "https://localhost:5001/api/codes/";
+  public urlUserMenu = "https://localhost:5001/api/menus";
+  public ticketProducts = [];
+  public buyProducts = [];
+  
 
-  constructor(public _UserService : UserService, public _http: HttpClient) { }
+  constructor(public _UserService : UserService, public _http: HttpClient, public _location : Location, public _router : Router) { }
   
 
   ngOnInit(): void {
@@ -44,7 +51,10 @@ export class AdminComponent implements OnInit {
     })
 
   }
-
+  
+  // de modificat datele
+  // de adaugat cazurile de errori
+  // de generat ticketul
 
 
   addProduct(product) {
@@ -66,6 +76,43 @@ export class AdminComponent implements OnInit {
         this.sellProducts.push(new SellProduct(product));
       }
     console.log(this.totalPrice);
+  }
+
+  GenerateTicket(value) {
+    console.log("value: " + value);
+    this._http.get<any>(this.urlCodes + value)
+    .subscribe({next: dataGet => {
+      this.buyProducts = dataGet;
+      let price = 0;
+      for (let i = 0; i < dataGet.length; i++) {
+        console.log(dataGet[i])
+        for (let j = 0; j < this.myProducts.length; j++){
+          if (dataGet[i]['idProduct'] == this.myProducts[j]['_id']){
+            price = price + this.myProducts[j]["student_price"];
+            this.ticketProducts.push(this.myProducts[j]);
+          } 
+        }
+      }
+      this.totalPrice = price;
+      console.log("produse tickete:");
+      console.log(this.ticketProducts);
+      this.myProducts = this.ticketProducts;
+    }});    
+  }
+
+  refresh() {
+    this._router.navigateByUrl('.', { skipLocationChange: true }).then(() => {
+      this._router.navigate([decodeURI(this._location.path())]);
+  }); 
+  }
+
+  BuyProducts(){ 
+    this._http.put<any>(this.urlUserMenu, this.buyProducts, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json'}})
+      .subscribe((response) => {
+        
+          this.refresh();
+      
+        });
   }
 
 }

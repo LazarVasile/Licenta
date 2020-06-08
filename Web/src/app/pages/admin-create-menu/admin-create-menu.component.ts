@@ -58,7 +58,8 @@ export class AdminCreateMenuComponent implements OnInit {
       for (let j = 0; j < this.productsToAdd[this.categories[i]].length; j++){
         this.list_ids.push(this.productsToAdd[this.categories[i]][j])
       }
-      
+  
+    
     let data = {"products" : this.myProducts, "dateMenu" : this.date_menu}
     console.log(data);
     this.http.post<any>(this._urlMenus, data, {headers:{'Accept' : 'application/json', 'Content-Type' : 'application/json'}})

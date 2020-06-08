@@ -26,10 +26,13 @@ namespace Api.Controllers
 
 
         // GET: api/Menu/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{date}", Name = "GetMenusByDate")]
+        public List<Menu> GetMenusByDate(DateTime date)
         {
-            return "value";
+            Console.WriteLine(date);
+            var myMenu =_menuService.GetMenusByDate(date);
+            return myMenu;
+
         }
 
         // POST: api/Menu
@@ -42,13 +45,14 @@ namespace Api.Controllers
             IMongoCollection<Menu> collection = _menuService.GetCollectionMenu();
             //Console.WriteLine(value.dateMenu);
             var number = menus.Count;
+            DateTime myDate = Convert.ToDateTime(request.dateMenu.ToString("dd-MM-yyyy"));
             foreach(KeyValuePair<string, int> item in request.products)
             {
                 number++;
                 Console.WriteLine(item.Key);
                 var newMenu = new Menu();
                 newMenu._id = number;
-                newMenu.dateMenu = request.dateMenu;
+                newMenu.dateMenu = myDate;
                 newMenu.productId = Int32.Parse(item.Key);
                 
                 newMenu.productCantity = item.Value;
@@ -75,9 +79,29 @@ namespace Api.Controllers
         }
 
         // PUT: api/Menu/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public void Put([FromBody] List<BuyProducts> request)
         {
+            for (int i = 0; i < request.Count; i++)
+            {
+                
+                IMongoCollection<Menu> collection = _menuService.GetCollectionMenu();
+                var quantity = _menuService.GetQuantity(request[i].idProduct, request[i].date);
+                Console.WriteLine("Vechea cantitate: " + quantity);
+                var newQuantity = quantity - request[i].quantity;
+                var arrayFilter = Builders<Menu>.Filter.Eq("product_id", request[i].idProduct) & Builders<Menu>.Filter.Eq("date_menu", request[i].date);
+                var update = Builders<Menu>.Update.Set("product_cantity", newQuantity);
+                try { 
+                    collection.UpdateOne(arrayFilter, update);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Nu se poate face update");
+                }
+                var quantity1 = _menuService.GetQuantity(request[i].idProduct, request[i].date);
+
+                Console.WriteLine("Noua cantitate: " + quantity1);
+            }
         }
 
         // DELETE: api/ApiWithActions/5

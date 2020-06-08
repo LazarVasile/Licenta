@@ -37,14 +37,16 @@ namespace Api.Controllers
 
         // POST: api/Register
         [HttpPost]
-        public string Post([FromBody]  Register request)
+        public IDictionary<String, String> Post([FromBody]  Register request)
         {
             List<User> users = _userService.GetUsers();
             IMongoCollection<User> collection = _userService.GetCollectionUser();
+            IDictionary<String, String> dict = new Dictionary<String, String>();
 
             if (users.Exists(x => x.email == request.email) == true)//&& users.Exists(y => x.password == request.password) == true)
             {
-                return "error";
+                dict.Add("response", "false");
+                return dict;
             }
             else
             {
@@ -65,7 +67,8 @@ namespace Api.Controllers
                 user_add.type = "student";
                 collection.InsertOneAsync(user_add);
                 //adaugare user in baza de date
-                return "succes";
+                dict.Add("response", "true");
+                return dict;
             }
         }
 

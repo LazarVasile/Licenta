@@ -29,7 +29,7 @@ namespace Api.Controllers
         [HttpGet("{date}", Name = "GetProducts")]
         public List<Product> GetProducts(DateTime date)
         {
-            Console.Write("getproducts");
+            //Console.Write("getproducts");
             var myProducts = _myService.GetMenu(date);
             return myProducts;
         }

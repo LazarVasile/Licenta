@@ -1,7 +1,13 @@
+import 'dart:io';
 import 'package:cantina/forgotpassword.dart';
 import 'package:flutter/material.dart';
 import 'register.dart';
 import 'user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'package:crypto/crypto.dart';
+import 'package:http/http.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -19,6 +25,73 @@ class _LoginState extends State<Login> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  String urlLogin = "https://192.168.0.101:5001/api/login";
+
+  bool isLogged = false;
+  bool error = false;
+
+  String generateMd5(String input) {
+    return md5.convert(utf8.encode(input)).toString();
+  }
+
+  Login (String email, String password) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    password = generateMd5(password);
+    print(email);
+    print(password);
+
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    Map data = {
+      'email' : email,
+      'password' : password
+    };
+
+  
+
+    HttpClientRequest request = await client.postUrl(Uri.parse(urlLogin));
+
+    request.headers.set('content-type', 'application/json');
+
+    request.add(utf8.encode(json.encode(data)));
+
+    HttpClientResponse response = await request.close();
+    
+    String reply = await response.transform(utf8.decoder).join();
+    var jsonResponse = jsonDecode(reply);
+    print(jsonResponse);
+    // print(jsonResponse["response"]);
+    // print(reply["response"]);
+    // var sendData = jsonEncode(data);
+    // Map<String, String> headers = {"Content-type": "application/json; charset=utf-8"};
+    // print("1");
+    // var res  = await http.post(urlLogin, body : sendData);
+    // print("2");
+    // var jsonResponse = jsonDecode(res.body);
+    // // print(jsonResponse);
+    if (jsonResponse['response'] == "true") {
+
+      setState(() {
+        isLogged = true;
+      });
+
+      sharedPreferences.setString("token", jsonResponse['token']);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Menu()),
+      );
+
+      print("true");
+    }
+    else 
+    {
+      setState(() {
+        isLogged = false;
+        error = true;
+      });
+      print("false");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +150,23 @@ class _LoginState extends State<Login> {
                             ),
                           )
                         ),
+                        Visibility(
+                            visible: error,
+                            child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(10),
+                            child: Center(
+                              child: Text(
+                                "Wrong email or password",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize:20,
+                                  color: Colors.red[800],
+                                  fontWeight: FontWeight.w500,
+                                  )
+                              ) ,
+                            )
+                          ),
+                        ),
                         Divider(height: 10, color: Colors.blue),
                         Container(
                           
@@ -132,8 +222,7 @@ class _LoginState extends State<Login> {
                               color: Colors.purple,
                               child: Text("Login", style: TextStyle(fontSize: 20)),
                               onPressed: () {
-                                print(nameController.text);
-                                print("Login");
+                                Login(nameController.text, passwordController.text);
                               },
                             ),
                           ),

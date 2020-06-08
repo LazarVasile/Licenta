@@ -1,4 +1,8 @@
+import 'package:cantina/main.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
 class Product {
   String name;
   String category;
@@ -26,8 +30,29 @@ class _MenuState extends State<Menu> {
   List<Product> menu = [Product(name: "product1", category : "felul1", description: "dsadskakd", professorPrice: 12, studentPrice: 12, cantity: 12), 
                       Product(name: "product2", category: "felul2", description: "dsadskakd", professorPrice: 12, studentPrice: 12, cantity: 12),
                       Product(name: "product3", category:"felul3", description: "dsadskakd", professorPrice: 12, studentPrice: 12, cantity: 12)];
+  
+  SharedPreferences sharedPreferences;
 
   double totalPrice = 14.5;
+
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
+
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    if (sharedPreferences.getString("token") == null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +60,24 @@ class _MenuState extends State<Menu> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Menu + date"),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
+              child: RaisedButton(
+              onPressed:(){
+                sharedPreferences.clear();
+                // sharedPreferences.commit();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
+
+              } ,
+              child: Text("Log Out", style: TextStyle(color: Colors.white)),
+              color: Colors.blue[600],
+              ),
+          )
+        ],
         backgroundColor: Colors.purple,
 
       ),

@@ -12,8 +12,9 @@ namespace Api
     public class Program
     {
         public static void Main(string[] args)
-        {
+        {   
             CreateHostBuilder(args).Build().Run();
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -21,6 +22,7 @@ namespace Api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    //webBuilder.UseUrls("http://192.168.0.101:5000;http://localhost:5001;");
                 });
     }
 }

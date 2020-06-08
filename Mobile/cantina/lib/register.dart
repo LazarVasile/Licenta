@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart';
 import 'package:flutter/material.dart';
+import 'package:crypto/crypto.dart';
+import './main.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -9,6 +14,80 @@ class _RegisterState extends State<Register> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  bool displayError = false;
+  String error = "";
+  String urlRegister = "https://192.168.0.101:5001/api/register";
+
+  String generateMd5(String input) {
+    return md5.convert(utf8.encode(input)).toString();
+  }
+
+
+
+  Register(String email, String password, String confirmPassword) async {
+    print(email);
+    print(password);
+    if (password != confirmPassword) {
+      setState(() {
+        displayError = true;
+        error = "Password and confirm password doesn't match";
+      });
+      print(error);
+
+    }
+    else if (password.length > 16) {
+      setState(() {
+        displayError = true;
+        error = "Password too long!";
+        
+      });
+      print(error);
+    }
+    else if (password.length < 8) {
+      setState(() {
+        displayError = true;
+        error = "Password too short";
+      });
+      print(error);
+    }
+    else {
+
+      HttpClient client = new HttpClient();
+      client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+
+      password = generateMd5(password);
+
+      Map data = {
+        "email" : email,
+        "password" : password
+      };
+
+      HttpClientRequest request = await client.postUrl(Uri.parse(urlRegister));
+
+      request.headers.set('content-type', 'application/json');
+
+      request.add(utf8.encode(json.encode(data)));
+
+      HttpClientResponse response = await request.close();
+      
+      
+      String reply = await response.transform(utf8.decoder).join();
+      var jsonResponse = jsonDecode(reply);
+      if (jsonResponse["response"] == "true") {
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
+      }
+      else {
+        setState(() {
+          displayError = true;
+          error = "Please try again!";
+        });
+      }
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +145,20 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                           )
+                        ),
+                        Visibility(
+                            visible: displayError,
+                            child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              error, 
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize:20,
+                                color: Colors.red[800],
+                              )
+                            )
+                          ),
                         ),
                         Divider(height: 10, color: Colors.blue),
                         Container(
@@ -137,7 +230,7 @@ class _RegisterState extends State<Register> {
                               color: Colors.purple,
                               child: Text("Sign up", style: TextStyle(fontSize: 20)),
                               onPressed: () {
-                                print("Register");
+                                Register(nameController.text, passwordController.text, confirmPasswordController.text);
                               },
                             ),
                           ),

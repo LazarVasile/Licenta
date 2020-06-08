@@ -4,8 +4,8 @@
 <p>{{password}}</p> -->
 <div class="total-price" id="total_price">
     <h3>Pret Total</h3>
-    <p>15.67 lei</p>
-    <button>Cumpara</button>
+    <p>{{totalPrice}}</p>
+    <button (click) = "buyProducts()">Cumpara</button>
 
 </div> 
 <!-- <h1> {{categories}} </h1> -->
@@ -17,7 +17,11 @@
 
 <div class="overlay">
     <div class = "container" id="cnt">
-        <h1>Meniu 15/02/2020</h1>
+    <h1 [style.display] = "displayCode">Codul dumneavoastra este: {{code}}</h1>
+        <h1>Meniu {{formatDate}}</h1>
+        <div class = "error"  #error_message [style.display] = "displayError">
+            <p>{{error}}</p>
+        </div>
         <div *ngFor = "let category of categories;">
             <div *ngIf = "productsByCategory[category].length>0; then thenBlock; else elseBlock"></div>
                 <!-- <ng-container class="dish" *ngIf = "productsByCategory[category].length>0; then thenBlock; else elseBlock"></ng-container> -->
@@ -29,8 +33,8 @@
                             <li><p>{{product.name}}</p></li>
                             <li><p>{{product.description}}</p></li>
                             <li><p>{{product.student_price}}</p></li>
-                            <li><button><b>-</b></button></li>
-                            <li><button><b>+</b></button></li>
+                            <li><button (click) = "minusProduct(product)"><b>-</b></button></li>
+                            <li><button (click) = "plusProduct(product)"><b>+</b></button></li>
                         </ul>
                     </div>
                 </ng-template>

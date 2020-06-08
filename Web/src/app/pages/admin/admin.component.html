@@ -2,7 +2,7 @@
 <div class="total-price" id="total_price">
     <h3>Pret Total</h3>
     <p>{{totalPrice}}</p>
-    <button>Cumpara</button>
+    <button (click) = BuyProducts()>Cumpara</button>
 
 </div>
 
@@ -20,7 +20,8 @@
         <div class="form-fields" id="sell_products">
             <div class="input-code">
                 <label><b>Cod pentru generare meniu automat:</b></label>
-                <input type="text" placeholder="Introduceti cod">
+                <input type="text" #code placeholder="Introduceti cod">
+                <button (click) = "GenerateTicket(code.value)">Generare ticket</button>
             </div>
             <div class="sell-products">
                 <div class="card" *ngFor = "let product of myProducts; let i as index">

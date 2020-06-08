@@ -18,7 +18,6 @@ namespace Api.Controllers
     {
         private readonly DatabaseService _userService;
         private IConfiguration _config;
-        IDictionary<String, String> dict = new Dictionary<String, String>();
 
         public LoginController(DatabaseService userService, IConfiguration config)
         {
@@ -46,6 +45,7 @@ namespace Api.Controllers
         {
             List<User> users = _userService.GetUsers();
             Console.WriteLine(request.email);
+            IDictionary<String, String> dict = new Dictionary<String, String>();
             //Console.WriteLine(request.password);
             // verificare daca emailul este in baza de date a facultatii
             if(users.Exists(x => x.email == request.email) == true && users.Exists(y => y.password == _userService.ComputeSha256(request.password)) == true)

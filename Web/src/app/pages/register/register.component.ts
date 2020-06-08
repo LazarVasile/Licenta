@@ -36,12 +36,12 @@ export class RegisterComponent implements OnInit {
       this._UserService.register(email, passwordMD5)
       .subscribe({next:data =>
       {
-        if(data == "succes"){
+        if(data["response"] == "true"){
           // this.error = "V-ati atutentificat cu succes! Vezi fi redirectionat catre pagina de Login";
           // DelayNode(300);
           this._router.navigate(['/login']);
         }
-        else if (data == "error")
+        else if (data["response"] == "false")
         {
           this.displayError = "block";
           this.error = "Email already exists! Please enter another email adress!";
