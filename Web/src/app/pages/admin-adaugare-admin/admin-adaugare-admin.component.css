@@ -1,45 +1,5 @@
 @import url("../../../assets/styles/common.css");   
 
-.total-price {
-    text-align: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    width: 200px;
-    color: white;
-    height: 165px;
-    background-color: var(--blue);
-    position: fixed;
-    bottom: 5px;
-    right: 5px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    border-radius: 5px;
-    border: 1px solid var(--gray);
-}
-.total-price button{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 12px;
-    color: black;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 42px;
-    width: 100%;
-    margin-top: 10px;
-    border-radius: 5px;
-    background-image: linear-gradient(-225deg,var(--white) 70%,#b300cf 30%);
-    /* background: ;     */
-    border: 0px;
-    transition: all 0.4s;
-    bottom: 0px;
-}
-
-.total-price button:hover {
-    background: var(--gray);
-    box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
-}
 
 .overlay {
     width: 80%;
@@ -54,98 +14,22 @@
     flex-direction: row;
 }
 
-
-.header {
-    padding: 1px;
-    background-color:#b300cf;
-    background-repeat: no-repeat;
-    display: flex;
-    justify-content: left;
-    border-radius: 5px;
-    /* border:1.5px solid black; */
-}
-
-.header h1 {
-
-    font-size: 25px;
-    margin-left: 15%;
-    color:black;
-    /* margin-right: 30%; */
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-
-.header a{
-    text-decoration: none;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-size: 16px;
-    /* margin-right: 0px; */
-    color: #fff;
-    /* line-height: 1.2; */
-    text-transform: uppercase;
-    
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 65px;
-    width: 10%;
-    border-radius: 0px;
-    background: #b300cf;    
-    transition: all 0.4s;
-    border: 1px solid var(--dark);
-}
-
-.header .logout-link{
-    margin-left: 26%;
-}
-
-.header a:hover {
-    background: var(--gray);
-    box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
-}
-
-
-
-.select-or-remove {
-    display: flex;
-}
-
 .container {
-    background-image: url("../../../assets/images/food1.jpg");
-    /* background-color:white; */
-    /* background-image: linear-gradient(-225deg,var(--white) 70%,#b300cf 30%); */
+    background-color: white;
     background-size: 100%  100%;
     display: flex;
-    /* margin-left: 50%; */
     flex-direction: column;
     justify-content: flex-start;
     flex-wrap: wrap;
     width: 80%;
     padding: 5%;
     margin-left: 20px;
-    /* background-color: #00ded1; */
     border-radius: 5px;
 
 }
-.menu {
-    background-image: linear-gradient(-225deg,var(--white) 70%,#b300cf 30%);
-    /* background-image: linear-gradient(to top, #b300cf -100%, var(--white) 100%); */
-    /* width: 100%; */
-    /* height : 80%; */
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    padding: 2%;
-    border-radius: 5px;
-    /* margin-top: 50%; */
-}
-
-
 
 .fields-inline {
     display:flex;
-    /* padding:15%; */
-    /* width:30%; */
     color: white;
 
 }
@@ -158,7 +42,6 @@
 }
 
 .form-fields label {
-    /* margin-left: 25%; */
     color:var(--dark);
     
 }
@@ -167,9 +50,7 @@
     width: 50%;
     height: 30px;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    /* margin-left: 25%; */
     border-radius: 5px;;
-    /* padding-top: 3px; */
     margin-top: 5px;
     margin-bottom: 15px;
 }
@@ -178,7 +59,6 @@
     background-color: #c9f4f5;
     width: 50%;
     height: 30px;
-    /* margin-left: 25%; */
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: black;
     border-radius: 5px;
@@ -186,13 +66,9 @@
     margin-bottom: 10px;
 }
 
-/* .form-fields h1 {
-    margin-left: 10%;
-} */
 
 .form-fields div textarea {
     width: 50%;
-    /* margin-left: 25%; */
     background-color: #c9f4f5;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     height: 50px;
@@ -218,7 +94,7 @@
     height: 42px;
     border: 0px;
     border-radius: 21px;
-    background: var(--blue);    
+    background: var(--blue800);    
     transition: all 0.4s;
 }
 
@@ -231,7 +107,7 @@
 }
     
 .form-fields button:hover {
-    background: var(--gray);
+    background: var(--purple900);
     box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
 }
 
@@ -239,66 +115,4 @@
     background: white;
 }
 
-#sell_products {
-    margin-left: 5%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.form-fields .input-code input{
-    width: 15%;
-    margin-left: 1%;
-}
-
-.form-fields .input-code {
-    margin-bottom: 20px;
-}
-
-.sell-products {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-
-.card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    background-color: white;
-    /* max-width: 300px; */
-    width: 150px;
-    height: 267px;
-    /* margin: auto; */
-    text-align: center;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-    margin-right: 20px;
-}
-  
-.price {
-    color: var(--gray);
-    font-size: 15px;
-}
-
-
-.card button {
-    border: none;
-    outline: 0;
-    color: white;
-    background-color: var(--blue);
-    text-align: center;
-    cursor: pointer;
-    width: 100%;
-    margin-left: 0px;
-    font-size: 18px;
-    border-radius: 5px;
-    margin-bottom: 0px;
-}
-
-
-.card button:hover {
-    opacity: 0.7;
-}
 

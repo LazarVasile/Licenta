@@ -16,7 +16,7 @@ class _RegisterState extends State<Register> {
   TextEditingController confirmPasswordController = TextEditingController();
   bool displayError = false;
   String error = "";
-  String urlRegister = "https://192.168.0.101:5001/api/register";
+  String urlRegister = "https://192.168.0.100:5001/api/register";
 
   String generateMd5(String input) {
     return md5.convert(utf8.encode(input)).toString();

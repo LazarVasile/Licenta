@@ -1,33 +1,87 @@
 :root {
-    --blue: #007bff;
-    --indigo: #6610f2;
-    --purple: #6f42c1;
-    --pink: #e83e8c;
-    --red: #dc3545;
-    --orange: #fd7e14;
-    --yellow: #ffc107;
-    --green: #28a745;
-    --teal: #20c997;
-    --cyan: #17a2b8;
-    --white: #fff;
-    --gray: #6c757d;
-    --gray-dark: #343a40;
-    --primary: #512bd4;
-    --secondary: #6c757d;
-    --success: #107c10;
-    --info: #0078d4;
-    --warning: #ffc107;
-    --danger: #e81123;
-    --light: #f8f9fa;
-    --dark: #343a40;
+    --purple400: #AB47BC;
+    --purple500: #9C27B0;
+    --purple600 : #8E24AA;
+    --purple700 : #7B1FA2;
+    --purple800 : #6A1B9A;
+    --purple900 : #4A148C;
+    --blue400 : #42A5F5;
+    --blue500 : #2196F3;
+    --blue600 : #1E88E5;
+    --blue700 : #1976D2;
+    --blue800 : #1565C0;
+    --blue900 : #0D47A1;
+    --red600 : #e53935;
+    --red700 : #d32f2f;
+    --red800 : #c62828;
+    --red900 : #b71c1c;
+    --black : #263238;
+
+
+}
+
+.header {
+    background-color: var(--purple600);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border: 1px solid var(--blue600);
+}
+
+.header a{
+    margin: 5px;
+    /* margin: 1%; */
+    /* margin-top: 3px; */
+    text-decoration: none;
+    cursor: pointer;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 16px;
+    color: white;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 10%;
+    border-radius: 5px;
+    background: var(--blue800);    
+    transition: all 0.4s;
+    border: 1px solid white;
+}
+
+.header h1 {
+
+    align-self: center;
+    padding-top: 1%;
+    font-size: 25px;
+    text-transform: uppercase;
+    font-weight: 900;
+    color:white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+
+.header a:hover {
+    background: var(--purple900);
+    box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
 }
 
 body {
     width: 100%;
     height: 100%;
     margin: 0;
-    background-image: linear-gradient(to top,var(--white) 0%, var(--blue) 100%);
-    /* background-color:  blue; */
+    background-image: linear-gradient(to top, white 0%, var(--blue500) 100%);
     background-repeat: no-repeat;
     font-family: Bitter;
+}
+
+.input-name {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 15px;
+    color: var(--black);
+}
+
+input {
+    color: var(--black);
 }

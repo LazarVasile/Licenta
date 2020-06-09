@@ -12,27 +12,27 @@
         <!-- <br> -->
         <div class="input-fields">
             <div>
-                <b>Email</b>
+                <b class = "input-name">Email</b>
             </div>
             <input type="text" class="input-field" placeholder="Email adress" #email_register>
             <!-- end email-input -->
 
             <!-- password -->
             <div>
-                <b>Password</b>
+                <b class= "input-name">Password</b>
             </div>
             <input type="password" class="input-field" #pwd_register placeholder="Enter password" name="password" required>
             <!-- end password-input -->
 
             <!-- confirm-input -->
             <div>
-                <b>Confirm Password</b>
+                <b class = "input-name">Confirm Password</b>
             </div>
             <input type="password" class="input-field" #pwd_confirm placeholder="Enter password" name="password" required>
             <!-- end confirm-input -->
 
             <br>
-            <button class="register" id = "register-bttn" (click) = "register(email_register.value, pwd_register.value, pwd_confirm.value)">Sign up</button>
+            <button class="register" id = "register-bttn" (click) = "register(email_register.value, pwd_register.value, pwd_confirm.value)">Sign-up</button>
             <br><br>
         </div>
         <!-- end fields-input class -->
