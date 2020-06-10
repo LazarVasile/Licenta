@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { HttpClient } from '@angular/common/http';
-import {Product, SellProduct} from '../../classes/product';
+import {Product, SellProduct, BuyProduct} from '../../classes/product';
 import { DatePipe } from '@angular/common';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
@@ -52,30 +52,34 @@ export class AdminComponent implements OnInit {
 
   }
   
-  // de modificat datele
-  // de adaugat cazurile de errori
-  // de generat ticketul
 
 
   addProduct(product) {
     console.log(product._id, product.student_price)
     let ok = 0;
 
-    this.totalPrice = Number((this.totalPrice + product.student_price).toFixed(2)); 
     // this.totalPrice = this.totalPrice.toFixed(2);
-    for(let i = 0; i < this.sellProducts.length; i++){
+    for(let i = 0; i < this.buyProducts.length; i++){
       // console.log(id,this.sellProducts[i].product.id);
-      if (product._id == this.sellProducts[i].product._id){
-        this.sellProducts[i].cantity +=1;
+      if (product._id == this.buyProducts[i]['id']){
+        this.totalPrice = Number((this.totalPrice + product.student_price).toFixed(2)); 
+        this.buyProducts[i]['quantity'] +=1;
         ok = 1;
         break
       }
 
     }
       if (ok == 0){
-        this.sellProducts.push(new SellProduct(product));
+        var buyProduct : {[id : string] : any} = {};
+
+        this.totalPrice = Number((this.totalPrice + product.student_price).toFixed(2)); 
+        buyProduct['_id'] = 0;
+        buyProduct['idProduct'] = product._id;
+        buyProduct['code'] = 0;
+        buyProduct['quantity'] = 1;
+        this.buyProducts.push(buyProduct);
+
       }
-    console.log(this.totalPrice);
   }
 
   GenerateTicket(value) {
@@ -88,7 +92,7 @@ export class AdminComponent implements OnInit {
         console.log(dataGet[i])
         for (let j = 0; j < this.myProducts.length; j++){
           if (dataGet[i]['idProduct'] == this.myProducts[j]['_id']){
-            price = price + this.myProducts[j]["student_price"];
+            price = price + (dataGet[i]['quantity'] * this.myProducts[j]["student_price"]);
             this.ticketProducts.push(this.myProducts[j]);
           } 
         }
@@ -107,6 +111,7 @@ export class AdminComponent implements OnInit {
   }
 
   BuyProducts(){ 
+    console.log(this.buyProducts);
     this._http.put<any>(this.urlUserMenu, this.buyProducts, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json'}})
       .subscribe((response) => {
         

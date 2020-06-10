@@ -1,20 +1,4 @@
-/* @import url("../../../assets/styles/common.css");    */
-@import url("https://fonts.googleapis.com/css?family=Bitter");
-
-
-/* .header {
-    padding: 1px;
-    background-color:#b300cf;
-    background-repeat: no-repeat;
-    display: flex;
-    justify-content: space-between;
-    border-radius: 5px;
-} */
-
-
-
-
-
+@import url("../../../assets/styles/common.css");   
 .overlay {
     width: 80%;
     min-height: 500px;
@@ -22,8 +6,7 @@
     border-radius: 5px;
     margin: 2% auto;
     padding: 2%;
-    background-image: linear-gradient(to top,var(--blue900) 0%, var(--gray) 100%);
-    background-repeat: no-repeat;
+    background-image: linear-gradient(to top,var(--blue900) 0%, white 100%);
     display: flex;
     flex-direction: row;
 }
@@ -33,20 +16,18 @@
     background-size: 100%  100%;
     display: flex;
     flex-direction: column;
-    /* flex-wrap: wrap; */
     width: 80%;
     margin-left: 10%;
     margin-right: 10%;
     border-radius: 5px;
-    /* height: 100%; */
 
 }
 
 .container h1 {
-    /* margin-top:0px; */
+    font-weight: 900;
+    margin-top: 1%;
     margin-left: auto;
     margin-right: auto;
-    /* min-height: 500px; */
 }
 
 .menu {
@@ -57,20 +38,19 @@
     margin-left: 5%;
     margin-right: 5%;
     margin-bottom: 5%;
-    /* border: 2px solid var(--blue); */
     border-bottom: 0px;
 }
 
 .menu .dish {
+    font-weight: 800;
     padding-top: 15px;
     padding-bottom: 5px;
     margin-bottom: 0px;    
-    /* border-top: 2px solid var(--blue); */
     font-size: 20px;
     text-align: center;
-    color: #b300cf;
+    color: var(--purple900);
     border-right: 0px;
-    border-bottom: 2px solid var(--blue);
+    border-bottom: 2px solid var(--blue900);
 }
 ul {
     display: flex;
@@ -80,31 +60,27 @@ ul {
     list-style-type: none;
     margin: 0px;
     padding: 0px;
-    /* border-top: 2px solid var(--blue); */
-    border-bottom: 2px solid var(--blue);
+    border-bottom: 2px solid var(--blue900);
 }
 
 ul li {
+    padding-top: 10px;
+    font-weight: 500;
     padding-left: 3px;
-    /* padding: 0px; */
-    /* border-bottom: 2px solid var(--blue); */
-    border-right: 2px solid var(--blue);
+    border-right: 2px solid var(--blue900);
 }
 
 ul > li:nth-child(1) {
     width: 25%;
-    border-left: 2px solid var(--blue);
+    border-left: 2px solid var(--blue900);
 }
 
 
 
 ul li * {
-    /* margin: 0px; */
     margin-left: 5px;
-    /* margin: 0px; */
-    /* paddin-left: 0px;/ */
-    /* margin: 0px; */
 }
+
 ul > li:nth-child(2) {
     width: 55%;
 }
@@ -115,14 +91,25 @@ ul > li:nth-child(3) {
 }
 
 ul > li:nth-child(4) {
+    padding-top: 0px;
     width: 5%;
     text-align: center;
-    /* align-items: center; */
     border-right: 0px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-right: 2px solid var(--blue);
+    border-right: 2px solid var(--blue900);
+}
+
+ul > li:nth-child(5) {
+    padding-top: 0px;
+    width: 5%;
+    text-align: center;
+    border-right: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid var(--blue900);
 }
 
 ul li button {
@@ -135,7 +122,7 @@ ul li button {
     line-height: 1.2;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    background: var(--blue);    
+    background: var(--blue900);    
     transition: all 0.4s;
     border-radius: 5px; 
     width: 80%;
@@ -150,8 +137,8 @@ ul li button {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     width: 200px;
     color: white;
-    height: 165px;
-    background-color: var(--blue);
+    height: 130px;
+    background-color: var(--blue900);
     position: fixed;
     bottom: 5px;
     right: 5px;
@@ -159,12 +146,13 @@ ul li button {
     flex-wrap: wrap;
     flex-direction: column;
     border-radius: 5px;
-    border: 1px solid var(--gray);
+    border: 1px solid var(--blue500);
 }
 .total-price button{
+    position: absolute;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
-    color: black;
+    color: white;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     display: flex;
@@ -174,15 +162,16 @@ ul li button {
     width: 100%;
     margin-top: 10px;
     border-radius: 5px;
-    background-image: linear-gradient(-225deg,var(--white) 70%,#b300cf 30%);
-    /* background: ;     */
     border: 0px;
+    background-color: var(--purple800);
     transition: all 0.4s;
     bottom: 0px;
+    border: 1px solid var(--blue500);
+
 }
 
 .total-price button:hover {
-    background: var(--gray);
+    background: var(--purple900);
     box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
 }
 .overlay {

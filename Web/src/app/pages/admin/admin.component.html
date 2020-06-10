@@ -1,14 +1,14 @@
 <!-- <app-admin-menu></app-admin-menu> -->
 <div class="total-price" id="total_price">
     <h3>Preț Total</h3>
-    <p>{{totalPrice}}</p>
-    <button (click) = BuyProducts()><header>Cumpară</header></button>
+    <p>{{totalPrice}} lei</p>
+    <button class="buy-products" (click) = BuyProducts()><header>Cumpară</header></button>
 
 </div>
 
 <div class="header">
     <a routerLink = "../user" class="nav-right">Users</a>
-    <h1>Cantinaă Gaudeamus</h1>
+    <h1>Cantină Gaudeamus</h1>
     <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
 </div>
 <div class="overlay">
@@ -28,10 +28,9 @@
                     <p class="price">Pret profesor: {{product.professor_price}}</p>
                     <p class="price">Pret student: {{product.student_price}}</p>
                     <p class="description"> {{product.description}}</p>
-                    <!-- <div class = "buttons-products"> -->
-                        <button (click) = "addProduct(product)">Adauga</button>
-                        <!-- <button>Sterge</button> -->
-                    <!-- </div> -->
+                    <p class="quantity"> 0 </p>
+                    <button class= "add-button" (click) = "addProduct(product)">Adauga</button>
+                    <button class="delete-button">Șterge</button>
                 </div>
             </div>    
         </div>

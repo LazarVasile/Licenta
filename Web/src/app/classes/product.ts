@@ -29,6 +29,25 @@ export class SellProduct{
         this.product = product;
         this.cantity = 1;
     }
+
 }
+
+export class BuyProduct {
+    _id : number;
+    idProduct : number;
+    code : number;
+    date : string;
+    quantity : number;
+
+    constructor(_id : number, idProduct : number, code : number, date : string, quantity : number){
+        this._id = _id;
+        this.idProduct = idProduct;
+        this.code = code;
+        this.date = date;
+        this.quantity = quantity;
+    }
+
+}
+
 
 // let Product1 = new Product(1, "dsak", "dska", "dksadksa", 12, 12,12);

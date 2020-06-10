@@ -6,7 +6,7 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     width: 200px;
     color: white;
-    height: 165px;
+    height: 130px;
     background-color: var(--blue700);
     position: fixed;
     bottom: 5px;
@@ -15,14 +15,15 @@
     flex-wrap: wrap;
     flex-direction: column;
     border-radius: 5px;
-    border: 1px solid var(--gray);
+    border: 1px solid var(--blue500);
 }
 
 .total-price button{
+    position: absolute;
     font-weight: 900;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
-    color: black;
+    color: white;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     display: flex;
@@ -30,16 +31,16 @@
     align-items: center;
     height: 42px;
     width: 100%;
-    margin-top: 10px;
     border-radius: 5px;
-    background-image: linear-gradient(-225deg,white 70%, var(--purple600) 30%);
+    background-color: var(--purple800);
     border: 0px;
     transition: all 0.4s;
-    bottom: 0px;
+    bottom: 0;
+    border: 1px solid var(--blue500);
 }
 
 .total-price button:hover {
-    background: var(--gray);
+    background: var(--purple900);
     box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
 }
 
@@ -96,6 +97,11 @@
     color:var(--black);
     
 }
+.input-code label {
+    margin-top: 0.8%;
+}
+
+
 
 h3 {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
@@ -136,8 +142,26 @@ p.description {
     margin-bottom: 10px;
 }
 
+button.ticket {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
+    color: #fff;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-left: 2%;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    border: 0px;
+    border-radius: 5px;
+    background-color: var(--blue800);    
+    transition: all 0.4s;
+}
 
-.form-fields button {
+.card button {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
     color: #fff;
@@ -150,14 +174,23 @@ p.description {
     justify-content: center;
     align-items: center;
     padding: 0 20px;
-    height: 42px;
+    height: 12%;
     border: 0px;
     border-radius: 5px;
     background-color: var(--blue800);    
     transition: all 0.4s;
-    bottom: 0px;    
 }
 
+
+button.delete-button{
+    position: absolute;
+    bottom: 0px;
+}
+
+button.add-button{
+    position: relative;
+    bottom: 13%;
+}
 
 
     

@@ -82,14 +82,16 @@ namespace Api.Controllers
         [HttpPut]
         public void Put([FromBody] List<BuyProducts> request)
         {
+            DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("dd-MM-yyyy"));
+            Console.WriteLine("put" + request[0].date);
             for (int i = 0; i < request.Count; i++)
             {
                 
                 IMongoCollection<Menu> collection = _menuService.GetCollectionMenu();
-                var quantity = _menuService.GetQuantity(request[i].idProduct, request[i].date);
+                var quantity = _menuService.GetQuantity(request[i].idProduct, dNow);
                 Console.WriteLine("Vechea cantitate: " + quantity);
                 var newQuantity = quantity - request[i].quantity;
-                var arrayFilter = Builders<Menu>.Filter.Eq("product_id", request[i].idProduct) & Builders<Menu>.Filter.Eq("date_menu", request[i].date);
+                var arrayFilter = Builders<Menu>.Filter.Eq("product_id", request[i].idProduct) & Builders<Menu>.Filter.Eq("date_menu", dNow);
                 var update = Builders<Menu>.Update.Set("product_cantity", newQuantity);
                 try { 
                     collection.UpdateOne(arrayFilter, update);
@@ -98,7 +100,7 @@ namespace Api.Controllers
                 {
                     Console.WriteLine("Nu se poate face update");
                 }
-                var quantity1 = _menuService.GetQuantity(request[i].idProduct, request[i].date);
+                var quantity1 = _menuService.GetQuantity(request[i].idProduct, dNow);
 
                 Console.WriteLine("Noua cantitate: " + quantity1);
             }
