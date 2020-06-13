@@ -35,16 +35,16 @@ namespace Api.Controllers
         }
 
         //POST: api/UserMenu
-        //[HttpPost]
-        // public List<Product> Post([FromBody] Dictionary<string, DateTime> value)
-        // {
+        [HttpPost]
+         public List<Product> Post([FromBody] Dictionary<string, DateTime> value)
+         {
 
-        //     //var myProducts = _myService.GetMenu(value["myDate"]);
-        //     //return myProducts; 
-        //     var myProducts = _myService.GetMenu(value["myDate"]);
-        //     return myProducts;
-        //     //return _myService.GetMenu(value["myDate"]);   
-        // }
+             //var myProducts = _myService.GetMenu(value["myDate"]);
+             //return myProducts; 
+             var myProducts = _myService.GetMenu(value["myDate"]);
+             return myProducts;
+             //return _myService.GetMenu(value["myDate"]);   
+         }
 
         // PUT: api/UserMenu/5
         //[HttpPut("{id}")]

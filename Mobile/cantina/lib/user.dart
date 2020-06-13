@@ -29,31 +29,38 @@ class Product {
   }
 }
 class Menu extends StatefulWidget {
+  Menu({Key key, this.id});
+  final int id;
   @override
-  _MenuState createState() => _MenuState();
+  _MenuState createState() => _MenuState(id : id);
 }
 
 
 class _MenuState extends State<Menu> {
- 
+  _MenuState({Key key, this.id});
+  final int id;
   SharedPreferences sharedPreferences;
   double totalPrice = 0.00;
   List menu;
-  String _url = "https://192.168.0.100:5001/api/usermenu/";
-  String urlCodes = "https://192.168.0.100:5001/api/codes";
+  String _url = "https://192.168.0.101:5001/api/usermenu/";
+  String _url2 = "https://192.168.0.101:5001/api/products/recommendation/";
+  String urlCodes = "https://192.168.0.101:5001/api/codes";
   List<String> categories = ["Ciorbe si supe / Soups", "Garnituri / Side dishes", "Felul II", "Desert / Deserts", "Salate / Salads", "Paine / Bread", "Bauturi / Drinks"];
   bool displayError = false;
   String error = "";
+  bool displayButton1 = true;
+  bool displayButton2 = false;
   var buyProductsTotal = <String, int>{}; 
   var buyProductsNumber = <String, int>{};
-  var buyProductsFinal = <String, int> {};
+  var buyProductsFinal = <String, double> {};
   var productsByCategory = <String, List> {};
+  int idUser;
   int code = 0;
   bool displayCode = false;
+  String dNow = DateFormat("dd-MM-yyyy").format(DateTime.now());
   
   @override
   void initState() {
-    initCategories();
     getProducts();
     super.initState();
     checkLoginStatus();
@@ -70,6 +77,13 @@ class _MenuState extends State<Menu> {
   }
 
   getProducts() async {
+    setState(() {
+      this.buyProductsTotal = {};
+      this.buyProductsNumber = {};
+    });
+    initCategories();
+  
+
     String dNow = DateFormat("dd-MM-yyyy").format(DateTime.now());
     print(dNow);
     HttpClient client = new HttpClient();
@@ -96,7 +110,58 @@ class _MenuState extends State<Menu> {
     HttpClient client2 = new HttpClient();
     client2.badCertificateCallback = ((X509Certificate cert1, String host1, int port1) => true);
 
-    HttpClientRequest request2 = await client2.getUrl(Uri.parse("https://192.168.0.100:5001/api/menus/" + dNow.toString()));
+    HttpClientRequest request2 = await client2.getUrl(Uri.parse("https://192.168.0.101:5001/api/menus/" + dNow.toString()));
+    HttpClientResponse response2 = await request2.close();
+    String reply2 = await response2.transform(utf8.decoder).join();
+    
+    var jsonResponse2 = jsonDecode(reply2);
+
+    for(var i = 0; i < jsonResponse.length; i++){
+      var result = jsonResponse2.firstWhere((x) => x["productId"] == jsonResponse[i]["_id"] , orElse: () => null);
+      setState(() {
+        this.buyProductsNumber[jsonResponse[i]['_id'].toString()] = 0;
+        this.buyProductsTotal[jsonResponse[i]['_id'].toString()] = result["productCantity"];
+      });
+    }
+
+    print(this.buyProductsTotal);
+    print(this.buyProductsNumber);
+
+  }
+
+  recommendation() async{
+    setState(() {
+      this.buyProductsTotal = {};
+      this.buyProductsNumber = {};
+    });
+    initCategories();
+
+    print(dNow);
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+
+    
+
+    HttpClientRequest request = await client.getUrl(Uri.parse(_url2 + this.id.toString()));
+    HttpClientResponse response = await request.close();
+    
+    
+    String reply = await response.transform(utf8.decoder).join();
+    var jsonResponse = jsonDecode(reply);
+    print(jsonResponse);
+    setState(() {
+      for(var  i = 0; i < jsonResponse.length; i++){
+        this.productsByCategory[jsonResponse[i]['category']].add(jsonResponse[i]);
+      }
+
+      this.menu = jsonResponse;
+    });
+
+    print(this.productsByCategory);
+    HttpClient client2 = new HttpClient();
+    client2.badCertificateCallback = ((X509Certificate cert1, String host1, int port1) => true);
+
+    HttpClientRequest request2 = await client2.getUrl(Uri.parse("https://192.168.0.101:5001/api/menus/" + dNow.toString()));
     HttpClientResponse response2 = await request2.close();
     String reply2 = await response2.transform(utf8.decoder).join();
     var jsonResponse2 = jsonDecode(reply2);
@@ -129,9 +194,11 @@ class _MenuState extends State<Menu> {
   buyProducts() async {
     for (var i = 0; i < this.menu.length; i++){
       if (this.buyProductsNumber[this.menu[i]['_id'].toString()] > 0){
-        this.buyProductsFinal[this.menu[i]['_id'].toString()] = this.buyProductsNumber[this.menu[i]['_id'].toString()];
+        this.buyProductsFinal[this.menu[i]['_id'].toString()] = this.buyProductsNumber[this.menu[i]['_id'].toString()].toDouble();
       }
     }
+    this.buyProductsFinal["total_price"] = this.totalPrice;
+    this.buyProductsFinal["id_user"] = this.idUser.toDouble();
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     
@@ -165,7 +232,7 @@ class _MenuState extends State<Menu> {
       
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("Menu + date"),
+        title: Text("Meniu "+ dNow.toString()),
         actions: <Widget>[
           Padding(
               padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
@@ -208,6 +275,51 @@ class _MenuState extends State<Menu> {
                           else
                             return Column(
                               children: [
+                                
+                                Visibility(
+                                  visible: this.displayButton1,
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: RaisedButton(
+                                      color: Colors.blue[600],
+                                      child: Text(
+                                        "Recomandare produse",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        )
+                                      ),
+                                      onPressed: () {
+                                        this.displayButton1 = false;
+                                        this.displayButton2 = true;
+                                        this.recommendation();
+                                      }
+                                  ),
+                                    ),
+                                ),
+                                Visibility(
+                                  visible: this.displayButton2,
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: RaisedButton(
+                                      color: Colors.blue[600],
+                                      child: Text(
+                                        "Inapoi la meniu",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        )
+                                      ),
+                                      onPressed: () {
+                                        this.displayButton2 = false;
+                                        this.displayButton1 = true;
+                                        this.getProducts();
+                                      }
+                                  ),
+                                    ),
+                                ),
                                 Visibility(
                                     visible : displayError,
                                     child: Center(
@@ -347,6 +459,17 @@ class _MenuState extends State<Menu> {
                                                                 ),
                                                                 Expanded(
                                                                   flex: 1,
+                                                                  child:Text(
+                                                                      '${buyProductsNumber[product['_id'].toString()]}',
+                                                                      style: TextStyle(
+                                                                        color: Colors.blue[800],
+                                                                        fontWeight: FontWeight.w500,
+                                                                        fontSize: 22,
+                                                                        ),
+                                                                    )
+                                                                  ),
+                                                                Expanded(
+                                                                  flex: 1,
                                                                   child: RaisedButton(
                                                                     color: Colors.blue[600],
                                                                     child: Icon(
@@ -390,6 +513,8 @@ class _MenuState extends State<Menu> {
                                           ),
                                         ]
                                       );
+                                      else
+                                      return Container(width: 0.0, height: 0.0);
                                     }
                                   );
                                   //'${m.name}'

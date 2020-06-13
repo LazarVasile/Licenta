@@ -1,0 +1,36 @@
+<div class="header">
+    <a routerLink = "../user" class="nav-right">Users</a>
+    <h1>Cantină Gaudeamus</h1>
+    <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
+</div>
+
+<div class = "overlay">
+    <app-nav-bar></app-nav-bar>
+    <div class = "container" id = "cnt">
+        <div class="form-fields" id="add_product_fields">
+            <div class = "search">
+                <input [(ngModel)] = "searchText" placeholder="Introduceti numele produsului">
+                <!-- <button (click) = "SearchProducts(search_products.value)">Cautare</button> -->
+            </div>
+            <div class = "menu">
+
+                <ul class="fields-name">
+                    <li>Nume</li>
+                    <li>Categorie</li>
+                    <li>Pret profesor</li>
+                    <li>Pret student</li>
+                    <li>Greutate</li>
+                    <li>Descriere</li>
+                </ul>
+
+                <ul *ngFor="let product of myProducts | filter : searchText">
+                    <li>{{product.name}}</li>
+                    <li>{{product.category}}</li>
+                    <li>{{product.professor_price}} lei</li>
+                    <li>{{product.student_price}} lei</li>
+                    <li>{{product.weight}} gr</li>
+                    <li>{{product.description}}</li>
+                </ul>
+            </div>
+    </div>
+</div>

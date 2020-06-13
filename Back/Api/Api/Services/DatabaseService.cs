@@ -5,7 +5,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Linq;
 using System.Globalization;
-
+using System.Drawing.Printing;
+using System.Drawing;
+using Eco.Report;
 
 namespace Api
 {
@@ -14,7 +16,8 @@ namespace Api
         private readonly IMongoCollection<User> _users;
         private readonly IMongoCollection<Product> _products;
         private readonly IMongoCollection<Menu> _menus;
-        private readonly IMongoCollection<BuyProducts> _codes;
+        private readonly IMongoCollection<Codes> _codes;
+        private readonly IMongoCollection<History> _history;
 
         public DatabaseService()
         {
@@ -27,7 +30,9 @@ namespace Api
 
             _menus = database.GetCollection<Menu>("menus");
 
-            _codes = database.GetCollection<BuyProducts>("buy_products");
+            _codes = database.GetCollection<Codes>("codes");
+
+            _history = database.GetCollection<History>("history");
         }
 
         public List<User> GetUsers()
@@ -43,6 +48,23 @@ namespace Api
         public List<Menu> GetMenus()
         {
             return _menus.Find(menus => true).ToList();
+        }
+
+        public IDictionary<string, string> GetProductsById()
+        {
+            List<Product> myProducts = GetProducts();
+            IDictionary<string, string> myDictionary = new Dictionary<String, String> { };
+            for(int i = 0; i < myProducts.Count; i++)
+            {
+                myDictionary[myProducts[i]._id.ToString()] = myProducts[i].name;
+            }
+
+            return myDictionary;
+        }
+
+        public List<History> getHistories()
+        {
+            return _history.Find(history => true).ToList();
         }
 
         public List<Product> GetMenu(DateTime myDate)
@@ -63,24 +85,25 @@ namespace Api
             return myProducts;
         }
 
-        public List<BuyProducts> GetCodesByDate(DateTime myDate)
+        public List<Codes> GetCodesByDate(DateTime myDate)
         {
-            List<BuyProducts> myCode = _codes.Find(c => c.date == myDate).ToList();
+            List<Codes> myCode = _codes.Find(c => c.date == myDate).ToList();
             return myCode;
         }
 
-        public List<BuyProducts> GetCodesByCodeAndDate(int code, DateTime myDate)
+        public Codes GetCodesByCodeAndDate(int code, DateTime myDate)
         {
-            List<BuyProducts> myCode = _codes.Find(c => c.code == code && c.date == myDate).ToList();
+            Codes myCode = _codes.Find(c => c.code == code && c.date == myDate).ToList()[0];
             return myCode;
         }
 
-        public List<BuyProducts> GetCodes()
+        public List<Codes> GetCodes()
         {
-            List<BuyProducts> myCode = _codes.Find(x => x._id > 0).ToList();
+            List<Codes> myCode = _codes.Find(x => true).ToList();
             return myCode;
         }
 
+ 
 
         public List<Menu> GetMenusByDate(DateTime myDate)
         {
@@ -89,6 +112,28 @@ namespace Api
 
             return myMenus;
         }
+
+        public List<Product> getIdProductsByIdUser(int id)
+        {
+            List<Product> myProducts = new List<Product>();
+            Codes buyProductsList = _codes.Find(code => code.idUser == id).ToList()[0];
+
+            foreach (KeyValuePair<string, int> item in buyProductsList.idProductsAndAmounts)
+            {
+                Product product = _products.Find(product => product._id == Int32.Parse(item.Key)).ToList()[0];
+                myProducts.Add(product);
+            }
+
+            List<Product> myProductsFinals = myProducts.Distinct().ToList();
+            return myProductsFinals;
+            
+        }
+
+        public List<History> getHistoryByDate(DateTime myDate)
+        {
+            List<History> myHistories = _history.Find(history => history.date == myDate).ToList();
+            return myHistories;
+;        }
 
         public int GetQuantity(int idProduct, DateTime myDate)
         {
@@ -112,11 +157,15 @@ namespace Api
             return _menus;
         }
 
-        public IMongoCollection<BuyProducts> GetCollectionCodes()
+        public IMongoCollection<Codes> GetCollectionCodes()
         {
             return _codes;
         }
 
+        public IMongoCollection<History> GetCollectionHistory()
+        {
+            return _history;
+        }
 
         public string ComputeSha256(string password)
         {
@@ -134,6 +183,7 @@ namespace Api
             }   
         }
 
-       
+
+
     }
 }

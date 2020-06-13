@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.Models;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,7 @@ namespace Api.Controllers
     public class MenuController : ControllerBase
     {
         public readonly DatabaseService _menuService;
+
         
         public MenuController (DatabaseService menuService)
         {
@@ -45,7 +47,7 @@ namespace Api.Controllers
             IMongoCollection<Menu> collection = _menuService.GetCollectionMenu();
             //Console.WriteLine(value.dateMenu);
             var number = menus.Count;
-            DateTime myDate = Convert.ToDateTime(request.dateMenu.ToString("dd-MM-yyyy"));
+            DateTime myDate = Convert.ToDateTime(request.dateMenu.ToString("yyyy-MM-dd"));
             foreach(KeyValuePair<string, int> item in request.products)
             {
                 number++;
@@ -78,32 +80,66 @@ namespace Api.Controllers
 
         }
 
+        public static int RandomCode()
+        {
+            Random random = new Random();
+            const string chars = "0123456789";
+            string stringCode = new string(Enumerable.Repeat(chars, 8)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+
+            int code = Int32.Parse(stringCode);
+
+            return code;
+        }
         // PUT: api/Menu/5
         [HttpPut]
-        public void Put([FromBody] List<BuyProducts> request)
+        public void Put([FromBody] IDictionary<String, double> request)
         {
-            DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("dd-MM-yyyy"));
-            Console.WriteLine("put" + request[0].date);
-            for (int i = 0; i < request.Count; i++)
-            {
-                
-                IMongoCollection<Menu> collection = _menuService.GetCollectionMenu();
-                var quantity = _menuService.GetQuantity(request[i].idProduct, dNow);
-                Console.WriteLine("Vechea cantitate: " + quantity);
-                var newQuantity = quantity - request[i].quantity;
-                var arrayFilter = Builders<Menu>.Filter.Eq("product_id", request[i].idProduct) & Builders<Menu>.Filter.Eq("date_menu", dNow);
-                var update = Builders<Menu>.Update.Set("product_cantity", newQuantity);
-                try { 
-                    collection.UpdateOne(arrayFilter, update);
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Nu se poate face update");
-                }
-                var quantity1 = _menuService.GetQuantity(request[i].idProduct, dNow);
+            DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
+            IMongoCollection<Menu> collection = _menuService.GetCollectionMenu();
+            IMongoCollection<History> collection2 = _menuService.GetCollectionHistory();
+            int code = RandomCode();
 
-                Console.WriteLine("Noua cantitate: " + quantity1);
+            List<History> histories = _menuService.getHistories();
+            History history = new History();
+            while (histories.Exists(x => x._id == code) == true)
+            {
+                code = RandomCode();
             }
+            history._id = code;
+            history.date = dNow;
+            IDictionary<string, string> products = _menuService.GetProductsById();
+            history.nameProductsAndAmounts = new Dictionary<String, int> { };
+            history.totalPrice = request["total_price"];
+
+            foreach (KeyValuePair<string, double> item in request)
+            {
+                if (item.Key != "total_price")
+                {
+                    var q = Convert.ToInt32(item.Value);
+                    history.nameProductsAndAmounts[products[item.Key.ToString()]] = q;
+
+                    var quantity = _menuService.GetQuantity(Convert.ToInt32(item.Key), dNow);
+                    Console.WriteLine("Vechea cantitate: " + quantity);
+                    var newQuantity = quantity - q;
+                    var arrayFilter = Builders<Menu>.Filter.Eq("product_id", Int32.Parse(item.Key)) & Builders<Menu>.Filter.Eq("date_menu", dNow);
+                    var update = Builders<Menu>.Update.Set("product_cantity", newQuantity);
+                    try
+                    {
+                        collection.UpdateOne(arrayFilter, update);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Nu se poate face update");
+                    }
+                    var quantity1 = _menuService.GetQuantity(Int32.Parse(item.Key), dNow);
+
+                    Console.WriteLine("Noua cantitate: " + quantity1);
+                }
+            }
+
+            collection2.InsertOneAsync(history);
+
         }
 
         // DELETE: api/ApiWithActions/5

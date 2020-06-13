@@ -51,8 +51,10 @@ namespace Api.Controllers
             if(users.Exists(x => x.email == request.email) == true && users.Exists(y => y.password == _userService.ComputeSha256(request.password)) == true)
             {
                 User _user = users.Find(x => x.email == request.email);
+                Console.WriteLine("User id:" + _user._id);
                 var tokenString = GenerateJSONWebToken(request.email);
                 dict.Add("response", "true");
+                dict.Add("id_user", _user._id.ToString());
                 dict.Add("role", _user.role);
                 dict.Add("type", _user.type);
                 dict.Add("token", tokenString);

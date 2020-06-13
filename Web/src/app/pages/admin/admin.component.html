@@ -18,20 +18,29 @@
             <div class="input-code">
                 <label><b>Cod pentru generare meniu automat:</b></label>
                 <input type="text" #code placeholder="Introduceti cod">
-                <button class = "ticket" (click) = "GenerateTicket(code.value)">Generare ticket</button>
+                <button class = "ticket" (click) = "GeneratePersonalMenu(code.value)">Generare ticket</button>
             </div>
-            <div class="sell-products">
-                <div class="card" *ngFor = "let product of myProducts; let i as index">
-                    <div class = "product-name">
-                        <h3>{{product.name}}</h3>
+            <div *ngFor = "let category of categories;">
+                <div *ngIf = "productsByCategory[category].length>0; then thenBlock; else elseBlock"></div>
+                    <!-- <ng-container class="dish" *ngIf = "productsByCategory[category].length>0; then thenBlock; else elseBlock"></ng-container> -->
+                    <ng-template class = "sell-products" #thenBlock>
+                    <div>
+                        <div class = "card" *ngFor="let product of productsByCategory[category];">
+                            <div class = "product-name">
+                                <h3>{{product.name}}</h3>
+                            </div>
+                            <p class="price">Pret profesor: {{product.professor_price}}</p>
+                            <p class="price">Pret student: {{product.student_price}}</p>
+                            <p class="description"> {{product.description}}</p>
+                            <p class="quantity"> {{buyProductsTotal[product._id.toString()]}} </p>
+                            <button class= "add-button" (click) = "addProduct(product)">Adauga</button>
+                            <button class="delete-button">Șterge</button>
+                        </div>
                     </div>
-                    <p class="price">Pret profesor: {{product.professor_price}}</p>
-                    <p class="price">Pret student: {{product.student_price}}</p>
-                    <p class="description"> {{product.description}}</p>
-                    <p class="quantity"> 0 </p>
-                    <button class= "add-button" (click) = "addProduct(product)">Adauga</button>
-                    <button class="delete-button">Șterge</button>
-                </div>
+                    </ng-template>
+                    <ng-template class = "menu" #elseBlock style = "display: none">
+                    </ng-template>
+    
             </div>    
         </div>
     </div>

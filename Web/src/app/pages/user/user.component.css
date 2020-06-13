@@ -129,6 +129,24 @@ ul li button {
     height: 30px;
 }
 
+.button{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    align-self: center;
+    margin-right: 2px;
+    font-size: 20px;
+    text-align: center;
+    border: 0px;
+    color: #fff;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--blue800);
+    border: 1px solid var(--purple900);    
+    transition: all 0.4s;
+    border-radius: 5px; 
+    width: 40%;
+    height: 30px;
+}
 #elsteBlock {
     display:none;
 }

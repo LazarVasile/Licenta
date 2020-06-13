@@ -25,10 +25,11 @@ class _LoginState extends State<Login> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  String urlLogin = "https://192.168.0.100:5001/api/login";
+  String urlLogin = "https://192.168.0.101:5001/api/login";
 
   bool isLogged = false;
   bool error = false;
+  int idUser;
 
   String generateMd5(String input) {
     return md5.convert(utf8.encode(input)).toString();
@@ -72,13 +73,14 @@ class _LoginState extends State<Login> {
     if (jsonResponse['response'] == "true") {
 
       setState(() {
-        isLogged = true;
+        this.isLogged = true;
+        this.idUser = int.parse(jsonResponse['id_user']);
       });
 
       sharedPreferences.setString("token", jsonResponse['token']);
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Menu()),
+        MaterialPageRoute(builder: (context) => Menu(id :this.idUser)),
       );
 
       print("true");

@@ -66,9 +66,32 @@ namespace Api.Controllers
         }
 
         // PUT: api/Product/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public void Put([FromBody] IDictionary<string, string> request)
         {
+            IMongoCollection<Product> collection = _productService.GetCollectionProduct();
+            var filter = Builders<Product>.Filter.Eq("_id", request["id"]);
+            if (request["professor_price"] != "")
+            {
+                var update = Builders<Product>.Update.Set("professor_price", request["professor_price"]);
+                collection.UpdateOne(filter, update);
+            }
+            if (request["student_price"] != "")
+            {
+                var update = Builders<Product>.Update.Set("student_price", request["student_price"]);
+                collection.UpdateOne(filter, update);
+            }
+            if (request["weight"] != "")
+            {
+                var update = Builders<Product>.Update.Set("weight", request["weight"]);
+                collection.UpdateOne(filter, update);
+            }
+            if (request["description"] != "")
+            {
+                var update = Builders<Product>.Update.Set("description", request["description"]);
+                collection.UpdateOne(filter, update);
+            }
+
         }
 
         // DELETE: api/ApiWithActions/5

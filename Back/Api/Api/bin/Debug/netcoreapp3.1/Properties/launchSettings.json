@@ -20,7 +20,7 @@
     "Api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:5001;https://192.168.0.100:5001;",
+      "applicationUrl": "https://localhost:5001;https://192.168.0.101:5001;",
       "launchUrl": "api/users",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

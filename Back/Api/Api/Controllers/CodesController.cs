@@ -4,24 +4,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Api.Controllers
 {
     [Route("api/codes")]
     [ApiController]
-    public class BuyCodesController : ControllerBase
+    public class CodesController : ControllerBase
     {
         private readonly DatabaseService _codesService;
 
-        public BuyCodesController(DatabaseService codesService)
+        public CodesController(DatabaseService codesService)
         {
             _codesService = codesService;
         }
 
-        private static Random random = new Random();
         public static int RandomCode()
         {
+            Random random = new Random();
             const string chars = "0123456789";
             string stringCode =  new string(Enumerable.Repeat(chars, 5)
               .Select(s => s[random.Next(s.Length)]).ToArray());
@@ -33,58 +34,59 @@ namespace Api.Controllers
 
         // GET: api/BuyCodes
         [HttpGet]
-        public List<BuyProducts> Get()
+        public List<Codes> Get()
         {
             return _codesService.GetCodes();
         }
 
         // GET: api/BuyCodes/5
         [HttpGet("{code}", Name = "Get")]
-        public List<BuyProducts> Get(int code)
+        public Codes Get(int code)
         {
-            DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("dd-MM-yyyy"));
+            DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
             Console.WriteLine(dNow);
-            List<BuyProducts> myCode = _codesService.GetCodesByCodeAndDate(code, dNow);
-            return myCode;
-
-            
-            
+            Codes myCode = _codesService.GetCodesByCodeAndDate(code, dNow);
+            return myCode; 
         }
 
         // POST: api/BuyCodes
         [HttpPost]
-        public IDictionary<String, String> Post([FromBody] IDictionary<String, int> request)
+        public IDictionary<String, String> Post([FromBody] IDictionary<String, double> request)
         {
-            DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("dd-MM-yyyy"));
+            Console.WriteLine("dskadksakdsa" + request["id_user"]);
 
-            IMongoCollection<BuyProducts> collection = _codesService.GetCollectionCodes();
+            DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
+
+            IMongoCollection<Codes> collection = _codesService.GetCollectionCodes();
             IDictionary<String, String> dict = new Dictionary<String, String>();
-            int count = _codesService.GetCodes().Count;
-            List<BuyProducts> codes = _codesService.GetCodesByDate(dNow);
+            List<Codes> codes = _codesService.GetCodesByDate(dNow);
             int code = RandomCode();
-
+            int count = codes.Count;
             while (codes.Exists(x => x.code == code) == true)
             {
                 code = RandomCode();
             }
 
-            foreach (KeyValuePair<String, int> item in request)
+            int idUSer = Convert.ToInt32(request["id_user"]);
+            double totalPrice = request["total_price"];
+            Codes product = new Codes();
+            product._id = count + 1;
+            product.idUser = idUSer;
+            product.date = dNow;
+            product.code = code;
+            product.totalPrice = totalPrice;
+            product.idProductsAndAmounts = new Dictionary<String, int>{ };
+            
+            foreach (KeyValuePair<string, double> item in request)
             {
-               
-                Console.WriteLine(item.Key + ":" + item.Value);
-                count += 1;
-                BuyProducts product = new BuyProducts();
-                product._id = count;
-                product.idProduct = Int32.Parse(item.Key);
-                product.quantity = item.Value;
-                product.date = dNow;
-                product.code = code;
-                try
+                if (item.Key != "id_user" && item.Key != "total_price")
                 {
-                    collection.InsertOneAsync(product);
+                    Console.WriteLine(item.Key + " " + item.Value);
+                    product.idProductsAndAmounts[item.Key] = Convert.ToInt32(item.Value);
                 }
-                catch (Exception) { Console.WriteLine("Nu s-a putut adauga in baza de date"); }
             }
+
+            collection.InsertOneAsync(product);
             dict.Add("response", "true");
             dict.Add("code", code.ToString());
 
