@@ -79,7 +79,7 @@ namespace Api.Controllers
                     mail.IsBodyHtml = true;
 
                     SmtpServer.Port = 587;
-                    SmtpServer.Credentials = new System.Net.NetworkCredential("lazarvasile21091998@gmail.com", "itprogramator21");
+                    SmtpServer.Credentials = new System.Net.NetworkCredential("can.gaudeamus@gmail.com", "cantina123");
                     SmtpServer.EnableSsl = true;
 
                     SmtpServer.Send(mail);
