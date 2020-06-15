@@ -45,7 +45,6 @@ export class RegisterComponent implements OnInit {
         {
           this.displayError = "block";
           this.error = "Email already exists! Please enter another email adress!";
-          console.log("Inregistrarea nu a avut loc!");
         }
       }})
     }

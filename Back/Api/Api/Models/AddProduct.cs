@@ -10,8 +10,8 @@ namespace Api.Models
         public int _id { get; set; }
         public string name { get; set; }
         public string category { get; set; }
-        public double professor_price { get; set; }
-        public double student_price { get; set; }
+        public double professorPrice { get; set; }
+        public double studentPrice { get; set; }
         public int weight { get; set; }
         public string description { get; set; }
     }

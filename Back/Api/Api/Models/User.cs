@@ -19,5 +19,8 @@ namespace Api
 
         [BsonElement("type")]
         public string type { get; set; }
+
+        [BsonElement("token")]
+        public string token { get; set; }
     }
 }

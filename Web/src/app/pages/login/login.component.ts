@@ -18,8 +18,6 @@ export class LoginComponent implements OnInit {
 
   loginUser(username, password) {
     var passwordMD5 = Md5.hashStr(password);
-    // console.log(passwordMD5);
-    // console.log(username, passwordMdD5);
     this._UserService.login(username, passwordMD5)
     .subscribe({next:data => 
       {  

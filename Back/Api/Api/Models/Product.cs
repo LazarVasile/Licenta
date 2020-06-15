@@ -15,11 +15,11 @@ namespace Api
         [BsonElement("category")]
         public string category { get; set; }
 
-        [BsonElement("professor_price")]
-        public double professor_price { get; set; }
+        [BsonElement("professorPrice")]
+        public double professorPrice { get; set; }
 
-        [BsonElement("student_price")]
-        public double student_price { get; set; }
+        [BsonElement("studentPrice")]
+        public double studentPrice { get; set; }
 
         [BsonElement("weight")]
         public int weight { get; set; }

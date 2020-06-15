@@ -41,18 +41,18 @@ namespace Api.Controllers
 
         // POST: api/Test
         [HttpPost]
-        public IDictionary<String, String> Post([FromBody]  Login request)
+        public IDictionary<String, String> Post([FromBody] IDictionary<String, String> request)
         {
+            
             List<User> users = _userService.GetUsers();
-            Console.WriteLine(request.email);
+            String type = request["type"];
+            Console.WriteLine(request["email"] + " " + request["password"]);
             IDictionary<String, String> dict = new Dictionary<String, String>();
-            //Console.WriteLine(request.password);
-            // verificare daca emailul este in baza de date a facultatii
-            if(users.Exists(x => x.email == request.email) == true && users.Exists(y => y.password == _userService.ComputeSha256(request.password)) == true)
-            {
-                User _user = users.Find(x => x.email == request.email);
+            Console.WriteLine(_userService.ComputeSha256(request["password"]));
+            if(users.Exists(x => x.email == request["email"] && x.password == _userService.ComputeSha256(request["password"]))){
+                User _user = users.Find(x => x.email == request["email"]);
                 Console.WriteLine("User id:" + _user._id);
-                var tokenString = GenerateJSONWebToken(request.email);
+                var tokenString = _userService.GenerateJSONWebToken(request["email"], type);
                 dict.Add("response", "true");
                 dict.Add("id_user", _user._id.ToString());
                 dict.Add("role", _user.role);
@@ -78,22 +78,6 @@ namespace Api.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }
-
-        private string GenerateJSONWebToken(string username)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[] {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
-                    _config["Jwt:Issuer"],
-                    claims,
-                    expires: DateTime.Now.AddSeconds(10),
-                    signingCredentials: credentials);
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

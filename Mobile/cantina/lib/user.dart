@@ -6,28 +6,6 @@ import 'package:http/http.dart';
 import 'dart:io';
 import 'dart:convert';
 
-
-class Product {
-  int id;
-  String name;
-  String category;
-  double professorPrice;
-  double studentPrice;
-  int weight;
-  String description;
-
-
-  Product(int id, String name, String category, double professorPrice, double studentPrice, int weight, String descripiton) {
-    this.id = id;
-    this.name = name;
-    this.category = category;
-    this.professorPrice = professorPrice;
-    this.studentPrice = studentPrice;
-    this.weight = weight;
-    this.description = description;
-    
-  }
-}
 class Menu extends StatefulWidget {
   Menu({Key key, this.id});
   final int id;
@@ -42,9 +20,10 @@ class _MenuState extends State<Menu> {
   SharedPreferences sharedPreferences;
   double totalPrice = 0.00;
   List menu;
-  String _url = "https://192.168.0.101:5001/api/usermenu/";
-  String _url2 = "https://192.168.0.101:5001/api/products/recommendation/";
-  String urlCodes = "https://192.168.0.101:5001/api/codes";
+  static String url = "https://192.168.0.101:5001/api/";
+  String _url = url + "usermenu/";
+  String _url2 = url + "products/recommendation/";
+  String urlCodes = url + "codes";
   List<String> categories = ["Ciorbe si supe / Soups", "Garnituri / Side dishes", "Felul II", "Desert / Deserts", "Salate / Salads", "Paine / Bread", "Bauturi / Drinks"];
   bool displayError = false;
   String error = "";
@@ -54,26 +33,46 @@ class _MenuState extends State<Menu> {
   var buyProductsNumber = <String, int>{};
   var buyProductsFinal = <String, double> {};
   var productsByCategory = <String, List> {};
-  int idUser;
   int code = 0;
   bool displayCode = false;
   String dNow = DateFormat("dd-MM-yyyy").format(DateTime.now());
+  String token;
+  String type;
+
   
   @override
   void initState() {
+    print(this.id);
+    getInstances();
     getProducts();
     super.initState();
     checkLoginStatus();
   }
+
+  getInstances() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      this.token = prefs.get("token");
+      print(this.token);
+      this.type = prefs.get("type");
+      print(this.type);
+    });
+    }
 
   initCategories() {
     setState(() {
       for(var i = 0; i < this.categories.length; i++){
         this.productsByCategory[this.categories[i]] = [];
       }
-      print(this.productsByCategory);
     });
-  
+  }
+
+  logout() async{
+    sharedPreferences.clear();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Login()),
+    );
   }
 
   getProducts() async {
@@ -82,51 +81,55 @@ class _MenuState extends State<Menu> {
       this.buyProductsNumber = {};
     });
     initCategories();
-  
 
-    String dNow = DateFormat("dd-MM-yyyy").format(DateTime.now());
-    print(dNow);
+    String dNow = DateFormat("yyyy-MM-dd").format(DateTime.now());
+    
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
-
-    
-
     HttpClientRequest request = await client.getUrl(Uri.parse(_url + dNow.toString()));
+    request.headers.set('Authorization', "Bearer " + this.token);
     HttpClientResponse response = await request.close();
-    
-    
-    String reply = await response.transform(utf8.decoder).join();
-    var jsonResponse = jsonDecode(reply);
 
-    setState(() {
-      for(var  i = 0; i < jsonResponse.length; i++){
-        this.productsByCategory[jsonResponse[i]['category']].add(jsonResponse[i]);
-      }
-
-      this.menu = jsonResponse;
-    });
-
-    print(this.productsByCategory);
-    HttpClient client2 = new HttpClient();
-    client2.badCertificateCallback = ((X509Certificate cert1, String host1, int port1) => true);
-
-    HttpClientRequest request2 = await client2.getUrl(Uri.parse("https://192.168.0.101:5001/api/menus/" + dNow.toString()));
-    HttpClientResponse response2 = await request2.close();
-    String reply2 = await response2.transform(utf8.decoder).join();
-    
-    var jsonResponse2 = jsonDecode(reply2);
-
-    for(var i = 0; i < jsonResponse.length; i++){
-      var result = jsonResponse2.firstWhere((x) => x["productId"] == jsonResponse[i]["_id"] , orElse: () => null);
-      setState(() {
-        this.buyProductsNumber[jsonResponse[i]['_id'].toString()] = 0;
-        this.buyProductsTotal[jsonResponse[i]['_id'].toString()] = result["productCantity"];
-      });
+    if(response.statusCode == 401){
+      this.logout();
     }
+    else{
+    
+      var reply = await response.transform(utf8.decoder).join();
+      var jsonResponse = jsonDecode(reply);
 
-    print(this.buyProductsTotal);
-    print(this.buyProductsNumber);
+      setState(() {
+        for(var  i = 0; i < jsonResponse.length; i++){
+          this.productsByCategory[jsonResponse[i]['category']].add(jsonResponse[i]);
+        }
+        this.menu = jsonResponse;
+      });
 
+      HttpClient client2 = new HttpClient();
+      client2.badCertificateCallback = ((X509Certificate cert1, String host1, int port1) => true);
+
+      HttpClientRequest request2 = await client2.getUrl(Uri.parse("https://192.168.0.101:5001/api/menus/" + dNow.toString()));
+      request2.headers.set('Authorization', "Bearer " + this.token);
+      HttpClientResponse response2 = await request2.close();
+      if(response2.statusCode == 401){
+        this.logout();
+      }
+      else{
+        String reply2 = await response2.transform(utf8.decoder).join();
+        var jsonResponse2 = jsonDecode(reply2);
+        jsonResponse2["productsIdAndAmounts"].forEach((k,v) => {
+          this.buyProductsNumber[k.toString()] = 0,
+          this.buyProductsTotal[k.toString()] = v,
+        });
+        // for(var i = 0; i < jsonResponse.length; i++){
+        //   var result = jsonResponse2.firstWhere((x) => x["productId"] == jsonResponse[i]["_id"] , orElse: () => null);
+        //   setState(() {
+        //     this.buyProductsNumber[jsonResponse[i]['_id'].toString()] = 0;
+        //     this.buyProductsTotal[jsonResponse[i]['_id'].toString()] = result["productAmount"];
+        //   });
+        // }
+      }
+    }
   }
 
   recommendation() async{
@@ -136,47 +139,50 @@ class _MenuState extends State<Menu> {
     });
     initCategories();
 
-    print(dNow);
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
-
-    
-
     HttpClientRequest request = await client.getUrl(Uri.parse(_url2 + this.id.toString()));
+    request.headers.set('Authorization', "Bearer " + this.token);
     HttpClientResponse response = await request.close();
+    if(response.statusCode == 401){
     
-    
-    String reply = await response.transform(utf8.decoder).join();
-    var jsonResponse = jsonDecode(reply);
-    print(jsonResponse);
-    setState(() {
-      for(var  i = 0; i < jsonResponse.length; i++){
-        this.productsByCategory[jsonResponse[i]['category']].add(jsonResponse[i]);
-      }
-
-      this.menu = jsonResponse;
-    });
-
-    print(this.productsByCategory);
-    HttpClient client2 = new HttpClient();
-    client2.badCertificateCallback = ((X509Certificate cert1, String host1, int port1) => true);
-
-    HttpClientRequest request2 = await client2.getUrl(Uri.parse("https://192.168.0.101:5001/api/menus/" + dNow.toString()));
-    HttpClientResponse response2 = await request2.close();
-    String reply2 = await response2.transform(utf8.decoder).join();
-    var jsonResponse2 = jsonDecode(reply2);
-
-    for(var i = 0; i < jsonResponse.length; i++){
-      var result = jsonResponse2.firstWhere((x) => x["productId"] == jsonResponse[i]["_id"] , orElse: () => null);
+      String reply = await response.transform(utf8.decoder).join();
+      var jsonResponse = jsonDecode(reply);
+      
       setState(() {
-        this.buyProductsNumber[jsonResponse[i]['_id'].toString()] = 0;
-        this.buyProductsTotal[jsonResponse[i]['_id'].toString()] = result["productCantity"];
+        for(var  i = 0; i < jsonResponse.length; i++){
+          this.productsByCategory[jsonResponse[i]['category']].add(jsonResponse[i]);
+        }
+
+        this.menu = jsonResponse;
       });
+
+      print(this.productsByCategory);
+      HttpClient client2 = new HttpClient();
+      client2.badCertificateCallback = ((X509Certificate cert1, String host1, int port1) => true);
+
+      HttpClientRequest request2 = await client2.getUrl(Uri.parse("https://192.168.0.101:5001/api/menus/" + dNow.toString()));
+      request2.headers.set('Authorization', "Bearer " + this.token);
+      HttpClientResponse response2 = await request2.close();
+      if(response2.statusCode == 401){
+        this.logout();
+      }
+      else {
+        String reply2 = await response2.transform(utf8.decoder).join();
+        var jsonResponse2 = jsonDecode(reply2);
+
+        for(var i = 0; i < jsonResponse.length; i++){
+          var result = jsonResponse2.firstWhere((x) => x["productId"] == jsonResponse[i]["_id"] , orElse: () => null);
+          setState(() {
+            this.buyProductsNumber[jsonResponse[i]['_id'].toString()] = 0;
+            this.buyProductsTotal[jsonResponse[i]['_id'].toString()] = result["productAmount"];
+          });
+        }
+
+        print(this.buyProductsTotal);
+        print(this.buyProductsNumber);
+      }
     }
-
-    print(this.buyProductsTotal);
-    print(this.buyProductsNumber);
-
   }
 
   checkLoginStatus() async {
@@ -191,40 +197,54 @@ class _MenuState extends State<Menu> {
 
   }
 
+
   buyProducts() async {
-    for (var i = 0; i < this.menu.length; i++){
-      if (this.buyProductsNumber[this.menu[i]['_id'].toString()] > 0){
-        this.buyProductsFinal[this.menu[i]['_id'].toString()] = this.buyProductsNumber[this.menu[i]['_id'].toString()].toDouble();
-      }
-    }
-    this.buyProductsFinal["total_price"] = this.totalPrice;
-    this.buyProductsFinal["id_user"] = this.idUser.toDouble();
-
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    
-
-    HttpClient client = new HttpClient();
-    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
-
-    HttpClientRequest request = await client.postUrl(Uri.parse(this.urlCodes));
-
-    request.headers.set('content-type', 'application/json');
-
-    request.add(utf8.encode(json.encode(this.buyProductsFinal)));
-
-    HttpClientResponse response = await request.close();
-    
-    String reply = await response.transform(utf8.decoder).join();
-    var jsonResponse = jsonDecode(reply);
-   
-    if (jsonResponse["response"] == "true"){
+    if (this.totalPrice == 0.00){
       setState(() {
-        this.code = int.parse(jsonResponse['code']);
-        this.displayCode = true;
+        this.displayError = true;
+        this.error = "Nu ati selectat niciun produs";
       });
     }
+    else{
+      for (var i = 0; i < this.menu.length; i++){
+        if (this.buyProductsNumber[this.menu[i]['_id'].toString()] > 0){
+          this.buyProductsFinal[this.menu[i]['_id'].toString()] = this.buyProductsNumber[this.menu[i]['_id'].toString()].toDouble();
+        }
+      }
+      this.buyProductsFinal["total_price"] = this.totalPrice;
+      this.buyProductsFinal["id_user"] = this.id.toDouble();
 
+      HttpClient client = new HttpClient();
+      client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+
+      HttpClientRequest request = await client.postUrl(Uri.parse(this.urlCodes));
+      request.headers.set('content-type', 'application/json');
+      request.headers.set('Authorization', "Bearer " + this.token);
+
+
+      request.add(utf8.encode(json.encode(this.buyProductsFinal)));
+
+      HttpClientResponse response = await request.close();
+
+      if(response.statusCode == 401){
+        this.logout();
+      }
+      else {
+        String reply = await response.transform(utf8.decoder).join();
+        var jsonResponse = jsonDecode(reply);
+        if (jsonResponse["response"] == "true"){
+          setState(() {
+            this.code = int.parse(jsonResponse['code']);
+            this.displayCode = true;
+          });
+        }
+      }
+
+    }
   }
+
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -238,15 +258,10 @@ class _MenuState extends State<Menu> {
               padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
               child: RaisedButton(
               onPressed:(){
-                sharedPreferences.clear();
-                // sharedPreferences.commit();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Login()),
-                );
+                this.logout();
 
               } ,
-              child: Text("Log Out", style: TextStyle(color: Colors.white)),
+              child: Text("Logout", style: TextStyle(color: Colors.white)),
               color: Colors.blue[600],
               ),
           )
@@ -335,11 +350,12 @@ class _MenuState extends State<Menu> {
                                 Visibility(
                                   visible: this.displayCode,
                                   child: Center(
-                                      child: Text("Codul dumneavoastra este: " + this.code.toString(),
+                                      child: Text("Your code is " + this.code.toString(),
                                         style: TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.w600,
                                           color: Colors.blue[800],
+                                          
                                         ),
                                       ) ,
                                   ),
@@ -353,6 +369,7 @@ class _MenuState extends State<Menu> {
                                         return Column(
                                         children: <Widget>[
                                           Container(
+                                                margin: EdgeInsets.all(0),
                                                 width: double.infinity,
                                                 // height: double.infinity,
                                                 color: Colors.purple[800],
@@ -368,10 +385,8 @@ class _MenuState extends State<Menu> {
                                             ),
                                                 ),
                                           ),
-                                          Divider(height: 10, color: Colors.blue),
-                                          Column(
-                                            // crossAxisAlignment: CrossAxisAlignment.center,
-                                            // mainAxisAlignment: MainAxisAlignment.start,
+                                          // Divider(height: 10, color: Colors.blue),
+                                          Column(                
                                             children: productsByCategory[category].map((product) {
                                               return Builder(
                                                 builder: (BuildContext context) {
@@ -382,6 +397,7 @@ class _MenuState extends State<Menu> {
                                                         return Card(
                                                           child:Container(
                                                               decoration: BoxDecoration(
+                                                              
                                                                 borderRadius: BorderRadius.circular(0),
                                                                 border: Border.all(color: Colors.blueAccent, width: 1),
                                                               ),
@@ -413,32 +429,58 @@ class _MenuState extends State<Menu> {
                                                                     ],
                                                                   ),
                                                                 ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child:Text(
-                                                                      '${product['student_price']}',
-                                                                      style: TextStyle(
-                                                                        color: Colors.blue[800],
-                                                                        fontWeight: FontWeight.w500,
-                                                                        fontSize: 22,
-                                                                        ),
-                                                                    )
-                                                                  ),
+                                                                Builder(
+                                                                  builder: (context) {
+                                                                    if (this.type == "student")
+                                                                      return Expanded(
+                                                                        flex: 1,
+                                                                        child:Text(
+                                                                            '${product['studentPrice']}' + ' lei',
+                                                                            style: TextStyle(
+                                                                              color: Colors.blue[800],
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontSize: 16,
+                                                                              ),
+                                                                          )
+                                                                        );
+                                                                    else
+                                                                      return Expanded(
+                                                                        flex: 1,
+                                                                        child:Text(
+                                                                            '${product['professoPrice']}' + ' lei',
+                                                                            style: TextStyle(
+                                                                              color: Colors.blue[800],
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontSize: 16,
+                                                                              ),
+                                                                          )
+                                                                        );
+
+                                                                  }
+                                                                ),
                                                                 Expanded(
                                                                   flex: 1,
                                                                   child: Padding(
-                                                                      padding: EdgeInsets.fromLTRB(0, 0, 10, 0,),
+                                                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0,),
                                                                       child: RaisedButton(
                                                                       color: Colors.blue[600],
-                                                                      child: Icon(
-                                                                        Icons.remove,
-                                                                        color: Colors.white,
+                                                                      child: SizedBox(
+                                                                          width: 20,
+                                                                          height: 30,
+                                                                          child: Icon(
+                                                                          Icons.remove,
+                                                                          color: Colors.white,
+                                                                        ),
                                                                       ),
                                                                       onPressed: (){
                                                                         setState(() {
                                                                           setState(() {
                                                                             if (this.buyProductsNumber[product['_id'].toString()] > 0){
-                                                                              totalPrice = double.parse((double.parse(totalPrice.toStringAsFixed(2)) - double.parse(product['student_price'].toStringAsFixed(2))).toStringAsFixed(2));
+                                                                              if(this.type == "student")
+                                                                                totalPrice = double.parse((double.parse(totalPrice.toStringAsFixed(2)) - double.parse(product['studentPrice'].toStringAsFixed(2))).toStringAsFixed(2));
+                                                                              else
+                                                                                totalPrice = double.parse((double.parse(totalPrice.toStringAsFixed(2)) - double.parse(product['professorPrice'].toStringAsFixed(2))).toStringAsFixed(2));
+
                                                                               this.buyProductsNumber[product['_id'].toString()] -= 1;
                                                                               this.buyProductsTotal[product['_id'].toString()] += 1;
                                                                             }
@@ -459,41 +501,50 @@ class _MenuState extends State<Menu> {
                                                                 ),
                                                                 Expanded(
                                                                   flex: 1,
-                                                                  child:Text(
-                                                                      '${buyProductsNumber[product['_id'].toString()]}',
-                                                                      style: TextStyle(
-                                                                        color: Colors.blue[800],
-                                                                        fontWeight: FontWeight.w500,
-                                                                        fontSize: 22,
-                                                                        ),
-                                                                    )
+                                                                  child:Center(
+                                                                    child: Text(
+                                                                        '${buyProductsNumber[product['_id'].toString()]}',
+                                                                        style: TextStyle(
+                                                                          color: Colors.blue[800],
+                                                                          fontWeight: FontWeight.w500,
+                                                                          fontSize: 22,
+                                                                          ),
+                                                                      ),
+                                                                  )
                                                                   ),
                                                                 Expanded(
                                                                   flex: 1,
-                                                                  child: RaisedButton(
-                                                                    color: Colors.blue[600],
-                                                                    child: Icon(
-                                                                      Icons.plus_one,
-                                                                      color: Colors.white,
+                                                                  child: Container(
+                                                                      margin:EdgeInsets.fromLTRB(0, 0, 2, 0) ,
+                                                                      child: RaisedButton(
+                                                                      color: Colors.blue[600],
+                                                                      child: Icon(
+                                                                        Icons.plus_one,
+                                                                        color: Colors.white,
+                                                                      ),
+                                                                      onPressed: () {
+                                                                        setState(() {
+                                                                          if(this.buyProductsTotal[product['_id'].toString()] == 0) {
+                                                                            setState(() {
+                                                                              displayError = true;
+                                                                              error = "Produsul nu mai este disponibil! Va rugam sa elegeti altceva";
+                                                                            });
+                                                                          }
+                                                                          else {
+                                                                            if (this.type == "student")
+                                                                              totalPrice = double.parse((double.parse(totalPrice.toStringAsFixed(2)) + double.parse(product['studentPrice'].toStringAsFixed(2))).toStringAsFixed(2));
+                                                                            else
+                                                                              totalPrice = double.parse((double.parse(totalPrice.toStringAsFixed(2)) + double.parse(product['professorPrice'].toStringAsFixed(2))).toStringAsFixed(2));
+                                                                              
+                                                                            this.buyProductsNumber[product['_id'].toString()] +=1;
+                                                                            this.buyProductsTotal[product['_id'].toString()] -=1;
+                                                                          }
+                                                                        });
+                                                                        print(this.buyProductsTotal);
+                                                                        print(this.buyProductsNumber);
+                                                                        // print("plus one");
+                                                                      },
                                                                     ),
-                                                                    onPressed: () {
-                                                                      setState(() {
-                                                                        if(this.buyProductsTotal[product['_id'].toString()] == 0) {
-                                                                          setState(() {
-                                                                            displayError = true;
-                                                                            error = "Produsul nu mai este disponibil! Va rugam sa elegeti altceva";
-                                                                          });
-                                                                        }
-                                                                        else {
-                                                                          totalPrice = double.parse((double.parse(totalPrice.toStringAsFixed(2)) + double.parse(product['student_price'].toStringAsFixed(2))).toStringAsFixed(2));
-                                                                          this.buyProductsNumber[product['_id'].toString()] +=1;
-                                                                          this.buyProductsTotal[product['_id'].toString()] -=1;
-                                                                        }
-                                                                      });
-                                                                      print(this.buyProductsTotal);
-                                                                      print(this.buyProductsNumber);
-                                                                      // print("plus one");
-                                                                    },
                                                                   )
                                                                 )
                                                               ],

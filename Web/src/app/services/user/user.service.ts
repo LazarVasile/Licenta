@@ -2,27 +2,28 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private _urlLogin = "https://localhost:5001/api/login";
-  private _urlRegister = "https://localhost:5001/api/register";
-  constructor(private http: HttpClient, private _router : Router) { }
+  public _urlLogin = "https://localhost:5001/api/login";
+  public _urlRegister = "https://localhost:5001/api/register";
+
+  constructor(public http: HttpClient, public _router : Router, public _location : Location) { }
 
   login(email, password) : Observable<String> {
-    let data = { "email" : email, "password" : password};
+    let data = { "email" : email, "password" : password, "type" : "web"};
     return this.http.post<String>(this._urlLogin, data, {headers:{'Accept' : 'application/json', 'Content-Type' : 'application/json'}});
 
   } 
 
   register(email, password) : Observable<any> {
     let data = {"email" : email,  "password" : password};
-    return this.http.post<any>(this._urlRegister, data, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json'}});
+    return this.http.put<any>(this._urlRegister, data, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json'}});
   }
 
   loggedIn() {
-    // return if token exist or not in the browser
     return !!localStorage.getItem('token');
   }
 
@@ -37,4 +38,10 @@ export class UserService {
     localStorage.removeItem('id_user');
     this._router.navigate(['/login']);
   }
+
+  refresh() {
+    this._router.navigateByUrl('.', { skipLocationChange: true }).then(() => {
+      this._router.navigate([decodeURI(this._location.path())]);
+  }); 
+}
 }

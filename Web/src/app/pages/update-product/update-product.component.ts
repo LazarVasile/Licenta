@@ -16,18 +16,27 @@ export class UpdateProductComponent implements OnInit {
   public urlProducts = "https://localhost:5001/api/products";
   public error = "";
   public displayError = "none";
+  public token;
+
   constructor(public _UserService : UserService, public _http : HttpClient, public _router : Router, public _location : Location) { }
 
   ngOnInit(): void {
+    this.token = localStorage.getItem("token");
     this.getProducts();
   }
 
   getProducts() {
 
-    this._http.get<any>(this.urlProducts)
-    .subscribe({next : data => {
+    this._http.get<any>(this.urlProducts, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
+    .subscribe(data => {
         this.myProducts = data;
-    }});
+    },
+    error => {
+      if (error.status == 401) {
+        this._UserService.logout();
+      }
+    });
+
 
   }
 
@@ -39,23 +48,19 @@ export class UpdateProductComponent implements OnInit {
     }
     else {
       var data = {"id" : id, "professor_price" : professorPrice, "student_price" : studentPrice, "weight" : weight, "description" : description};
-      console.log(data);
-      this._http.put<any>(this.urlProducts,  data, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json'}})
-      .subscribe({next : data =>{
-        console.log(data);
-      }});
-      this.refresh();
+      this._http.put<any>(this.urlProducts,  data, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
+      .subscribe(data =>{
+      },
+      error => {
+        if (error.status == 401) {
+          this._UserService.logout();
+        }
+      });
+
+      this._UserService.refresh();
 
     }
     
   }
-
-  refresh() {
-    this._router.navigateByUrl('.', { skipLocationChange: true }).then(() => {
-      this._router.navigate([decodeURI(this._location.path())]);
-  }); 
-}
-
-
 
 }

@@ -4,9 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/usermenu")]
     [ApiController]
     public class UserMenuController : ControllerBase

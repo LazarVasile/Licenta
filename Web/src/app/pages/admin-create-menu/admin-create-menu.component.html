@@ -6,7 +6,9 @@
 <div class="overlay">
     <app-nav-bar></app-nav-bar>
     <div class = "container" id="cnt">
-
+        <div class = "error"  #error_message [style.display] = "displayError">
+            <p>{{error}}</p>
+        </div>
         <div class="form-fields" id="create_menu">
             <div>
                 <div>
@@ -14,7 +16,7 @@
                     <input class = "input-date" type="date" (input) = "date_menu = $event.target.value">
                 </div>
                 <div class = "categories">
-                    <div class = "categories" id = "add_product_menu" *ngFor = "let category of categories; let i as index">
+                    <div id = "add_product_menu" *ngFor = "let category of categories; let i as index">
                         <label class="fields-inline" ><b>{{category}}</b></label>
                         <div class = "select-product" *ngFor = "let a of counter_categories[category]; let k as index" >
                             <select [(ngModel)] = "productsToAdd[category][k-1]">

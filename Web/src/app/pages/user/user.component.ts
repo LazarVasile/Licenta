@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ParamMap, ActivatedRoute } from '@angular/router';
-import { ThrowStmt } from '@angular/compiler';
 import { UserService } from 'src/app/services/user/user.service';
 import { ProductService } from '../../services/products/product.service';
 import { DatePipe } from '@angular/common';
 import { HttpClient} from '@angular/common/http';
-import { IMenu } from '../../services/menus/imenu';
 import { IProduct } from 'src/app/services/products/products';
-import { MAY } from '@angular/material/core';
-import { resolve } from 'dns';
-import { Menu } from 'src/app/classes/menu';
 
 @Component({
   selector: 'app-user',
@@ -40,6 +35,8 @@ export class UserComponent implements OnInit {
   public code : number;
   public displayCode;
   public idUser;
+  public token;
+  public price;
 
   constructor(private _router : Router, private _http: HttpClient,  private _route : ActivatedRoute, public _UserService : UserService, public _productService : ProductService) {
     this.categories = _productService.getCategories();
@@ -50,7 +47,12 @@ export class UserComponent implements OnInit {
     this.displayCode = "none";
     this.username = localStorage.getItem("loggedUser");
     this.typeUser = localStorage.getItem("type");
+
+
+    console.log(this.price);
+    
     this.idUser = localStorage.getItem("id_user");
+    this.token = localStorage.getItem("token");
     this.getProducts(this.formatDate);
   }
 
@@ -61,6 +63,8 @@ export class UserComponent implements OnInit {
     this.buyProductsNumber = {};
     this.buyProductsTotal = {};
     this.initCategories();
+    this.displayError = "none";
+    this.error = "";
     this.displayButton1 = "block";
     this.displayButton2 = "none";
     // const promise = new Promise((resolve, reject) => {
@@ -71,20 +75,27 @@ export class UserComponent implements OnInit {
           for (let i = 0; i < this.myProducts.length; i++){
             this.productsByCategory[this.myProducts[i].category].push(this.myProducts[i]);
           }
-          console.log(this.myProducts);
-          console.log(date);
-          this._http.get<any>("https://localhost:5001/api/menus/" + date)
+          
+          this._http.get<any>("https://localhost:5001/api/menus/" + date, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
           .subscribe(data =>
             {
               this.myMenu = data;
-              for (let i = 0; i < this.myProducts.length; i++){
-                this.buyProductsNumber[this.myProducts[i]['_id'].toString()] = 0;
-                let seachProduct = this.myMenu.find(x => x['productId'] == this.myProducts[i]['_id']);
-                this.buyProductsTotal[this.myProducts[i]['_id'].toString()] = seachProduct['productCantity'];
+              // for (let i = 0; i < this.myProducts.length; i++){
+              //   this.buyProductsNumber[this.myProducts[i]['_id'].toString()] = 0;
+              //   let seachProduct = this.myMenu.find(x => x['productId'] == this.myProducts[i]['_id']);
+              //   this.buyProductsTotal[this.myProducts[i]['_id'].toString()] = seachProduct['productAmount'];
+              // }
+      
+              for (let key in this.myMenu["productsIdAndAmounts"]){
+                this.buyProductsNumber[key.toString()] = 0;
+                this.buyProductsTotal[key.toString()] = this.myMenu["productsIdAndAmounts"][key];
               }
-              console.log(this.buyProductsNumber);
-              console.log(this.buyProductsTotal);
             },
+            error => {
+              if (error.status == 401) {
+                this._UserService.logout();
+              }
+            }
           )
       }
       )
@@ -99,46 +110,57 @@ export class UserComponent implements OnInit {
   }
 
   Recommendation(){
+    this.displayError = "none";
+    this.error = "";
     this.totalPrice = 0;
-    console.log(this.myMenu);
     this.displayButton1 = "none";
     this.displayButton2 = "block";
     this.buyProductsNumber = {};
     this.buyProductsTotal = {};
     this.initCategories();
     var url = this._url2 + this.idUser;
-      this._http.get<any>(url)
+      this._http.get<any>(url, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
       .subscribe( data => {
-        this.myProducts = data;
-        for (let i = 0; i < this.myProducts.length; i++){
-          this.productsByCategory[this.myProducts[i].category].push(this.myProducts[i]);
+        console.log(data);
+        if(data.length == 0){
+          this.displayError = "block";
+          this.error = "Incă nu vă putem oferi o recomandare, vă rugăm să incercați în altă zi!";
         }
-        
-        this.myMenu = data;
-        for (let i = 0; i < this.myProducts.length; i++){
-          this.buyProductsNumber[this.myProducts[i]['_id'].toString()] = 0;
-          let seachProduct = this.myMenu.find(x => x['productId'] == this.myProducts[i]['_id']);
-          if (seachProduct != null){
-            this.buyProductsTotal[this.myProducts[i]['_id'].toString()] = seachProduct['productCantity'];
+        else {
+          this.myProducts = data;
+          for (let i = 0; i < this.myProducts.length; i++){
+            this.productsByCategory[this.myProducts[i].category].push(this.myProducts[i]);
           }
-        }    
+          this.myMenu = data;
+          for (let key in this.myMenu["productsIdAndAmounts"]){
+            this.buyProductsNumber[key.toString()] = 0;
+            this.buyProductsTotal[key.toString()] = this.myMenu["productsIdAndAmounts"][key];
+          }    
+        }
+      },
+      error => {
+        if (error.status == 401) {
+          this._UserService.logout();
+        }
       }
       )
   }
 
   plusProduct(product) {
-    console.log(this.idUser);
     if (this.buyProductsTotal[product["_id"].toString()] == 0){
       this.error = "Produsul nu mai este disponibil! Va rugam sa alegeti altceva!";
       this.displayError = "block";
     }
     else {
-    // console.log(this.buyProducts);
-      this.totalPrice = Number((this.totalPrice + product.student_price).toFixed(2)); 
+      if(this.typeUser == "student"){
+        this.totalPrice = Number((this.totalPrice + product.studentPrice).toFixed(2)); 
+      }
+      else if (this.typeUser == "professor"){
+        this.totalPrice = Number((this.totalPrice + product.professorPrice).toFixed(2)); 
+        
+      }
       this.buyProductsTotal[product["_id"].toString()] -= 1;  
       this.buyProductsNumber[product['_id'].toString()] += 1;
-      // console.log(this.buyProductsNumber);
-      // console.log(this.buyProductsTotal);
     }
   }
 
@@ -146,7 +168,13 @@ export class UserComponent implements OnInit {
 
   minusProduct(product) {
     if (this.buyProductsNumber[product['_id'].toString()] > 0){
-      this.totalPrice = Number((this.totalPrice - product.student_price).toFixed(2)); 
+      if(this.typeUser == "student"){
+        this.totalPrice = Number((this.totalPrice - product.studentPrice).toFixed(2)); 
+      }
+      else if (this.typeUser == "professor"){
+        this.totalPrice = Number((this.totalPrice - product.professorPrice).toFixed(2)); 
+        
+      }
       this.buyProductsTotal[product['_id'].toString()] += 1;
       this.buyProductsNumber[product["_id"].toString()] -= 1;
     }
@@ -158,18 +186,30 @@ export class UserComponent implements OnInit {
         this.buyProductsFinal[this.myProducts[i]['_id'].toString()] = this.buyProductsNumber[this.myProducts[i]['_id'].toString()];
       }
     }
-    this.buyProductsFinal["total_price"] = this.totalPrice;
-    this.buyProductsFinal["id_user"] = Number(this.idUser);
     console.log(this.buyProductsFinal);
-    // this.buyProductsFinal["id_user"] = Number(this.idUser); 
-    this._http.post<any>(this._urlCodes, this.buyProductsFinal, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json'}})
-    .subscribe({next:data =>{
-      // console.log(data);
-      if (data["response"] == "true"){
-        this.code = data['code'];
-        this.displayCode = "block";
-      }
-    }});
+    if (this.totalPrice != 0) {
+
+      this.buyProductsFinal["total_price"] = this.totalPrice;
+      this.buyProductsFinal["id_user"] = Number(this.idUser);
+      // this.buyProductsFinal["id_user"] = Number(this.idUser); 
+      this._http.post<any>(this._urlCodes, this.buyProductsFinal, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
+      .subscribe(data =>{
+        console.log(data);
+        if (data["response"] == "true"){
+          this.code = data['code'];
+          this.displayCode = "block";
+        }
+      },
+      error => {
+        if (error.status == 401) {
+          this._UserService.logout();
+        }
+      });
+    }
+    else {
+      this.displayError = "block";
+      this.error = "Nu ați selectat niciun produs, incercați din nou!";
+    }
   }
 
 

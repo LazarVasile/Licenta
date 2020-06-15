@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/history")]
     [ApiController]
     public class HistoryController : ControllerBase
@@ -25,11 +27,11 @@ namespace Api.Controllers
         //}
 
         // GET: api/History/5
-        [HttpGet("{id}", Name = "GetHistoryByDate")]
+        [HttpGet("{date}", Name = "GetHistoryByDate")]
         public List<History> Get(DateTime date)
         {
-            DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
-            List<History> myHistories = _historyService.getHistoryByDate(dNow);
+            Console.WriteLine(date);
+            List<History> myHistories = _historyService.getHistoryByDate(date);
             return myHistories;
         }
 
@@ -46,9 +48,9 @@ namespace Api.Controllers
         //}
 
         // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
+        //[HttpDelete("{id}")]
         //////public void Delete(int id)
-        {
-        }
+        //{
+        //}
     }
 }

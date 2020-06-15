@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/codes")]
     [ApiController]
     public class CodesController : ControllerBase
@@ -40,10 +42,12 @@ namespace Api.Controllers
         }
 
         // GET: api/BuyCodes/5
-        [HttpGet("{code}", Name = "Get")]
+        [HttpGet("{code}", Name = "GetProductsByCode")]
         public Codes Get(int code)
         {
+            Console.WriteLine(code);
             DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
+            Console.WriteLine(dNow);
             Console.WriteLine(dNow);
             Codes myCode = _codesService.GetCodesByCodeAndDate(code, dNow);
             return myCode; 
@@ -53,13 +57,12 @@ namespace Api.Controllers
         [HttpPost]
         public IDictionary<String, String> Post([FromBody] IDictionary<String, double> request)
         {
-            Console.WriteLine("dskadksakdsa" + request["id_user"]);
 
             DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
 
             IMongoCollection<Codes> collection = _codesService.GetCollectionCodes();
             IDictionary<String, String> dict = new Dictionary<String, String>();
-            List<Codes> codes = _codesService.GetCodesByDate(dNow);
+            List<Codes> codes = _codesService.GetCodes();
             int code = RandomCode();
             int count = codes.Count;
             while (codes.Exists(x => x.code == code) == true)
@@ -70,6 +73,7 @@ namespace Api.Controllers
             int idUSer = Convert.ToInt32(request["id_user"]);
             double totalPrice = request["total_price"];
             Codes product = new Codes();
+            Console.WriteLine(count);
             product._id = count + 1;
             product.idUser = idUSer;
             product.date = dNow;
@@ -85,8 +89,14 @@ namespace Api.Controllers
                     product.idProductsAndAmounts[item.Key] = Convert.ToInt32(item.Value);
                 }
             }
-
-            collection.InsertOneAsync(product);
+            try
+            {
+                collection.InsertOneAsync(product);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("nu s-a putut insera");
+            }
             dict.Add("response", "true");
             dict.Add("code", code.ToString());
 

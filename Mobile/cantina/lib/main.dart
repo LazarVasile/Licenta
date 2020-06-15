@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
   }
 
   Login (String email, String password) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     password = generateMd5(password);
     print(email);
     print(password);
@@ -45,7 +45,8 @@ class _LoginState extends State<Login> {
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     Map data = {
       'email' : email,
-      'password' : password
+      'password' : password,
+      'type' : "web"
     };
 
   
@@ -76,8 +77,8 @@ class _LoginState extends State<Login> {
         this.isLogged = true;
         this.idUser = int.parse(jsonResponse['id_user']);
       });
-
-      sharedPreferences.setString("token", jsonResponse['token']);
+      prefs.setString("token", jsonResponse['token']);
+      prefs.setString("type", jsonResponse["type"]);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Menu(id :this.idUser)),

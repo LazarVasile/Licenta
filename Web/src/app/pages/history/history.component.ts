@@ -13,21 +13,33 @@ export class HistoryComponent implements OnInit {
 
   public my_date;
   public myHistory;
+  public token;
+  public displayError = "none";
+  public error;
   constructor(public _UserService : UserService, public _http : HttpClient, public _router : Router, public _location : Location) { }
 
   ngOnInit(): void {
+    this.token = localStorage.getItem("token");
   }
 
   showHistory() {
+    this.myHistory = null;
     if(this.my_date == null){
-      console.log("Alegeti data")
+      this.displayError = "block";
+      this.error = "Alegeti data!";
     }
     else {
-      this._http.get("https://localhost:5001/api/history/" + this.my_date)
-      .subscribe({next : data => {
+      console.log(this.my_date);
+      this._http.get("https://localhost:5001/api/history/" + this.my_date, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
+      .subscribe(data => {
         console.log(data);
         this.myHistory = data;
-      }});
+      },
+      error => {
+        if (error.status == 401) {
+          this._UserService.logout();
+        }
+      });
     }
   }
 }

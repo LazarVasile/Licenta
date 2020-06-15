@@ -10,6 +10,8 @@ import { AdminAdaugareProdusComponent } from './pages/admin-adaugare-produs/admi
 import { AdminCreateMenuComponent } from './pages/admin-create-menu/admin-create-menu.component';
 import { UpdateProductComponent } from './pages/update-product/update-product.component';
 import { ProductDetailsComponent } from './pages/product-details/product-details.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { HistoryComponent } from './pages/history/history.component';
 import { NavBarComponent } from './pages/nav-bar/nav-bar.component';
 import { AuthGuard } from './services/auth/auth.guard';
@@ -19,6 +21,8 @@ const routes: Routes = [
   {path : '', redirectTo : "/login", pathMatch : "full" },
   {path : 'login', component: LoginComponent},
   {path : 'register', component : RegisterComponent},
+  {path : 'forgot-password', component : ForgotPasswordComponent},
+  {path : 'reset-password', component : ResetPasswordComponent},
   {path : 'user', component : UserComponent, canActivate: [AuthGuard]},
   {path : 'admin', component : AdminComponent},
   {path : 'admin-adaugare-admin', component : AdminAdaugareAdminComponent, canActivate: [AuthGuard]},
@@ -48,5 +52,8 @@ export const routingComponents = [LoginComponent,
                                   AdminCreateMenuComponent,
                                   ProductDetailsComponent,
                                   UpdateProductComponent,
+                                  HistoryComponent,
+                                  ForgotPasswordComponent,
+                                  ResetPasswordComponent,
                                   NavBarComponent
                                 ];

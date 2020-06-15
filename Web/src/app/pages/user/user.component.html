@@ -34,7 +34,13 @@
                         <ul *ngFor="let product of productsByCategory[category];">
                             <li><p>{{product.name}}</p></li>
                             <li><p>{{product.description}}</p></li>
-                            <li><p>{{product.student_price}} lei</p></li>
+                            <div *ngIf = "typeUser == 'student'; then thenBlock2; else elseBlock2"></div>
+                            <ng-template #thenBlock2>
+                                <li><p>{{product.studentPrice}} lei</p></li>
+                            </ng-template>
+                            <ng-template #elseBlock2>
+                                <li><p>{{product.professorPrice}} lei</p></li>
+                            </ng-template>
                             <li><button (click) = "minusProduct(product)"><b>-</b></button></li>
                             <li>{{buyProductsNumber[product._id.toString()]}}</li>
                             <li><button (click) = "plusProduct(product)"><b>+</b></button></li>

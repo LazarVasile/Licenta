@@ -4,9 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Api.Controllers
-{
+{   
+    [Authorize]
     [Route("api/products/recommendation")]
     [ApiController]
     public class RecommendationController : ControllerBase
@@ -38,7 +41,8 @@ namespace Api.Controllers
                 }
             }
 
-            return myProducts;
+            List<Product> myProductsFinal = myProducts.Distinct().ToList();
+            return myProductsFinal;
         }
 
         // POST: api/Recommendation

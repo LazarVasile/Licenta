@@ -12,6 +12,8 @@ import { TokenInterceptorService} from './services/token-interceptor/token-inter
 import { FormsModule } from '@angular/forms';
 import { ProductDetailsComponent } from './pages/product-details/product-details.component';
 import { HistoryComponent } from './pages/history/history.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import { HistoryComponent } from './pages/history/history.component';
     routingComponents,
     ProductDetailsComponent,
     HistoryComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
     
   ],
   imports: [

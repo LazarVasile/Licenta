@@ -34,6 +34,7 @@ namespace Api
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
+                   
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
@@ -78,6 +79,9 @@ namespace Api
             {
                 endpoints.MapControllers();
             });
+
+            app.UseAuthentication();
+            app.UseAuthorization();
         }
     }
 }

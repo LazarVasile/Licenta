@@ -6,9 +6,12 @@ using Api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Api.Controllers
 {
+    //[Authorize]
     [Route("api/menus")]
     [ApiController]
     public class MenuController : ControllerBase
@@ -29,10 +32,9 @@ namespace Api.Controllers
 
         // GET: api/Menu/5
         [HttpGet("{date}", Name = "GetMenusByDate")]
-        public List<Menu> GetMenusByDate(DateTime date)
+        public Menu GetMenuByDate(DateTime date)
         {
-            Console.WriteLine(date);
-            var myMenu =_menuService.GetMenusByDate(date);
+            Menu myMenu =_menuService.GetLastMenuByDate(date);
             return myMenu;
 
         }
@@ -48,34 +50,22 @@ namespace Api.Controllers
             //Console.WriteLine(value.dateMenu);
             var number = menus.Count;
             DateTime myDate = Convert.ToDateTime(request.dateMenu.ToString("yyyy-MM-dd"));
+            var newMenu = new Menu();
+            newMenu._id = number + 1;
+            newMenu.dateMenu = myDate;
+            newMenu.productsIdAndAmounts = new Dictionary<String, int> { };
             foreach(KeyValuePair<string, int> item in request.products)
             {
-                number++;
-                Console.WriteLine(item.Key);
-                var newMenu = new Menu();
-                newMenu._id = number;
-                newMenu.dateMenu = myDate;
-                newMenu.productId = Int32.Parse(item.Key);
-                
-                newMenu.productCantity = item.Value;
-                try
-                {
-                    collection.InsertOneAsync(newMenu);
-                } catch (Exception)
-                {
-                    Console.WriteLine("Nu s-a putut adauga produs in meniu!");
-                }
+                newMenu.productsIdAndAmounts[item.Key] = item.Value;
             }
-            //for (int i = 0; i <value.listIds.Count; i++)
-            //{
-            //    var newMenu = new Menu();
-            //    newMenu._id = menus.Count + i;
-            //    newMenu.dateMenu = value.dateMenu;
-            //    newMenu.productId = value.listIds[i];
-            //    collection.InsertOneAsync(newMenu);
-
-            //}
-
+            try
+            {
+                collection.InsertOneAsync(newMenu);
+            } catch (Exception)
+            {
+                Console.WriteLine("Nu s-a putut adauga produs in meniu!");
+            }
+          
             return "true";
 
         }
@@ -93,7 +83,7 @@ namespace Api.Controllers
         }
         // PUT: api/Menu/5
         [HttpPut]
-        public void Put([FromBody] IDictionary<String, double> request)
+        public string Put([FromBody] IDictionary<String, double> request)
         {
             DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
             IMongoCollection<Menu> collection = _menuService.GetCollectionMenu();
@@ -111,34 +101,34 @@ namespace Api.Controllers
             IDictionary<string, string> products = _menuService.GetProductsById();
             history.nameProductsAndAmounts = new Dictionary<String, int> { };
             history.totalPrice = request["total_price"];
+            Menu menu = _menuService.GetLastMenuByDate(dNow);
+            IDictionary<string, int> copy =  new Dictionary<string, int>(menu.productsIdAndAmounts);
 
             foreach (KeyValuePair<string, double> item in request)
             {
                 if (item.Key != "total_price")
                 {
-                    var q = Convert.ToInt32(item.Value);
-                    history.nameProductsAndAmounts[products[item.Key.ToString()]] = q;
+                    Console.WriteLine(menu.productsIdAndAmounts[item.Key]);
+                    copy[item.Key] -= Convert.ToInt32(item.Value);
+                    Console.WriteLine(menu.productsIdAndAmounts[item.Key] + " " + copy[item.Key]);
 
-                    var quantity = _menuService.GetQuantity(Convert.ToInt32(item.Key), dNow);
-                    Console.WriteLine("Vechea cantitate: " + quantity);
-                    var newQuantity = quantity - q;
-                    var arrayFilter = Builders<Menu>.Filter.Eq("product_id", Int32.Parse(item.Key)) & Builders<Menu>.Filter.Eq("date_menu", dNow);
-                    var update = Builders<Menu>.Update.Set("product_cantity", newQuantity);
-                    try
-                    {
-                        collection.UpdateOne(arrayFilter, update);
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine("Nu se poate face update");
-                    }
-                    var quantity1 = _menuService.GetQuantity(Int32.Parse(item.Key), dNow);
-
-                    Console.WriteLine("Noua cantitate: " + quantity1);
                 }
+            }
+           
+            var arrayFilter = Builders<Menu>.Filter.Eq("dateMenu", dNow) & Builders<Menu>.Filter.Eq("productsIdAndAmounts", menu.productsIdAndAmounts);
+            var update = Builders<Menu>.Update.Set("productsIdAndAmounts", copy);
+
+            try
+            {
+                collection.UpdateOne(arrayFilter, update);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Nu se poate face update");
             }
 
             collection2.InsertOneAsync(history);
+            return "succes";
 
         }
 

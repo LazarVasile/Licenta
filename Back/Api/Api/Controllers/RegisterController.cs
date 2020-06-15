@@ -34,10 +34,9 @@ namespace Api.Controllers
         {
             return "value";
         }
-
-        // POST: api/Register
-        [HttpPost]
-        public IDictionary<String, String> Post([FromBody]  Register request)
+        // PUT: api/Register/5
+        [HttpPut]
+        public IDictionary<String, String> Put([FromBody]  Register request)
         {
             List<User> users = _userService.GetUsers();
             IMongoCollection<User> collection = _userService.GetCollectionUser();
@@ -60,7 +59,7 @@ namespace Api.Controllers
                 };
                 */
                 var user_add = new User();
-                user_add._id = users[users.Count-1]._id + 1;
+                user_add._id = users[users.Count - 1]._id + 1;
                 user_add.email = request.email;
                 user_add.password = _userService.ComputeSha256(request.password);
                 user_add.role = "user";
@@ -70,12 +69,6 @@ namespace Api.Controllers
                 dict.Add("response", "true");
                 return dict;
             }
-        }
-
-        // PUT: api/Register/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
         }
 
         // DELETE: api/ApiWithActions/5

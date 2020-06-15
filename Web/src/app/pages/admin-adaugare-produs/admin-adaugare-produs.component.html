@@ -7,8 +7,11 @@
 <div class = "overlay">
     <app-nav-bar></app-nav-bar>
     <div class = "container" id = "cnt">
+        <div class = "error"  #error_message [style.display] = "displayError">
+            <p>{{error}}</p>
+        </div>
         <div class="form-fields" id="add_product_fields">
-            <h1 style = "display:none;" id = "msg">Produsul a fost adaugat cu succes</h1>
+            
             <div class="field2">
                 <label class="fields-inline"><b>Nume produs</b></label>
                 <input type="text" placeholder="Introduceti nume produs" #name_product>

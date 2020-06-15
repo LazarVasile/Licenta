@@ -13,14 +13,13 @@ namespace Api
         [BsonElement("_id")]
         public int _id { get; set; }
 
-        [BsonElement("date_menu")]
+        [BsonElement("dateMenu")]
         public DateTime dateMenu { get; set; }
 
-        [BsonElement("product_id")]
-        public int productId { get; set; }
+        [BsonElement("productsIdAndAmounts")]
+        public IDictionary<string, int> productsIdAndAmounts {get; set;}
 
-        [BsonElement("product_cantity")]
-        public int productCantity { get; set; }
+        
     }
 
     public class CreateMenu

@@ -1,4 +1,7 @@
+import 'package:cantina/main.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'dart:convert';
 
 class ForgotPassword extends StatefulWidget {
   @override
@@ -6,8 +9,30 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  static String url = "https://192.168.0.101:5001/api/users/forgotpassword";
+  bool displayMessage = false;
+  String message = "";
   
+  sendEmail(email) async {
+    var data = {"email" : email};
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+
+    HttpClientRequest request = await client.putUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.add(utf8.encode(json.encode(data)));
+    HttpClientResponse response = await request.close();
+    if(response.statusCode != 200){
+      print("Ceva nu a mers bine");
+    }
+    else {
+      String reply2 = await response.transform(utf8.decoder).join();
+      print(reply2);
+    }
+  }
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,12 +89,29 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             ),
                           )
                         ),
+                        Visibility(
+                            visible: this.displayMessage,
+                            child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(10),
+                            child: Center(
+                              child: Text(
+                                this.message,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize:20,
+                                  color: Colors.blue[900],
+                                  fontWeight: FontWeight.w500,
+                                  )
+                              ) ,
+                            )
+                          ),
+                        ),
                         Divider(height: 10, color: Colors.blue),
                         Container(
                           
                           padding: EdgeInsets.all(20),
                           child: TextField(
-                            controller: nameController,
+                            controller: emailController,
                             decoration: InputDecoration(
                               suffixIcon: Icon(Icons.email,
                                 color: Colors.blue[600],
@@ -98,7 +140,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               color: Colors.purple,
                               child: Text("Send mail", style: TextStyle(fontSize: 20)),
                               onPressed: () {
-                                print("Send mail");
+                                sendEmail(emailController.text);
+                                // setState(() {
+                                //   this.displayMessage = true;
+                                //   this.message = "An email has been sent to your email adress!";
+                                // });
+                                // sleep(Duration(seconds : 5));
+                                Navigator.push(context,
+                                MaterialPageRoute(builder : (context) => Login()));
                               },
                             ),
                           ),

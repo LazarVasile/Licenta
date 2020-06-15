@@ -6,9 +6,11 @@ using Api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/products")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -38,8 +40,6 @@ namespace Api.Controllers
         {
             List<Product> products = _productService.GetProducts();
             IMongoCollection<Product> collection = _productService.GetCollectionProduct();
-            Console.WriteLine("dsadsa");
-            Console.WriteLine(request);
             if (products.Exists( x => x.name == request.name ))
             {
                 return "error";
@@ -50,8 +50,8 @@ namespace Api.Controllers
                 productToAdd._id = products[products.Count-1]._id + 1;
                 productToAdd.name = request.name;
                 productToAdd.category = request.category;
-                productToAdd.professor_price = Convert.ToDouble(request.professor_price);
-                productToAdd.student_price = Convert.ToDouble(request.student_price);
+                productToAdd.professorPrice = Convert.ToDouble(request.professorPrice);
+                productToAdd.studentPrice = Convert.ToDouble(request.studentPrice);
                 productToAdd.weight = Convert.ToInt32(Convert.ToString(request.weight));
                 productToAdd.description = request.description;
                 
@@ -73,12 +73,12 @@ namespace Api.Controllers
             var filter = Builders<Product>.Filter.Eq("_id", request["id"]);
             if (request["professor_price"] != "")
             {
-                var update = Builders<Product>.Update.Set("professor_price", request["professor_price"]);
+                var update = Builders<Product>.Update.Set("professorPrice", request["professor_price"]);
                 collection.UpdateOne(filter, update);
             }
             if (request["student_price"] != "")
             {
-                var update = Builders<Product>.Update.Set("student_price", request["student_price"]);
+                var update = Builders<Product>.Update.Set("studentPrice", request["student_price"]);
                 collection.UpdateOne(filter, update);
             }
             if (request["weight"] != "")
