@@ -16,7 +16,7 @@ import { HttpClient} from '@angular/common/http';
 })
 export class AdminCreateMenuComponent implements OnInit {
 
-  public categories = ["Ciorbe si supe / Soups", "Garnituri / Side dishes", "Felul II", "Desert / Deserts", "Salate / Salads", "Paine / Bread", "Bauturi / Drinks"];
+  public categories;
   // public productsOnCategories = new Array(any[]);
  
   public activeButton;
@@ -28,14 +28,17 @@ export class AdminCreateMenuComponent implements OnInit {
   private _urlMenus = "https://localhost:5001/api/menus";
   public date_menu;
   public list_cantities = [];
-  public myProducts= {};
+  public myProducts = {};
   public token;
   public error;
   public displayError = "none";
+  public message;
+  public displayMessage = "none";
 
   constructor(private http: HttpClient, public _UserService : UserService, public _productService : ProductService, public _router: Router, public _location: Location) { }
 
   ngOnInit(): void {
+    this.categories = this._productService.getCategories();
     this.activeButton = true;
     this.token = localStorage.getItem("token");
     this._productService.getProducts().subscribe(data => {
@@ -57,13 +60,19 @@ export class AdminCreateMenuComponent implements OnInit {
   } 
 
   createMenu() {
-    if (this.date_menu == null) {
+    console.log(this.myProducts);
+    if (Object.keys(this.myProducts).length == 0 ) {
       this.displayError = "block";
-      this.error = "Va rugam sa selectati data!";
+      this.error = "Nu ați introdus niciun produs! Încercați din nou!";
     }
     else {
-      for (let i = 0; i < this.categories.length; i++)
-      for (let j = 0; j < this.productsToAdd[this.categories[i]].length; j++){
+      if (this.date_menu == null) {
+        this.displayError = "block";
+        this.error = "Va rugăm să selectați data!";
+      }
+      else {
+        for (let i = 0; i < this.categories.length; i++)
+        for (let j = 0; j < this.productsToAdd[this.categories[i]].length; j++){
         this.list_ids.push(this.productsToAdd[this.categories[i]][j])
       }
       
@@ -71,13 +80,17 @@ export class AdminCreateMenuComponent implements OnInit {
       this.http.post<any>(this._urlMenus, data, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
       .subscribe(data =>
         {
-          this._UserService.refresh()
-    },
-    error => {
-      if (error.status == 401) {
-        this._UserService.logout();
-      }      
-    })
+          if (data["response"] == "true"){
+            this._UserService.refresh()
+            
+          }
+        },
+        error => {
+          if (error.status == 401) {
+            this._UserService.logout();
+          }      
+        })
+      }
     }
     
   }

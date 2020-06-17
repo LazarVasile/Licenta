@@ -26,7 +26,6 @@ export class UpdateProductComponent implements OnInit {
   }
 
   getProducts() {
-
     this._http.get<any>(this.urlProducts, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
     .subscribe(data => {
         this.myProducts = data;
@@ -43,7 +42,7 @@ export class UpdateProductComponent implements OnInit {
   updateProduct(id, professorPrice, studentPrice, weight, description ) {
     if(id == ""){
       this.displayError = "block";
-      this.error = "Nu ati selectat niciun produs, incercati din nou!";
+      this.error = "Nu ați selectat niciun produs, incercați din nou!";
       
     }
     else {

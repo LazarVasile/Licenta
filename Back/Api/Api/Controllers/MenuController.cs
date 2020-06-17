@@ -41,7 +41,7 @@ namespace Api.Controllers
 
         // POST: api/Menu
         [HttpPost]
-        public string Post([FromBody] CreateMenu request)
+        public IDictionary<string, string> Post([FromBody] CreateMenu request)
         {
             List<Menu> menus = _menuService.GetMenus();
             Console.WriteLine("dsa");
@@ -54,6 +54,7 @@ namespace Api.Controllers
             newMenu._id = number + 1;
             newMenu.dateMenu = myDate;
             newMenu.productsIdAndAmounts = new Dictionary<String, int> { };
+            var dict = new Dictionary<string, string> { };
             foreach(KeyValuePair<string, int> item in request.products)
             {
                 newMenu.productsIdAndAmounts[item.Key] = item.Value;
@@ -61,12 +62,15 @@ namespace Api.Controllers
             try
             {
                 collection.InsertOneAsync(newMenu);
-            } catch (Exception)
+                dict["response"] = "true";
+                return dict;
+            } catch 
             {
-                Console.WriteLine("Nu s-a putut adauga produs in meniu!");
+                dict["response"] = "false";
+                return dict;
             }
           
-            return "true";
+            
 
         }
 
@@ -108,6 +112,7 @@ namespace Api.Controllers
             {
                 if (item.Key != "total_price")
                 {
+                    history.nameProductsAndAmounts[products[item.Key]] = Convert.ToInt32(item.Value); 
                     Console.WriteLine(menu.productsIdAndAmounts[item.Key]);
                     copy[item.Key] -= Convert.ToInt32(item.Value);
                     Console.WriteLine(menu.productsIdAndAmounts[item.Key] + " " + copy[item.Key]);

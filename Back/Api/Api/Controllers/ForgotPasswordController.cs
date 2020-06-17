@@ -40,6 +40,8 @@ namespace Api.Controllers
             Console.WriteLine(email);
             List<User> users = _fpService.GetUsers();
             IMongoCollection<User> collection = _fpService.GetCollectionUser();
+            Dictionary<string, string> dict = new Dictionary<string, string> { };
+
 
             if (users.Exists(x => x.email == email))
             {
@@ -84,21 +86,17 @@ namespace Api.Controllers
 
                     SmtpServer.Send(mail);
                     Console.WriteLine("Email sent");
-                    Dictionary<string, string> dict = new Dictionary<string, string> { };
                     dict["response"] = "true";
                     return dict;
                 }
-                catch (Exception)
+                catch
                 {
-                    Console.WriteLine("Not able to sent email");
-                    Dictionary<string, string> dict = new Dictionary<string, string> { };
                     dict["response"] = "false";
                     return dict;
                 }
             }
             else
             {
-                Dictionary<string, string> dict = new Dictionary<string, string> { };
                 dict["response"] = "false";
                 return dict;
             }

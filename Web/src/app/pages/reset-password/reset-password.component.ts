@@ -49,14 +49,14 @@ export class ResetPasswordComponent implements OnInit {
         }
         else {
           this.displayError = "block";
-          this.error = "Something went wrong. Please try again!";
+          this.error = "Ceva nu a mers. Încercați din nou!";
         }
       },
       error => {
         console.log(error);
         if (error.status == 401) {
           this.displayError = "block";
-          this.error = "Something went wrong. Please try again!"
+          this.error = "Link-ul de schimbare parolă a expirat. Incercați din nou!"
         }
       });
       

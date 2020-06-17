@@ -47,7 +47,13 @@ namespace Api.Controllers
             else
             {
                 var productToAdd = new Product();
-                productToAdd._id = products[products.Count-1]._id + 1;
+                try
+                {
+                    productToAdd._id = products[products.Count-1]._id + 1;
+                } catch
+                {
+                    productToAdd._id = 0;
+                }
                 productToAdd.name = request.name;
                 productToAdd.category = request.category;
                 productToAdd.professorPrice = Convert.ToDouble(request.professorPrice);

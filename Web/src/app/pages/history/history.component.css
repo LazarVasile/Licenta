@@ -95,9 +95,16 @@ ul li {
     padding-top: 10px;
     font-weight: 900;
     padding-left: 3px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    
     border-right: 2px solid var(--blue900);
 }
+ul li div {
+    overflow-wrap: break-word;
 
+}
 ul > li:nth-child(1) {
     width: 15%;
     border-left: 2px solid var(--blue900);
@@ -105,6 +112,7 @@ ul > li:nth-child(1) {
 
 ul > li:nth-child(2) {
     width: 70%;
+    overflow-wrap: break-word;
 }
 ul > li:nth-child(3) {
     width: 15%;

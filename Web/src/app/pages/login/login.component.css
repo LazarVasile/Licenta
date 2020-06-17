@@ -1,10 +1,6 @@
 
-body {
-    background-image: linear-gradient(to top,var(--blue900) 0%, white 100%);
-    background-repeat: no-repeat;
-}
 .div-form{
-    width: 450px;
+    width: 25%;
     min-height: 500px;
     height: auto;
     border-radius: 5px; 
@@ -20,6 +16,9 @@ body {
     display: flex;
     flex-direction: column;
     margin: 0 auto;
+}
+body {
+    
 }
 
 header {
@@ -53,10 +52,16 @@ header p {
 
 .input-fields {
     margin: 2% auto 10% auto;
+    align-items: center;
 }
 
+.input-name {
+    margin-left: 20%;
+}
 .input-field{
-    width: 93%;
+    align-self: center;
+    margin-left: 20%;
+    width: 60%;
     height: 30px;
     background-color: #c9f4f5;
     padding: 10px;
@@ -69,6 +74,7 @@ header p {
     margin-bottom: 15px;
     
 }
+
 
 input {
     margin-top: 5px;
@@ -103,7 +109,8 @@ button {
     /* margin-right: 5px; */
 }
 .log-in {
-    width:100%;
+    margin-left: 20%;
+    width:60%;
 }
 
 button:hover{

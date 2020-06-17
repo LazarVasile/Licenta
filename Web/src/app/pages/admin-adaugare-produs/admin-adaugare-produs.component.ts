@@ -18,20 +18,21 @@ export class AdminAdaugareProdusComponent implements OnInit {
   public message = "";
   public token;
   public _urlProducts = "https://localhost:5001/api/products";
+  public displayMessage = "none";
 
   constructor(public _productService : ProductService, public _UserService : UserService, private _router : Router, private _location : Location, private _http : HttpClient) { 
+    this.categories = this._productService.getCategories();
   }
 
   ngOnInit(): void {
     this.token = localStorage.getItem("token");
     this.activeButton = true;
-    this.categories = this._productService.getCategories();
   }
 
   addProduct(name, category, professor_price, student_price, weight, description) {
-    if(name == "" || category == "" || professor_price == "" || student_price == "" || weight == "" || description == ""){
+    if(name == "" || category == "" || professor_price == "" || student_price == "" || weight == ""){
       this.displayError = "block";
-      this.error = "Nu ati completat toate campurile!";
+      this.error = "Nu ați completat toate câmpurile!";
     }
     else {
       console.log(this._urlProducts);
@@ -41,8 +42,8 @@ export class AdminAdaugareProdusComponent implements OnInit {
         {
           console.log(data);
           if (data == "succes"){
-            this.displayError = "block";
-            this.error = "Produsul a fost adaugat cu succes!";
+            this.displayMessage = "block";
+            this.message = "Produsul a fost adăugat cu succes!";
           }
 
           this._UserService.refresh();

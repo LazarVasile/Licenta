@@ -3,8 +3,8 @@
     <div class="container">
         
         <header class="head-form">
-            <h2>Register</h2>
-            <p>Fill in the fields bellow!</p>
+            <h2>Înregistrare</h2>
+            <p>Completați câmpurile de mai jos!</p>
         </header>
         <div class = "error"  #error_message [style.display] = "displayError">
             <p>{{error}}</p>
@@ -12,27 +12,27 @@
         <!-- <br> -->
         <div class="input-fields">
             <div>
-                <b class = "input-name">Email</b>
+                <b class = "input-name">Adresa de email</b>
             </div>
-            <input type="text" class="input-field" placeholder="Email adress" #email_register>
+            <input type="text" class="input-field" placeholder="Introduceți adresa de email" #email_register>
             <!-- end email-input -->
 
             <!-- password -->
             <div>
-                <b class= "input-name">Password</b>
+                <b class= "input-name">Parolă</b>
             </div>
-            <input type="password" class="input-field" #pwd_register placeholder="Enter password" name="password" required>
+            <input type="password" class="input-field" #pwd_register placeholder="Introduceți parola" name="password" required>
             <!-- end password-input -->
 
             <!-- confirm-input -->
             <div>
-                <b class = "input-name">Confirm Password</b>
+                <b class = "input-name">Confirmare parolă</b>
             </div>
-            <input type="password" class="input-field" #pwd_confirm placeholder="Enter password" name="password" required>
+            <input type="password" class="input-field" #pwd_confirm placeholder="Introduceți parola din nou" name="password" required>
             <!-- end confirm-input -->
 
             <br>
-            <button class="register" id = "register-bttn" (click) = "register(email_register.value, pwd_register.value, pwd_confirm.value)">Sign-up</button>
+            <button class="register" id = "register-bttn" (click) = "register(email_register.value, pwd_register.value, pwd_confirm.value)">Înregistrează-te</button>
             <br><br>
         </div>
         <!-- end fields-input class -->

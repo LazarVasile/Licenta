@@ -7,16 +7,18 @@
 <div class = "overlay">
     <app-nav-bar></app-nav-bar>
     <div class = "container" id = "cnt">
+        <div class = "error"  #error_message [style.display] = "displayError">
+            <p>{{error}}</p>
+        </div>
+        <div class = "message"  #error_message [style.display] = "displayMessage">
+            <p>{{message}}</p>
+        </div>
         <form class="form-fields" id="add_admin_fields" >
             <div>
-                <label class="fields-inline"><b>Nume Admin</b></label>
-                <input type = "text" placeholder= "Introduceti nume">
-            </div>
-            <div>
                 <label class="fields-inline"><b>Adresa de email</b></label>
-                <input type = "text" placeholder = "Introduceti email">
+                <input type = "text" #email placeholder = "Introduceti email">
             </div>
-            <button onclick = "addAdmin()">Adauga admin</button>
+            <button onclick = "addAdmin(email.value)">Adaugă admin</button>
 
         </form>
     </div>

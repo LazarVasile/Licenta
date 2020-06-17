@@ -32,6 +32,7 @@ class _MenuState extends State<Menu> {
   var buyProductsTotal = <String, int>{}; 
   var buyProductsNumber = <String, int>{};
   var buyProductsFinal = <String, double> {};
+  var buyProductsTotalCopy = <String, int> {};
   var productsByCategory = <String, List> {};
   int code = 0;
   bool displayCode = false;
@@ -117,10 +118,16 @@ class _MenuState extends State<Menu> {
       else{
         String reply2 = await response2.transform(utf8.decoder).join();
         var jsonResponse2 = jsonDecode(reply2);
-        jsonResponse2["productsIdAndAmounts"].forEach((k,v) => {
-          this.buyProductsNumber[k.toString()] = 0,
-          this.buyProductsTotal[k.toString()] = v,
-        });
+        for(var key in jsonResponse2["productsIdAndAmounts"].keys) {
+          setState(() {
+            this.buyProductsNumber[key.toString()] = 0;
+            this.buyProductsTotal[key.toString()] = jsonResponse2["productsIdAndAmounts"][key];
+            this.buyProductsTotalCopy[key.toString()] = jsonResponse2["productsIdAndAmounts"][key];
+          });
+
+        }
+
+
         // for(var i = 0; i < jsonResponse.length; i++){
         //   var result = jsonResponse2.firstWhere((x) => x["productId"] == jsonResponse[i]["_id"] , orElse: () => null);
         //   setState(() {
@@ -134,54 +141,37 @@ class _MenuState extends State<Menu> {
 
   recommendation() async{
     setState(() {
-      this.buyProductsTotal = {};
       this.buyProductsNumber = {};
+      this.buyProductsTotal = {};
+      this.totalPrice = 0.00;
+      for(var key in this.buyProductsTotalCopy.keys){
+        this.buyProductsTotal[key.toString()] = this.buyProductsTotalCopy[key.toString()];
+      }
     });
     initCategories();
 
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
-    HttpClientRequest request = await client.getUrl(Uri.parse(_url2 + this.id.toString()));
+
+    HttpClientRequest request = await client.getUrl(Uri.parse(this._url2 + this.id.toString()));
     request.headers.set('Authorization', "Bearer " + this.token);
     HttpClientResponse response = await request.close();
+
     if(response.statusCode == 401){
-    
+      this.logout();
+    }
+    else {
       String reply = await response.transform(utf8.decoder).join();
       var jsonResponse = jsonDecode(reply);
-      
-      setState(() {
-        for(var  i = 0; i < jsonResponse.length; i++){
+      print(jsonResponse);
+      this.menu = jsonResponse;
+
+      for(var  i = 0; i < jsonResponse.length; i++){
+        setState(() {
           this.productsByCategory[jsonResponse[i]['category']].add(jsonResponse[i]);
+          this.buyProductsNumber[jsonResponse[i]['_id'].toString()] = 0;
+        });
         }
-
-        this.menu = jsonResponse;
-      });
-
-      print(this.productsByCategory);
-      HttpClient client2 = new HttpClient();
-      client2.badCertificateCallback = ((X509Certificate cert1, String host1, int port1) => true);
-
-      HttpClientRequest request2 = await client2.getUrl(Uri.parse("https://192.168.0.101:5001/api/menus/" + dNow.toString()));
-      request2.headers.set('Authorization', "Bearer " + this.token);
-      HttpClientResponse response2 = await request2.close();
-      if(response2.statusCode == 401){
-        this.logout();
-      }
-      else {
-        String reply2 = await response2.transform(utf8.decoder).join();
-        var jsonResponse2 = jsonDecode(reply2);
-
-        for(var i = 0; i < jsonResponse.length; i++){
-          var result = jsonResponse2.firstWhere((x) => x["productId"] == jsonResponse[i]["_id"] , orElse: () => null);
-          setState(() {
-            this.buyProductsNumber[jsonResponse[i]['_id'].toString()] = 0;
-            this.buyProductsTotal[jsonResponse[i]['_id'].toString()] = result["productAmount"];
-          });
-        }
-
-        print(this.buyProductsTotal);
-        print(this.buyProductsNumber);
-      }
     }
   }
 
@@ -252,7 +242,7 @@ class _MenuState extends State<Menu> {
       
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("Meniu "+ dNow.toString()),
+        title: Text("Menu "+ dNow.toString()),
         actions: <Widget>[
           Padding(
               padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
@@ -298,7 +288,7 @@ class _MenuState extends State<Menu> {
                                       child: RaisedButton(
                                       color: Colors.blue[600],
                                       child: Text(
-                                        "Recomandare produse",
+                                        "Recommendation",
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
@@ -320,7 +310,7 @@ class _MenuState extends State<Menu> {
                                       child: RaisedButton(
                                       color: Colors.blue[600],
                                       child: Text(
-                                        "Inapoi la meniu",
+                                        "Back to menu",
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
@@ -597,7 +587,7 @@ class _MenuState extends State<Menu> {
                   padding: EdgeInsets.fromLTRB(0, 5, 15, 5),
                   child: RaisedButton(
                   color: Colors.blue[600],
-                  child: Text("Cumpara",
+                  child: Text("Buy",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w400,

@@ -1,5 +1,5 @@
 <div class="header">
-    <a routerLink = "../user" class="nav-right">Users</a>
+    <a routerLink = "../user" class="nav-right">Utilizatori</a>
     <h1>Cantină Gaudeamus</h1>
     <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
 </div>
@@ -9,6 +9,9 @@
     <div class = "container" id = "cnt">
         <div class = "error"  #error_message [style.display] = "displayError">
             <p>{{error}}</p>
+        </div>
+        <div class = "message"  #error_message [style.display] = "displayMessage">
+            <p>{{message}}</p>
         </div>
         <div class="form-fields" id="add_product_fields">
             
@@ -24,18 +27,18 @@
             </div>
 
             <div class="pret">
-                <label class="fields-inline"><b>Pret profesor</b></label>
-                <input type="number" placeholder="pret" #professor_price>
+                <label class="fields-inline"><b>Preț profesor</b></label>
+                <input type="number" placeholder="Preț" #professor_price>
             </div>
 
             <div class="pret">
-                <label class="fields-inline"><b>Pret student</b></label>
-                <input type="number" placeholder="pret" #student_price>
+                <label class="fields-inline"><b>Preț student</b></label>
+                <input type="number" placeholder="Preț" #student_price>
             </div>
 
             <div class="gramaj">
                 <label class="fields-inline"><b>Gramaj</b></label>
-                <input type="number" placeholder="Introduceti gramaj" #product_weight>            
+                <input type="number" placeholder="Introduceți gramaj" #product_weight>            
             </div>
             <div class="descriere">
                 <label class="fields-inline"><b>Descriere</b></label>

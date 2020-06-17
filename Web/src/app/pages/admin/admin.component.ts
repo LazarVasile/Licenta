@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { HttpClient } from '@angular/common/http';
 import {Product, SellProduct, BuyProduct} from '../../classes/product';
@@ -10,7 +10,8 @@ import { Route } from '@angular/compiler/src/core';
 import { ProductService } from '../../services/products/product.service';
 import { timeStamp, error } from 'console';
 import { JitEmitterVisitor } from '@angular/compiler/src/output/output_jit';
-
+import { SelectMultipleControlValueAccessor } from '@angular/forms';
+import * as jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-admin',
@@ -23,6 +24,7 @@ export class AdminComponent implements OnInit {
   public pipe = new DatePipe('en-US'); // Use your own local
   private _url = "https://localhost:5001/api/usermenu/";
   public formatDate = this.pipe.transform(Date.now(), "yyyy-MM-dd")
+  public myDate = this.pipe.transform(Date.now(), "dd-MM-yyyy");
   public myProducts = [];
   public sellProducts = [];
   public totalPrice = 0;
@@ -40,7 +42,10 @@ export class AdminComponent implements OnInit {
   public token;
   public error;
   public displayError = "none";
+  public message;
+  public displayMessage = "none";
 
+  @ViewChild('menu') content: ElementRef;
 
   constructor(public _UserService : UserService, public _http: HttpClient, public _location : Location, public _router : Router, public _productService : ProductService) {
     this.categories = _productService.getCategories();
@@ -102,7 +107,7 @@ export class AdminComponent implements OnInit {
 
   addProduct(product) {
     if (this.buyProductsTotal[product["_id"].toString()] == 0){
-      this.error = "Produsul nu mai este disponibil! Va rugam sa alegeti altceva!";
+      this.error = "Produsul nu mai este disponibil! Vă rugam să alegeți altceva!";
       this.displayError = "block";
     }
     else {
@@ -180,6 +185,10 @@ export class AdminComponent implements OnInit {
           if(response.status == 401){
             this._UserService.logout;
           }
+          this.displayError = "none";
+          this.displayMessage = "block";
+          this.message = "Comanda a fost procesată!"
+          setTimeout(() => {}, 2000);
           this.refresh();
       
         },
@@ -191,8 +200,25 @@ export class AdminComponent implements OnInit {
     }
     else {
       this.displayError = "block";
-      this.error = "Nu ati ales nimic. Incercati din nou!";
+      this.error = "Nu ați ales niciun produs. Incercați din nou!";
     }
+  }
+
+  downloadPdf() {
+    const doc = new jsPDF();
+    let specialElementHandlers = {
+      "#editor" : function(element, renderer){
+        return true;
+      }
+    };
+
+    let content = this.content.nativeElement;
+
+    doc.autoTable({
+      head : [['Name', 'dsadsa', 'dsdsadsa']]
+    })
+
+    doc.save("test.pdf");
   }
 
 }

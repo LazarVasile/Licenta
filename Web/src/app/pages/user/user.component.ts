@@ -26,6 +26,7 @@ export class UserComponent implements OnInit {
   public buyProductsNumber : {[id : string] : number} = {};
   public buyProductsFinal: {[id : string] : number} = {};
   public buyProductsTotal : {[id : string] : number} = {}; 
+  public buyProductsTotalCopy: {[id : string] : number} = {};
   public error;
   public displayError = "none";
   public displayButton1 = "none";
@@ -89,7 +90,11 @@ export class UserComponent implements OnInit {
               for (let key in this.myMenu["productsIdAndAmounts"]){
                 this.buyProductsNumber[key.toString()] = 0;
                 this.buyProductsTotal[key.toString()] = this.myMenu["productsIdAndAmounts"][key];
+                this.buyProductsTotalCopy[key.toString()] = this.myMenu["productsIdAndAmounts"][key];
               }
+              console.log(this.buyProductsTotal);
+              console.log(this.buyProductsNumber);
+              
             },
             error => {
               if (error.status == 401) {
@@ -116,7 +121,14 @@ export class UserComponent implements OnInit {
     this.displayButton1 = "none";
     this.displayButton2 = "block";
     this.buyProductsNumber = {};
-    this.buyProductsTotal = {};
+    for (let key in this.buyProductsTotalCopy){
+      this.buyProductsTotal[key.toString()] = this.buyProductsTotalCopy[key];
+
+    }
+
+    console.log(this.buyProductsTotal);
+
+    
     this.initCategories();
     var url = this._url2 + this.idUser;
       this._http.get<any>(url, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
@@ -127,15 +139,11 @@ export class UserComponent implements OnInit {
           this.error = "Incă nu vă putem oferi o recomandare, vă rugăm să incercați în altă zi!";
         }
         else {
-          this.myProducts = data;
-          for (let i = 0; i < this.myProducts.length; i++){
-            this.productsByCategory[this.myProducts[i].category].push(this.myProducts[i]);
-          }
           this.myMenu = data;
-          for (let key in this.myMenu["productsIdAndAmounts"]){
-            this.buyProductsNumber[key.toString()] = 0;
-            this.buyProductsTotal[key.toString()] = this.myMenu["productsIdAndAmounts"][key];
-          }    
+          for (let i = 0; i < this.myMenu.length; i++){
+            this.productsByCategory[this.myMenu[i].category].push(this.myMenu[i]);
+            this.buyProductsNumber[this.myMenu[i]['_id']] = 0;
+          }   
         }
       },
       error => {

@@ -23,7 +23,7 @@
             <p>{{error}}</p>
         </div>
         <button class = "button" [style.display] = "displayButton1" (click) = "Recommendation()">Recomandare produse</button>
-        <button class = "button" [style.display] = "displayButton2" (click) = "getProducts(formatDate)">Inapoi la meniu</button>
+        <button class = "button" [style.display] = "displayButton2" (click) = "getProducts(formatDate)">Înapoi la meniu</button>
         <div *ngFor = "let category of categories;">
             <div *ngIf = "productsByCategory[category].length>0; then thenBlock; else elseBlock"></div>
                 <!-- <ng-container class="dish" *ngIf = "productsByCategory[category].length>0; then thenBlock; else elseBlock"></ng-container> -->
@@ -32,7 +32,7 @@
                         
                         <p class="dish">{{category}}</p>
                         <ul *ngFor="let product of productsByCategory[category];">
-                            <li><p>{{product.name}}</p></li>
+                            <li><p style = "font-weight: 700;">{{product.name}}</p></li>
                             <li><p>{{product.description}}</p></li>
                             <div *ngIf = "typeUser == 'student'; then thenBlock2; else elseBlock2"></div>
                             <ng-template #thenBlock2>

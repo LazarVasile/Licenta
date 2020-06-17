@@ -134,7 +134,9 @@ button.create-button {
     flex-direction: column;
 }
 
-
+.category_and_products {
+    margin-bottom: 30px;
+}
     
 .form-fields button:hover {
     background-color: var(--purple900);

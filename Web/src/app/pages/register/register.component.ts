@@ -20,15 +20,15 @@ export class RegisterComponent implements OnInit {
   register(email, password, confirmPassword) {
     if (password != confirmPassword) {
       this.displayError = "block";
-      this.error = "Password and confirm password doesn't match!";
+      this.error = "Parolele nu se potrivesc!";
     }
     else if (password.length < 8) {
       this.displayError = "block";
-      this.error = "Password is too short, should have minimum 8 characters!";
+      this.error = "Parola este prea mică! Trebuie să conțină minim 8 caractere.";
     }
     else if (password.length > 16) {
       this.displayError = "block";
-      this.error = "Password is too long, should have maximum 20 characters!"
+      this.error = "Parola este prea mare! Trebuie să conțină maxim 20 caractere!"
     } 
     else {
       var passwordMD5 = Md5.hashStr(password);
@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
         else if (data["response"] == "false")
         {
           this.displayError = "block";
-          this.error = "Email already exists! Please enter another email adress!";
+          this.error = "Adresa de email deja există!";
         }
       }})
     }

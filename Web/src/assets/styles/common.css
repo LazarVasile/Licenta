@@ -19,6 +19,10 @@
 
 
 }
+html {
+    margin: 0px;
+    min-height: 100%;
+}
 
 .header {
     background-color: var(--purple600);
@@ -66,14 +70,13 @@
     background: var(--purple900);
     box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
 }
-
 body {
     width: 100%;
-    height: 100%;
+    min-height: 100px;
     margin: 0;
-    /* background-image: linear-gradient(to top, white 0%, var(--blue500) 100%);
-    background-repeat: no-repeat; */
-    background-color: var(--blue500);
+    background-image: linear-gradient(to right top,var(--purple900) 0%, var(--blue500) 100%);
+    background-repeat: no-repeat; 
+    /* background-color: var(--purple800); */
     font-family: Bitter;
 
 }
@@ -86,4 +89,21 @@ body {
 
 input {
     color: var(--black);
+}
+
+.error, .message{
+    padding-top: 2%;
+    align-self: center;
+    width : 80%;
+    background-color: var(--purple600);
+    text-align: center;
+    font-size: 20px;
+    color: white;
+    font-weight: 700;
+    margin-bottom: 2%;
+    border-radius: 3px;
+}
+
+.message {
+    background-color: var(--blue700);
 }
