@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
@@ -25,18 +24,19 @@ namespace Api.Controllers
         [HttpGet]
         public ActionResult<List<Product>> GetProducts() =>
             _productService.GetProducts();
-        
+
 
         // GET: api/Product/5
-        [HttpGet("{id}", Name = "GetProductId")]
-        public string GetProductId(int id)
+        [HttpGet("{date}", Name = "GetProducts")]
+        public List<Product> GetProducts(DateTime date)
         {
-            return "value";
+            var myProducts = _productService.GetMenu(date);
+            return myProducts;
         }
 
         // POST: api/Product
         [HttpPost]
-        public string Post([FromBody] AddProduct request)
+        public string Post([FromBody] Product request)
         {
             List<Product> products = _productService.GetProducts();
             IMongoCollection<Product> collection = _productService.GetCollectionProduct();
@@ -100,10 +100,5 @@ namespace Api.Controllers
 
         }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

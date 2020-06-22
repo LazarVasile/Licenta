@@ -32,18 +32,22 @@
                         
                         <p class="dish">{{category}}</p>
                         <ul *ngFor="let product of productsByCategory[category];">
-                            <li><p style = "font-weight: 700;">{{product.name}}</p></li>
-                            <li><p>{{product.description}}</p></li>
-                            <div *ngIf = "typeUser == 'student'; then thenBlock2; else elseBlock2"></div>
+                            <div *ngIf = "this.buyProductsTotal[product._id.toString()] > 0; then thenBlock2; else elseBlock2"></div>
                             <ng-template #thenBlock2>
-                                <li><p>{{product.studentPrice}} lei</p></li>
+                                <li><p style = "font-weight: 700;">{{product.name}}</p></li>
+                                <li><p>{{product.description}}</p></li>
+                                <div *ngIf = "typeUser == 'student'; then thenBlock3; else elseBlock3"></div>
+                                <ng-template #thenBlock3>
+                                    <li><p>{{product.studentPrice}} lei</p></li>
+                                </ng-template>
+                                <ng-template #elseBlock3>
+                                    <li><p>{{product.professorPrice}} lei</p></li>
+                                </ng-template>
+                                <li><button (click) = "minusProduct(product)"><b>-</b></button></li>
+                                <li>{{buyProductsNumber[product._id.toString()]}}</li>
+                                <li><button (click) = "plusProduct(product)"><b>+</b></button></li>
                             </ng-template>
-                            <ng-template #elseBlock2>
-                                <li><p>{{product.professorPrice}} lei</p></li>
-                            </ng-template>
-                            <li><button (click) = "minusProduct(product)"><b>-</b></button></li>
-                            <li>{{buyProductsNumber[product._id.toString()]}}</li>
-                            <li><button (click) = "plusProduct(product)"><b>+</b></button></li>
+                            <ng-template #elseBlock2></ng-template>
                         </ul>
                     </div>
                 </ng-template>

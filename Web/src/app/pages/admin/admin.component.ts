@@ -22,14 +22,14 @@ export class AdminComponent implements OnInit {
   public activeButton;
   public username = "";
   public pipe = new DatePipe('en-US'); // Use your own local
-  private _url = "https://localhost:5001/api/usermenu/";
+  private _urlMenu = "https://localhost:5001/api/products/menus/";
+  private _urlProducts = "https://localhost:5001/api/products/"
+  public urlOrders = "https://localhost:5001/api/orders";
   public formatDate = this.pipe.transform(Date.now(), "yyyy-MM-dd")
   public myDate = this.pipe.transform(Date.now(), "dd-MM-yyyy");
   public myProducts = [];
   public sellProducts = [];
   public totalPrice = 0;
-  public urlCodes = "https://localhost:5001/api/codes/";
-  public urlUserMenu = "https://localhost:5001/api/menus";
   public productsByCategory : {[category : string] : Array<IProduct>} = {};
   public ticketProducts = [];
   public categories;
@@ -44,6 +44,7 @@ export class AdminComponent implements OnInit {
   public displayError = "none";
   public message;
   public displayMessage = "none";
+  public others = false;
 
   @ViewChild('menu') content: ElementRef;
 
@@ -65,14 +66,15 @@ export class AdminComponent implements OnInit {
     this.buyProductsNumber = {};
     this.buyProductsTotal = {};
     this.initCategories();
-      var url = this._url + date;
+      var url = this._urlProducts + date;
       this._http.get<any>(url, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
       .subscribe( data => {
           this.myProducts = data;
+          console.log(data);
           for (let i = 0; i < this.myProducts.length; i++){
             this.productsByCategory[this.myProducts[i].category].push(this.myProducts[i]);
           }
-          this._http.get<any>("https://localhost:5001/api/menus/" + date, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
+          this._http.get<any>(this._urlMenu + date, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
           .subscribe(data =>
             {
               console.log(data);
@@ -109,9 +111,16 @@ export class AdminComponent implements OnInit {
     if (this.buyProductsTotal[product["_id"].toString()] == 0){
       this.error = "Produsul nu mai este disponibil! Vă rugam să alegeți altceva!";
       this.displayError = "block";
+      this.displayMessage = "none";
+      window.scroll(0, 0);
     }
     else {
-      this.totalPrice = Number((this.totalPrice + product.studentPrice).toFixed(2)); 
+      if(this.others == true){
+      this.totalPrice = Number((this.totalPrice + product.professorPrice).toFixed(2)); 
+      }
+      else {
+        this.totalPrice = Number((this.totalPrice + product.studentPrice).toFixed(2)); 
+      }
       this.buyProductsTotal[product["_id"].toString()] -= 1;  
       this.buyProductsNumber[product['_id'].toString()] += 1;
     }
@@ -121,7 +130,12 @@ export class AdminComponent implements OnInit {
 
   minusProduct(product) {
     if (this.buyProductsNumber[product['_id'].toString()] > 0){
-      this.totalPrice = Number((this.totalPrice - product.studentPrice).toFixed(2)); 
+      if (this.others == true) {
+        this.totalPrice = Number((this.totalPrice - product.professorPrice).toFixed(2)); 
+      }
+      else {
+        this.totalPrice = Number((this.totalPrice - product.studentPrice).toFixed(2)); 
+      }
       this.buyProductsTotal[product['_id'].toString()] += 1;
       this.buyProductsNumber[product["_id"].toString()] -= 1;
     }
@@ -130,23 +144,29 @@ export class AdminComponent implements OnInit {
 
   GeneratePersonalMenu(value) {
     this.buyProductsNumber = {}
-    this.buyProductsTotal = {};
-    this.buyProductsTotal = {};
     this.initCategories();
-    this._http.get<any>(this.urlCodes + value, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
+    this._http.get<any>(this.urlOrders + "/" + value, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
     .subscribe(dataGet => {
       console.log(dataGet);
       this.ok = true;
+      console.log(dataGet["typeUser"]);
+      if (dataGet["typeUser"] != "student"){
+        this.others = true;
+      }
       for (let key in dataGet["idProductsAndAmounts"]) {
         for (let j = 0; j < this.myProducts.length; j++){
           if (key == this.myProducts[j]['_id']){
-            this.buyProductsTotal[this.myProducts[j]] = dataGet["idProductsAndAmounts"][key];
+            this.buyProductsNumber[this.myProducts[j]['_id'].toString()] = dataGet["idProductsAndAmounts"][key];
             this.buyProductsFinal[this.myProducts[j]['_id'].toString()] =  dataGet["idProductsAndAmounts"][key];
             this.ticketProducts.push(this.myProducts[j]);
           } 
         }
       }
       this.buyProductsFinal["total_price"] = dataGet["totalPrice"];
+      if (this.others == true)
+        this.buyProductsFinal["others"] = 1;
+      else
+        this.buyProductsFinal["others"] = 0;
       this.totalPrice = dataGet["totalPrice"];
       this.myProducts = this.ticketProducts;
       for (let i = 0; i < this.myProducts.length; i++){
@@ -177,30 +197,35 @@ export class AdminComponent implements OnInit {
           }
         }
         this.buyProductsFinal["total_price"] = this.totalPrice;
+        if (this.others == true)
+          this.buyProductsFinal["others"] = 1;
+        else
+          this.buyProductsFinal["others"] = 0;
       }
-    
-    this._http.put<any>(this.urlUserMenu, this.buyProductsFinal, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}, observe : "response"})
+    console.log(this.buyProductsFinal);
+    this._http.put<any>(this._urlMenu, this.buyProductsFinal, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}, observe : "response"})
       .subscribe(response => {
-          console.log(response);
-          if(response.status == 401){
-            this._UserService.logout;
-          }
+        console.log(response);
           this.displayError = "none";
           this.displayMessage = "block";
           this.message = "Comanda a fost procesată!"
-          setTimeout(() => {}, 2000);
+          window.scroll(0, 0);
           this.refresh();
       
         },
         error => {
+          console.log(error);
           if (error.status == 401) {
             this._UserService.logout();
           }      
         });
     }
     else {
+      this.displayMessage = "none";
       this.displayError = "block";
       this.error = "Nu ați ales niciun produs. Incercați din nou!";
+      window.scroll(0, 0);
+      
     }
   }
 
@@ -214,9 +239,10 @@ export class AdminComponent implements OnInit {
 
     let content = this.content.nativeElement;
 
-    doc.autoTable({
-      head : [['Name', 'dsadsa', 'dsdsadsa']]
-    })
+    doc.fromHTML(content.innerHTML, 15, 15, {
+      "width" : 198,
+      'elementsHandlers' : specialElementHandlers
+    });
 
     doc.save("test.pdf");
   }

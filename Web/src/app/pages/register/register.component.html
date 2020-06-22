@@ -9,6 +9,9 @@
         <div class = "error"  #error_message [style.display] = "displayError">
             <p>{{error}}</p>
         </div>
+        <div class = "message"  #error_message [style.display] = "displayMessage">
+            <p>{{message}}</p>
+        </div>
         <!-- <br> -->
         <div class="input-fields">
             <div>
@@ -30,7 +33,16 @@
             </div>
             <input type="password" class="input-field" #pwd_confirm placeholder="Introduceți parola din nou" name="password" required>
             <!-- end confirm-input -->
-
+            <div class = "checkboxes">
+                <div class = "checkbox1">
+                    <input type = "checkbox" #professor name = "professor" [(ngModel)] = "checkProfessor" value = "professor">
+                    <label>Profesor</label>
+                </div>
+                <div class= "checkbox2">
+                    <input type = "checkbox" #student name = "student" [(ngModel)] = "checkStudent" value = "student">
+                    <label>Student</label>
+                </div>
+            </div>
             <br>
             <button class="register" id = "register-bttn" (click) = "register(email_register.value, pwd_register.value, pwd_confirm.value)">Înregistrează-te</button>
             <br><br>

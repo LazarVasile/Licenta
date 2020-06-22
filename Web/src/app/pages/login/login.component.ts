@@ -32,17 +32,27 @@ export class LoginComponent implements OnInit {
             this._router.navigate(['/user']);
           }
           else if (data['role'] == "admin"){
-            this._router.navigate(['/admin']);
+            if(data['type'] == "admin")
+            {
+              this._router.navigate(['/admin-create-menu']);
+            }
+            else {
+              this._router.navigate(['/admin']);
+            }
           }
           // this.redirectToUser(username, passwordMD5);
         }
         else {
-          this.error = "Wrong email or password!";
+          this.error = "Nume sau parolă greșită!";
           this.displayError = "block";
+          window.scroll(0,0);
         }
       },
     error:error => {
-    return console.error('There was an error!', error);}
+      this.error = "A intervenit o eroare. Încearcați din nou!";
+      this.displayError = "block";
+      window.scroll(0, 0);
+    }
     })
   }
 

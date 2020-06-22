@@ -43,8 +43,10 @@ export class AdminAdaugareAdminComponent implements OnInit {
           this.displayMessage = "block";
         }
         else {
+          this.displayMessage = "none";
           this.error = "Eroare la adăugare admin! Încercați din nou!";
           this.displayError = "block";
+          window.scroll(0, 0);
         }
       },
       error => {

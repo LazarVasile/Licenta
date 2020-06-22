@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Api.Controllers
 {
     [Authorize]
-    [Route("api/history")]
+    [Route("api/orders/history")]
     [ApiController]
     public class HistoryController : ControllerBase
     {
@@ -19,12 +19,6 @@ namespace Api.Controllers
         {
             _historyService = historyService;
         }
-        // GET: api/History
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
 
         // GET: api/History/5
         [HttpGet("{date}", Name = "GetHistoryByDate")]
@@ -34,23 +28,5 @@ namespace Api.Controllers
             List<History> myHistories = _historyService.getHistoryByDate(date);
             return myHistories;
         }
-
-        // POST: api/History
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT: api/History/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        // DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //////public void Delete(int id)
-        //{
-        //}
     }
 }

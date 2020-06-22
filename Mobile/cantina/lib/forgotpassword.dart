@@ -13,6 +13,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   static String url = "https://192.168.0.101:5001/api/users/forgotpassword";
   bool displayMessage = false;
   String message = "";
+  bool displayError = false;
+  String error = "";
   
   sendEmail(email) async {
     var data = {"email" : email};
@@ -24,14 +26,25 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     request.add(utf8.encode(json.encode(data)));
     HttpClientResponse response = await request.close();
     if(response.statusCode != 200){
-      print("Ceva nu a mers bine");
+      setState(() {
+        this.displayMessage = false;
+        this.displayError = true;
+        this.error = "Ceva nu a mers bine. Încercațti din nou!";
+      });
     }
     else {
       String reply2 = await response.transform(utf8.decoder).join();
-      print(reply2);
-    }
+      setState(() {
+        this.displayError = false;
+        this.displayMessage = true;
+        this.message = "A fost trimis un link de resetare parolă către adresa dumneavoastră de email!";
+      });
+      Future.delayed(Duration(seconds: 3)).then((_) {
+        Navigator.push(context,
+        MaterialPageRoute(builder : (context) => Login()));
+      });
   }
-  
+}
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +80,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(10),
-                          child: Text("Forgot password",
+                          child: Text("Recuperare parolă",
                             style: TextStyle(
                               color: Colors.purple,
                               fontWeight: FontWeight.w500,
@@ -81,7 +94,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           
                           child:Center(
                             child: Text(
-                              'Enter your email adress bellow',
+                              'Recupereză-ți parola utilizând adresa ta de email',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize:20,
                               color: Colors.blue[800],
@@ -106,6 +119,23 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             )
                           ),
                         ),
+                        Visibility(
+                            visible: this.displayError,
+                            child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(10),
+                            child: Center(
+                              child: Text(
+                                this.error,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize:20,
+                                  color: Colors.red[800],
+                                  fontWeight: FontWeight.w500,
+                                  )
+                              ) ,
+                            )
+                          ),
+                        ),
                         Divider(height: 10, color: Colors.blue),
                         Container(
                           
@@ -121,7 +151,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 borderSide: BorderSide(color: Colors.blue[800], width: 1),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              labelText: 'Username',
+                              labelText: 'Adresă de email',
                               labelStyle: TextStyle(color: Colors.blue[600]),
                             )
                           )
@@ -138,17 +168,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               ),
                               textColor: Colors.white,
                               color: Colors.purple,
-                              child: Text("Send mail", style: TextStyle(fontSize: 20)),
+                              child: Text("Trimite mail", style: TextStyle(fontSize: 20)),
                               onPressed: () {
                                 sendEmail(emailController.text);
-                                // setState(() {
-                                //   this.displayMessage = true;
-                                //   this.message = "An email has been sent to your email adress!";
-                                // });
-                                // sleep(Duration(seconds : 5));
-                                Navigator.push(context,
-                                MaterialPageRoute(builder : (context) => Login()));
                               },
+                              splashColor: Colors.blue[600],
                             ),
                           ),
                         ),

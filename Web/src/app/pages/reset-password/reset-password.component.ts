@@ -13,8 +13,10 @@ export class ResetPasswordComponent implements OnInit {
 
   public displayError = "none";
   public error;
-  public url = "https://localhost:5001/api/users/resetpassword";
+  public url = "https://localhost:5001/api/users/forgotpassword";
   public token;
+  public displayMessage = "none";
+  public message = "";  
   constructor(private activatedRoute: ActivatedRoute, public _http : HttpClient, public _router : Router) {
     this.activatedRoute.queryParams.subscribe(params => {
       this.token = params['token'].toString();
@@ -42,14 +44,19 @@ export class ResetPasswordComponent implements OnInit {
       var passwordMD5 = Md5.hashStr(password);
       console.log(this.token);
       var data = {"password" : passwordMD5, "token" : this.token};
-      this._http.post<any>(this.url, data, {headers : {'Accept' : 'application/json;', 'Content-Type' : 'application/json; charset=utf-8  ', 'Authorization' : 'Bearer '+ this.token}})
+      this._http.put<any>(this.url, data, {headers : {'Accept' : 'application/json;', 'Content-Type' : 'application/json; charset=utf-8  ', 'Authorization' : 'Bearer '+ this.token}})
       .subscribe( data => { 
         if(data["response"] == "true"){
+          this.displayError = "none";
+          this.message = "Te-ai înregistrat cu succes! Vei fi redirecționat către pagina de autentificare."
+          this.displayMessage = "block";
+          window.scroll(0, 0);
           this._router.navigate(['/login']);
         }
         else {
           this.displayError = "block";
           this.error = "Ceva nu a mers. Încercați din nou!";
+          window.scroll(0, 0);
         }
       },
       error => {
@@ -57,6 +64,7 @@ export class ResetPasswordComponent implements OnInit {
         if (error.status == 401) {
           this.displayError = "block";
           this.error = "Link-ul de schimbare parolă a expirat. Incercați din nou!"
+          window.scroll(0, 0);
         }
       });
       

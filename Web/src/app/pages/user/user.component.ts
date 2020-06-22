@@ -19,8 +19,9 @@ export class UserComponent implements OnInit {
   public printDate = this.pipe.transform(Date.now(), "dd-MM-yyyy");
   public myProducts = [];
   public myMenu = [];
-  private _url = "https://localhost:5001/api/usermenu/";
-  private _url2 = "https://localhost:5001/api/products/recommendation/"
+  private _urlProducts = "https://localhost:5001/api/products/"
+  private _urlMenus = "https://localhost:5001/api/products/menus/";
+  private _url2 = "https://localhost:5001/api/users/"
   public categories;
   public productsByCategory : {[category : string] : Array<IProduct>} = {};
   public buyProductsNumber : {[id : string] : number} = {};
@@ -29,15 +30,18 @@ export class UserComponent implements OnInit {
   public buyProductsTotalCopy: {[id : string] : number} = {};
   public error;
   public displayError = "none";
+  public displayMessage = "none";
+  public message;
   public displayButton1 = "none";
   public displayButton2 = "none";
   public totalPrice = 0;
-  public _urlCodes = "https://localhost:5001/api/codes";
+  public _urlOrders = "https://localhost:5001/api/orders";
   public code : number;
   public displayCode;
   public idUser;
   public token;
   public price;
+  public others;
 
   constructor(private _router : Router, private _http: HttpClient,  private _route : ActivatedRoute, public _UserService : UserService, public _productService : ProductService) {
     this.categories = _productService.getCategories();
@@ -69,24 +73,19 @@ export class UserComponent implements OnInit {
     this.displayButton1 = "block";
     this.displayButton2 = "none";
     // const promise = new Promise((resolve, reject) => {
-      var url = this._url + date;
+      var url = this._urlProducts + date;
       this._http.get<any>(url)
       .subscribe( data => {
+        console.log(data);
           this.myProducts = data;
           for (let i = 0; i < this.myProducts.length; i++){
             this.productsByCategory[this.myProducts[i].category].push(this.myProducts[i]);
           }
           
-          this._http.get<any>("https://localhost:5001/api/menus/" + date, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
+          this._http.get<any>(this._urlMenus + date, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
           .subscribe(data =>
             {
               this.myMenu = data;
-              // for (let i = 0; i < this.myProducts.length; i++){
-              //   this.buyProductsNumber[this.myProducts[i]['_id'].toString()] = 0;
-              //   let seachProduct = this.myMenu.find(x => x['productId'] == this.myProducts[i]['_id']);
-              //   this.buyProductsTotal[this.myProducts[i]['_id'].toString()] = seachProduct['productAmount'];
-              // }
-      
               for (let key in this.myMenu["productsIdAndAmounts"]){
                 this.buyProductsNumber[key.toString()] = 0;
                 this.buyProductsTotal[key.toString()] = this.myMenu["productsIdAndAmounts"][key];
@@ -135,8 +134,10 @@ export class UserComponent implements OnInit {
       .subscribe( data => {
         console.log(data);
         if(data.length == 0){
+          this.displayMessage = "none";
           this.displayError = "block";
           this.error = "Incă nu vă putem oferi o recomandare, vă rugăm să incercați în altă zi!";
+          window.scroll(0, 0);
         }
         else {
           this.myMenu = data;
@@ -156,8 +157,10 @@ export class UserComponent implements OnInit {
 
   plusProduct(product) {
     if (this.buyProductsTotal[product["_id"].toString()] == 0){
+      this.displayMessage = "none";
       this.error = "Produsul nu mai este disponibil! Va rugam sa alegeti altceva!";
       this.displayError = "block";
+      window.scroll(0, 0);
     }
     else {
       if(this.typeUser == "student"){
@@ -200,12 +203,13 @@ export class UserComponent implements OnInit {
       this.buyProductsFinal["total_price"] = this.totalPrice;
       this.buyProductsFinal["id_user"] = Number(this.idUser);
       // this.buyProductsFinal["id_user"] = Number(this.idUser); 
-      this._http.post<any>(this._urlCodes, this.buyProductsFinal, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
+      this._http.post<any>(this._urlOrders, this.buyProductsFinal, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
       .subscribe(data =>{
         console.log(data);
         if (data["response"] == "true"){
           this.code = data['code'];
           this.displayCode = "block";
+          window.scroll(0, 0);
         }
       },
       error => {
@@ -215,8 +219,10 @@ export class UserComponent implements OnInit {
       });
     }
     else {
+      this.displayMessage = "none";
       this.displayError = "block";
       this.error = "Nu ați selectat niciun produs, incercați din nou!";
+      window.scroll(0, 0);
     }
   }
 

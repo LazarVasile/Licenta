@@ -7,7 +7,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Api
 {
-    public class Codes
+    public class Orders
     {
         [BsonId]
         [BsonElement("_id")]
@@ -15,6 +15,8 @@ namespace Api
 
         [BsonElement("idUser")]
         public int idUser { get; set; } 
+
+        public string typeUser { get; set; }
 
         [BsonElement("idProductAndAmount")]
         public IDictionary<String, int> idProductsAndAmounts { get; set;  }

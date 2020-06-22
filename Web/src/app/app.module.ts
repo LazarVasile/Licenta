@@ -14,6 +14,7 @@ import { ProductDetailsComponent } from './pages/product-details/product-details
 import { HistoryComponent } from './pages/history/history.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { NavBar1Component } from './pages/nav-bar1/nav-bar1.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
     HistoryComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
+    NavBar1Component,
     
   ],
   imports: [

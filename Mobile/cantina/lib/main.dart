@@ -25,7 +25,7 @@ class _LoginState extends State<Login> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  String urlLogin = "https://192.168.0.101:5001/api/login";
+  String urlLogin = "https://192.168.0.101:5001/api/users/login";
 
   bool isLogged = false;
   bool error = false;
@@ -62,15 +62,7 @@ class _LoginState extends State<Login> {
     String reply = await response.transform(utf8.decoder).join();
     var jsonResponse = jsonDecode(reply);
     print(jsonResponse);
-    // print(jsonResponse["response"]);
-    // print(reply["response"]);
-    // var sendData = jsonEncode(data);
-    // Map<String, String> headers = {"Content-type": "application/json; charset=utf-8"};
-    // print("1");
-    // var res  = await http.post(urlLogin, body : sendData);
-    // print("2");
-    // var jsonResponse = jsonDecode(res.body);
-    // // print(jsonResponse);
+  
     if (jsonResponse['response'] == "true") {
 
       setState(() {
@@ -83,8 +75,6 @@ class _LoginState extends State<Login> {
         context,
         MaterialPageRoute(builder: (context) => Menu(id :this.idUser)),
       );
-
-      print("true");
     }
     else 
     {
@@ -92,7 +82,6 @@ class _LoginState extends State<Login> {
         isLogged = false;
         error = true;
       });
-      print("false");
     }
   }
 
@@ -104,12 +93,11 @@ class _LoginState extends State<Login> {
       backgroundColor: Colors.purple[800],
       appBar: AppBar(
         backgroundColor: Colors.purple,
-        title: Text("Cantina Gaudeamus")
+        title: Text("Cantină")
       ),
       body: SingleChildScrollView(
               reverse: true,
               child: Padding(
-                  
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom
                   ),
@@ -131,7 +119,7 @@ class _LoginState extends State<Login> {
                         Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(10),
-                          child: Text("Login",
+                          child: Text("Autentificare",
                             style: TextStyle(
                               color: Colors.purple,
                               fontWeight: FontWeight.w500,
@@ -145,7 +133,7 @@ class _LoginState extends State<Login> {
                           
                           child:Center(
                             child: Text(
-                              'Login here using your name and password',
+                              'Autentificați-vă utilizând numele și parola',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize:20,
                                 color: Colors.blue[800],
@@ -160,7 +148,7 @@ class _LoginState extends State<Login> {
                             padding: EdgeInsets.all(10),
                             child: Center(
                               child: Text(
-                                "Wrong email or password",
+                                "Nume sau parolă greșită!",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize:20,
                                   color: Colors.red[800],
@@ -184,7 +172,7 @@ class _LoginState extends State<Login> {
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.blue[800], width:1)
                               ),
-                              labelText: 'Username',
+                              labelText: 'Adresă de email',
                               labelStyle: TextStyle(
                                 color: Colors.blue[600],
                               )
@@ -204,7 +192,7 @@ class _LoginState extends State<Login> {
                                 borderSide: BorderSide(color: Colors.blue[800], width: 1),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              labelText: 'Password',
+                              labelText: 'Parolă',
                               labelStyle: TextStyle(
                                 color: Colors.blue[600], 
                                 ),
@@ -223,10 +211,11 @@ class _LoginState extends State<Login> {
                               ),
                               textColor: Colors.white,
                               color: Colors.purple,
-                              child: Text("Login", style: TextStyle(fontSize: 20)),
+                              child: Text("Autentificare", style: TextStyle(fontSize: 20)),
                               onPressed: () {
                                 Login(nameController.text, passwordController.text);
                               },
+                              splashColor: Colors.blue[600],
                             ),
                           ),
                         ),
@@ -235,7 +224,7 @@ class _LoginState extends State<Login> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                                 Expanded(
-                                    flex: 3,
+                                    flex: 2,
                                     child: Padding(
                                       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                                       child: RaisedButton(
@@ -249,13 +238,14 @@ class _LoginState extends State<Login> {
                                           MaterialPageRoute(builder: (context) => ForgotPassword()),
                                         );
                                       },
+                                      splashColor: Colors.blue[900],
                                       textColor: Colors.purple,
-                                      child: Text("Forgot Password",)
+                                      child: Text("Ai uitat parola?",)
                               ),
                                     ),
                                 ),
                               Expanded(
-                                  flex: 2,
+                                  flex: 3,
                                   child: Padding(
                                     padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
                                     child: RaisedButton(
@@ -265,7 +255,7 @@ class _LoginState extends State<Login> {
                                       ),
                                     textColor: Colors.blue,
                                     child: Text(
-                                      'Sign up',
+                                      'Înregistrare',
                                       style: TextStyle(fontSize:20),
                                     ),
                                     onPressed: () {
@@ -275,7 +265,8 @@ class _LoginState extends State<Login> {
                                         context,
                                         MaterialPageRoute(builder: (context) => Register()),
                                       );
-                                    }
+                                    },
+                                    splashColor: Colors.blue[900],
                                 ),
                                   ),
                               )

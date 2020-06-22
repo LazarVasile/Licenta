@@ -4,10 +4,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Linq;
-using System.Globalization;
-using System.Drawing.Printing;
-using System.Drawing;
-using Eco.Report;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -20,7 +16,7 @@ namespace Api
         private readonly IMongoCollection<User> _users;
         private readonly IMongoCollection<Product> _products;
         private readonly IMongoCollection<Menu> _menus;
-        private readonly IMongoCollection<Codes> _codes;
+        private readonly IMongoCollection<Orders> _codes;
         private readonly IMongoCollection<History> _history;
         private IConfiguration _config;
 
@@ -36,7 +32,7 @@ namespace Api
 
             _menus = database.GetCollection<Menu>("menus");
 
-            _codes = database.GetCollection<Codes>("codes");
+            _codes = database.GetCollection<Orders>("codes");
 
             _history = database.GetCollection<History>("history");
         }
@@ -56,6 +52,11 @@ namespace Api
             return _menus.Find(menus => true).ToList();
         }
 
+        public User GetUserById(int id)
+        {
+            User user = _users.Find(u => u._id == id).ToList()[0];
+            return user;
+        }
         public IDictionary<string, string> GetProductsById()
         {
             List<Product> myProducts = GetProducts();
@@ -96,21 +97,21 @@ namespace Api
             return myProducts;
         }
 
-        public List<Codes> GetCodesByDate(DateTime myDate)
+        public List<Orders> GetCodesByDate(DateTime myDate)
         {
-            List<Codes> myCode = _codes.Find(c => c.date == myDate).ToList();
+            List<Orders> myCode = _codes.Find(c => c.date == myDate).ToList();
             return myCode;
         }
 
-        public Codes GetCodesByCodeAndDate(int code, DateTime myDate)
+        public Orders GetCodesByCodeAndDate(int code, DateTime myDate)
         {
-            Codes myCode = _codes.Find(c => c.code == code && c.date == myDate).ToList()[0];
+            Orders myCode = _codes.Find(c => c.code == code && c.date == myDate).ToList()[0];
             return myCode;
         }
 
-        public List<Codes> GetCodes()
+        public List<Orders> GetCodes()
         {
-            List<Codes> myCode = _codes.Find(x => true).ToList();
+            List<Orders> myCode = _codes.Find(x => true).ToList();
             return myCode;
         }
 
@@ -127,7 +128,7 @@ namespace Api
         public List<Product> getIdProductsByIdUser(int id)
         {
             List<Product> myProducts = new List<Product>();
-            List<Codes> buyProductsList = _codes.Find(code => code.idUser == id).ToList();
+            List<Orders> buyProductsList = _codes.Find(code => code.idUser == id).ToList();
             List<Product> myProductsFinal = new List<Product>();
             for (int i = 0; i < buyProductsList.Count; i++) { 
                 foreach (KeyValuePair<string, int> item in buyProductsList[i].idProductsAndAmounts)
@@ -184,7 +185,7 @@ namespace Api
             return _menus;
         }
 
-        public IMongoCollection<Codes> GetCollectionCodes()
+        public IMongoCollection<Orders> GetCollectionCodes()
         {
             return _codes;
         }
@@ -196,7 +197,6 @@ namespace Api
 
         public string GenerateJSONWebToken(string username, string type)
         {
-            Console.WriteLine(type);
             var hours = 0;
             if(type == "web")
             {
@@ -204,7 +204,7 @@ namespace Api
             }
             else if (type == "password")
             {
-                hours = 2;
+                hours = 1;
             }
             else if (type == "mobile")
             {

@@ -31,10 +31,9 @@ namespace Api.Controllers
 
             return token;
         }
-
-        // PUT: api/ForgotPassword/5
-        [HttpPut]
-        public IDictionary<string, string> Put([FromBody] IDictionary<string, string> request)
+        
+        [HttpPost]
+        public IDictionary<string, string> Post([FromBody] IDictionary<string, string> request)
         {
             string email = request["email"];
             Console.WriteLine(email);
@@ -58,8 +57,8 @@ namespace Api.Controllers
                     SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
 
 
-                    mail.From = new MailAddress(email+ "@info.uaic.ro");
-                    mail.To.Add("vasile.lazar@info.uaic.ro");
+                    mail.From = new MailAddress("can.gaudeamus@gmail.com");
+                    mail.To.Add(request["email"]);
                     mail.Subject = "Reset-password";
                     string htmlString = $@"<html>
 
@@ -103,10 +102,31 @@ namespace Api.Controllers
             
         }
 
-        // DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        [HttpPut]
+        public IDictionary<String, String> Put([FromBody] IDictionary<string, string> request)
+        {
+
+            try
+            {
+                IMongoCollection<User> collection = _fpService.GetCollectionUser();
+                string password = _fpService.ComputeSha256(request["password"]);
+                string token = request["token"];
+                var filter = Builders<User>.Filter.Eq("token", token);
+                var update = Builders<User>.Update.Set("password", password);
+                collection.UpdateOne(filter, update);
+                Dictionary<string, string> dict = new Dictionary<string, string> { };
+                dict["response"] = "true";
+                return dict;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Nu s-a putut face update!");
+                Dictionary<string, string> dict = new Dictionary<string, string> { };
+                dict["response"] = "false";
+                return dict;
+            }
+        }
+
     }
+
 }

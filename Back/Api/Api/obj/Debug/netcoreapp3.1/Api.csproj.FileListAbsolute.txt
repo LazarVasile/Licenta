@@ -218,7 +218,7 @@ D:\Facultate\Licenta\Back\Api\Api\bin\Debug\netcoreapp3.1\Eco.LinqExtender.dll
 D:\Facultate\Licenta\Back\Api\Api\bin\Debug\netcoreapp3.1\Eco.WPF.dll
 D:\Facultate\Licenta\Back\Api\Api\bin\Debug\netcoreapp3.1\WECPOFLogic.dll
 D:\Facultate\Licenta\Back\Api\Api\bin\Debug\netcoreapp3.1\WPFViewModelExternalControls.dll
-D:\Facultate\Licenta\Back\Api\Api\obj\Debug\netcoreapp3.1\Api.MvcApplicationPartsAssemblyInfo.cache
 D:\Facultate\Licenta\Back\Api\Api\bin\Debug\netcoreapp3.1\Interop.Microsoft.Vbe.Interop.Forms.dll
 D:\Facultate\Licenta\Back\Api\Api\obj\Debug\netcoreapp3.1\Interop.Microsoft.Vbe.Interop.Forms.dll
 D:\Facultate\Licenta\Back\Api\Api\obj\Debug\netcoreapp3.1\Api.csproj.ResolveComReference.cache
+D:\Facultate\Licenta\Back\Api\Api\obj\Debug\netcoreapp3.1\Api.MvcApplicationPartsAssemblyInfo.cache

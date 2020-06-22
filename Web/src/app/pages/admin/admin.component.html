@@ -2,7 +2,7 @@
 <div class="total-price" id="total_price">
     <h3>Preț Total</h3>
     <p>{{totalPrice}} lei</p>
-    <button class="buy-products" (click) = BuyProducts()><header>Cumpară</header></button>
+    <button class="buy-products" (click) = BuyProducts()><header>Cumpără</header></button>
 
 </div>
 
@@ -12,7 +12,7 @@
     <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
 </div>
 <div class="overlay">
-    <app-nav-bar></app-nav-bar>
+    <app-nav-bar1></app-nav-bar1>
     <div class = "container" id="cnt" #cnt >
         <div class = "error"  #error_message [style.display] = "displayError">
             <p>{{error}}</p>
@@ -25,21 +25,33 @@
                 <label><b>Cod pentru generare meniu automat:</b></label>
                 <input type="text" #code placeholder="Introduceți cod">
                 <button class = "ticket" (click) = "GeneratePersonalMenu(code.value)">Arată meniu</button>
-                <button class = "ticket" (click) = "downloadPdf()">Descarcă meniu sub format pdf</button>
+                <div class = "checkboxes">
+                    <input type = "checkbox" #professor value = "others" [(ngModel)] = "others">
+                    <label>Profesor/alți clienți</label>
+                </div>
+                <!-- <button class = "ticket" (click) = "downloadPdf()">Descarcă meniu sub format pdf</button> -->
             </div>
+            
             <div *ngFor = "let category of categories;">
                 <div *ngIf = "productsByCategory[category].length>0; then thenBlock; else elseBlock"></div>
                     <!-- <ng-container class="dish" *ngIf = "productsByCategory[category].length>0; then thenBlock; else elseBlock"></ng-container> -->
                     <ng-template class = "sell-products" #thenBlock>
                     <div class = "sell-products">
-                        <div class = "card" *ngFor="let product of productsByCategory[category];">
-                            <p class="product-name">{{product.name}}</p>
-                            <p class="price">Pret profesor: {{product.professorPrice}}</p>
-                            <p class="price">Pret student: {{product.studentPrice}}</p>
-                            <p class="description"> {{product.description}}</p>
-                            <p class="quantity"> Rămase:{{buyProductsTotal[product._id.toString()]}} / Selectate: {{buyProductsNumber[product._id.toString()]}}</p>
-                            <button class= "add-button" (click) = "addProduct(product)">Adauga</button>
-                            <button class="delete-button">Șterge</button>
+                        <div *ngFor="let product of productsByCategory[category];">
+                            <div *ngIf = "this.buyProductsTotal[product._id.toString()] > 0; then thenBlock2; else elseBlock2"></div>
+
+                            <ng-template #thenBlock2>
+                                <div class = "card">
+                                    <p class="product-name">{{product.name}}</p>
+                                    <p class="price">Pret profesor: {{product.professorPrice}}</p>
+                                    <p class="price">Pret student: {{product.studentPrice}}</p>
+                                    <p class="description"> {{product.description}}</p>
+                                    <p class="quantity"> Rămase:{{buyProductsTotal[product._id.toString()]}} / Selectate: {{buyProductsNumber[product._id.toString()]}}</p>
+                                    <button class= "add-button" (click) = "addProduct(product)">Adaugă</button>
+                                    <button class="delete-button" (click) = "minusProduct(product)">Șterge</button>
+                                </div>
+                            </ng-template>
+                            <ng-template #elseBlock2 style = "display:none"></ng-template>
                         </div>
                     </div>
                     </ng-template>
@@ -47,31 +59,6 @@
                     </ng-template>
     
                 </div>    
-        </div>
-        <div #menu id = "menu" style = "display: none; align-content: center;">
-            <h1 style = "display: block; align-self: center;">Meniu {{myDate}}</h1>
-            <div style = "display: flex; flex-direction: column;">
-                <div *ngFor = "let category of categories;">
-                    <div *ngIf = "productsByCategory[category].length>0; then thenBlock1; else elseBlock1"></div>
-                    <ng-template #thenBlock1>
-                    <h3>{{category}}</h3>
-                    <div>
-                        <div style = "display : flex; flex-direction: row; flex-wrap: wrap;" *ngFor="let product of productsByCategory[category];">
-                            <div class = "product-name" style = "width: 40%;">
-                                <h3>{{product.name}}</h3>
-                            </div>
-                            <p class="description" style = "width: 30%; border-left: 1px solid black;"> {{product.description}}</p>
-                            <p class ="weight" style = "width: 10%">{{product.weight}} gr/ml</p>
-                            <p class="price" style = "width: 10%;color: blue">Pret profesor: {{product.professorPrice}} lei </p>
-                            <p class="price" style = "width: 10%;color: red">Pret student: {{product.studentPrice}} lei </p>
-                        </div>
-                    </div>
-                    </ng-template>
-                    <ng-template  #elseBlock1 style = "display: none">
-                    </ng-template>
-    
-                </div>  
             </div>
-        </div>
     </div>
 </div>

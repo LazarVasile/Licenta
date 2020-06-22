@@ -21,9 +21,10 @@ class _MenuState extends State<Menu> {
   double totalPrice = 0.00;
   List menu;
   static String url = "https://192.168.0.101:5001/api/";
-  String _url = url + "usermenu/";
-  String _url2 = url + "products/recommendation/";
-  String urlCodes = url + "codes";
+  String _urlMenus = url + "products/menus/";
+  String _urlProducts = url + "products/";
+  String _urlUsers = url + "users/";
+  String urlOrders = url + "orders";
   List<String> categories = ["Ciorbe si supe / Soups", "Garnituri / Side dishes", "Felul II", "Desert / Deserts", "Salate / Salads", "Paine / Bread", "Bauturi / Drinks"];
   bool displayError = false;
   String error = "";
@@ -34,6 +35,8 @@ class _MenuState extends State<Menu> {
   var buyProductsFinal = <String, double> {};
   var buyProductsTotalCopy = <String, int> {};
   var productsByCategory = <String, List> {};
+  ScrollController controller = ScrollController();
+
   int code = 0;
   bool displayCode = false;
   String dNow = DateFormat("dd-MM-yyyy").format(DateTime.now());
@@ -54,11 +57,14 @@ class _MenuState extends State<Menu> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       this.token = prefs.get("token");
-      print(this.token);
       this.type = prefs.get("type");
-      print(this.type);
     });
     }
+  
+  void _goTop(){
+    this.controller.animateTo(0, duration: Duration(microseconds: 500), curve: Curves.easeInOut);
+  }
+  
 
   initCategories() {
     setState(() {
@@ -87,7 +93,7 @@ class _MenuState extends State<Menu> {
     
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
-    HttpClientRequest request = await client.getUrl(Uri.parse(_url + dNow.toString()));
+    HttpClientRequest request = await client.getUrl(Uri.parse(this._urlProducts + dNow.toString()));
     request.headers.set('Authorization', "Bearer " + this.token);
     HttpClientResponse response = await request.close();
 
@@ -109,7 +115,7 @@ class _MenuState extends State<Menu> {
       HttpClient client2 = new HttpClient();
       client2.badCertificateCallback = ((X509Certificate cert1, String host1, int port1) => true);
 
-      HttpClientRequest request2 = await client2.getUrl(Uri.parse("https://192.168.0.101:5001/api/menus/" + dNow.toString()));
+      HttpClientRequest request2 = await client2.getUrl(Uri.parse(this._urlMenus + dNow.toString()));
       request2.headers.set('Authorization', "Bearer " + this.token);
       HttpClientResponse response2 = await request2.close();
       if(response2.statusCode == 401){
@@ -153,7 +159,7 @@ class _MenuState extends State<Menu> {
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
 
-    HttpClientRequest request = await client.getUrl(Uri.parse(this._url2 + this.id.toString()));
+    HttpClientRequest request = await client.getUrl(Uri.parse(this._urlUsers + this.id.toString()));
     request.headers.set('Authorization', "Bearer " + this.token);
     HttpClientResponse response = await request.close();
 
@@ -192,7 +198,7 @@ class _MenuState extends State<Menu> {
     if (this.totalPrice == 0.00){
       setState(() {
         this.displayError = true;
-        this.error = "Nu ati selectat niciun produs";
+        this.error = "Nu ați selectat niciun produs";
       });
     }
     else{
@@ -207,7 +213,7 @@ class _MenuState extends State<Menu> {
       HttpClient client = new HttpClient();
       client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
 
-      HttpClientRequest request = await client.postUrl(Uri.parse(this.urlCodes));
+      HttpClientRequest request = await client.postUrl(Uri.parse(this.urlOrders));
       request.headers.set('content-type', 'application/json');
       request.headers.set('Authorization', "Bearer " + this.token);
 
@@ -224,6 +230,8 @@ class _MenuState extends State<Menu> {
         var jsonResponse = jsonDecode(reply);
         if (jsonResponse["response"] == "true"){
           setState(() {
+            this.displayButton1 = false;
+            this.displayButton2 = false;
             this.code = int.parse(jsonResponse['code']);
             this.displayCode = true;
           });
@@ -242,7 +250,7 @@ class _MenuState extends State<Menu> {
       
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("Menu "+ dNow.toString()),
+        title: Text("Meniu "+ dNow.toString()),
         actions: <Widget>[
           Padding(
               padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
@@ -251,6 +259,7 @@ class _MenuState extends State<Menu> {
                 this.logout();
 
               } ,
+              splashColor: Colors.purple[600],
               child: Text("Logout", style: TextStyle(color: Colors.white)),
               color: Colors.blue[600],
               ),
@@ -260,6 +269,7 @@ class _MenuState extends State<Menu> {
 
       ),
       body: SingleChildScrollView(
+                      controller: controller,
                       // reverse: true,
                       child: Builder(
                         builder: (BuildContext context) {
@@ -267,7 +277,7 @@ class _MenuState extends State<Menu> {
                             return Center(
                               child: Container(
                                 child: Center(
-                                  child:Text("Loading",
+                                  child:Text("Încărcare",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w800,
                                       fontSize: 30,
@@ -279,50 +289,54 @@ class _MenuState extends State<Menu> {
                             );
                           else
                             return Column(
-                              children: [
-                                
+                              children: [   
                                 Visibility(
                                   visible: this.displayButton1,
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      child: RaisedButton(
-                                      color: Colors.blue[600],
-                                      child: Text(
-                                        "Recommendation",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white,
-                                        )
-                                      ),
-                                      onPressed: () {
-                                        this.displayButton1 = false;
-                                        this.displayButton2 = true;
-                                        this.recommendation();
-                                      }
+                                    child: Center(
+                                        child: SizedBox(
+                                        width: MediaQuery.of(context).size.width * 0.50,
+                                        child: RaisedButton(
+                                        color: Colors.blue[600],
+                                        child: Text(
+                                          "Recomandare produse",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white,
+                                          )
+                                        ),
+                                        onPressed: () {
+                                          this.displayButton1 = false;
+                                          this.displayButton2 = true;
+                                          this.recommendation();
+                                        },
+                                        splashColor: Colors.purple[600],
                                   ),
+                                      ),
                                     ),
                                 ),
                                 Visibility(
                                   visible: this.displayButton2,
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      child: RaisedButton(
-                                      color: Colors.blue[600],
-                                      child: Text(
-                                        "Back to menu",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white,
-                                        )
-                                      ),
-                                      onPressed: () {
-                                        this.displayButton2 = false;
-                                        this.displayButton1 = true;
-                                        this.getProducts();
-                                      }
+                                    child: Center(
+                                      child: SizedBox(
+                                        width: MediaQuery.of(context).size.width * 0.50,
+                                        child: RaisedButton(
+                                        color: Colors.blue[600],
+                                        child: Text(
+                                          "Încapoi la meniu",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white,
+                                          )
+                                        ),
+                                        onPressed: () {
+                                          this.displayButton2 = false;
+                                          this.displayButton1 = true;
+                                          this.getProducts();
+                                        }
                                   ),
+                                      ),
                                     ),
                                 ),
                                 Visibility(
@@ -340,7 +354,7 @@ class _MenuState extends State<Menu> {
                                 Visibility(
                                   visible: this.displayCode,
                                   child: Center(
-                                      child: Text("Your code is " + this.code.toString(),
+                                      child: Text("Codul tău este " + this.code.toString(),
                                         style: TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.w600,
@@ -481,11 +495,13 @@ class _MenuState extends State<Menu> {
                                                                               });
                                                                             }
                                                                           });
+                                                                          
                                                                           print(this.buyProductsTotal);
                                                                           print(this.buyProductsNumber);
                                                                         });
                                                                         // print("minus one");
                                                                       },
+                                                                      splashColor: Colors.purple[600],
                                                                     ),
                                                                   )
                                                                 ),
@@ -534,6 +550,7 @@ class _MenuState extends State<Menu> {
                                                                         print(this.buyProductsNumber);
                                                                         // print("plus one");
                                                                       },
+                                                                      splashColor: Colors.purple[600],
                                                                     ),
                                                                   )
                                                                 )
@@ -574,7 +591,7 @@ class _MenuState extends State<Menu> {
             children: <Widget>[
               Padding(
                   padding: EdgeInsets.fromLTRB(10, 5, 0, 10),
-                  child: Text("Total price: " + '$totalPrice',
+                  child: Text("Preț total: " + '$totalPrice',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -587,7 +604,7 @@ class _MenuState extends State<Menu> {
                   padding: EdgeInsets.fromLTRB(0, 5, 15, 5),
                   child: RaisedButton(
                   color: Colors.blue[600],
-                  child: Text("Buy",
+                  child: Text("Cumpără",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w400,
@@ -597,6 +614,7 @@ class _MenuState extends State<Menu> {
                   onPressed: () {
                     this.buyProducts();
                   },
+                  splashColor: Colors.purple[600],
                 ),
               )
             ],

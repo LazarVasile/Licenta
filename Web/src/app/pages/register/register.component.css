@@ -76,6 +76,19 @@ b {
     
 }
 
+.checkboxes {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-around; */
+}
+.checkbox1 {
+    margin-left: 10%;
+}
+
+.checkbox2 {
+    margin-left: 10%;
+}
 
 button {
     background-color: var(--blue600);

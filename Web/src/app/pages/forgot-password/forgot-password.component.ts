@@ -27,15 +27,19 @@ export class ForgotPasswordComponent implements OnInit {
     }
     else {
       var data = {"email" : value};
-      this._http.put<any>(this.url, data, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json'}})
+      this._http.post<any>(this.url, data, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json'}})
       .subscribe({ next: data => {
         if (data['response'] == "true"){
+          this.displayError = "none";
           this.message = "A fost trimis un link către pagina de resetare parolă pe adresa dumneavoastră de email!";
           this.displayMessage = "block";
+          window.scroll(0, 0);
         }
         else if (data['rseponse'] == "false") {
+          this.displayMessage = "none";
           this.displayError = "block";
           this.error = "Adresa de email nu este validă! Vă rugăm să incercați din nou!";
+          window.scroll(0, 0);
         }
       }})
     }

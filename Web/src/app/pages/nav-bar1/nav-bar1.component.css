@@ -1,0 +1,46 @@
+.menu {
+    background-image: linear-gradient(-225deg,white 70%, var(--purple600) 30%);
+    /* background-image: linear-gradient(to top, #b300cf -100%, var(--white) 100%); */
+    /* width: 100%; */
+    /* height : 100%; */
+    background-repeat: no-repeat;
+    padding: 2%;
+    border-radius: 5px;
+    /* margin-top: 50%; */
+}
+
+
+.menu button {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 42px;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 5px;
+    background: var(--blue800);    
+    border: 0px;
+    transition: all 0.4s;
+}
+
+
+.menu button:hover {
+    background: var(--purple900);
+    box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
+}
+
+.menu button.active {
+    background: var(--purple600);
+}
+
+.product-name {
+    height: 50px;
+}

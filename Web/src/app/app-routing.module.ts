@@ -14,6 +14,7 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { HistoryComponent } from './pages/history/history.component';
 import { NavBarComponent } from './pages/nav-bar/nav-bar.component';
+import { NavBar1Component } from './pages/nav-bar1/nav-bar1.component';
 import { AuthGuard } from './services/auth/auth.guard';
 
 
@@ -32,8 +33,9 @@ const routes: Routes = [
   {path : 'update-product', component: UpdateProductComponent, canActivate : [AuthGuard]},
   {path : 'history', component : HistoryComponent, canActivate : [AuthGuard]},
   {path : 'nav-bar', component : NavBarComponent},
+  {path : 'nav-bar', component : NavBarComponent},
+  {path : 'nav-bar1', component : NavBar1Component},
   {path: "**", component : PageNotFoundComponent}
-
 ];
 
 @NgModule({
@@ -55,5 +57,6 @@ export const routingComponents = [LoginComponent,
                                   HistoryComponent,
                                   ForgotPasswordComponent,
                                   ResetPasswordComponent,
-                                  NavBarComponent
+                                  NavBarComponent,
+                                  NavBar1Component
                                 ];

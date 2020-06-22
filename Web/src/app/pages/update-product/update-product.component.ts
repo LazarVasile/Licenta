@@ -17,6 +17,8 @@ export class UpdateProductComponent implements OnInit {
   public error = "";
   public displayError = "none";
   public token;
+  public displayMessage = "none";
+  public message = "";
 
   constructor(public _UserService : UserService, public _http : HttpClient, public _router : Router, public _location : Location) { }
 
@@ -41,14 +43,20 @@ export class UpdateProductComponent implements OnInit {
 
   updateProduct(id, professorPrice, studentPrice, weight, description ) {
     if(id == ""){
+      this.displayMessage = "none";
       this.displayError = "block";
       this.error = "Nu ați selectat niciun produs, incercați din nou!";
+      window.scroll(0, 0);
       
     }
     else {
       var data = {"id" : id, "professor_price" : professorPrice, "student_price" : studentPrice, "weight" : weight, "description" : description};
       this._http.put<any>(this.urlProducts,  data, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json', 'Authorization':'Bearer '+ this.token}})
       .subscribe(data =>{
+        this.displayError = "none";
+        this.message = "Produsul a fost modificat cu succes!";
+        this.displayMessage = "none";
+        this._UserService.refresh();
       },
       error => {
         if (error.status == 401) {
@@ -56,7 +64,6 @@ export class UpdateProductComponent implements OnInit {
         }
       });
 
-      this._UserService.refresh();
 
     }
     

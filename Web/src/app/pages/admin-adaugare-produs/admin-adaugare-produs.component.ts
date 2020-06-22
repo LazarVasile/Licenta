@@ -4,6 +4,7 @@ import { UserService } from '../../services/user/user.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { ThrowStmt } from '@angular/compiler';
 @Component({
   selector: 'app-admin-adaugare-produs',
   templateUrl: './admin-adaugare-produs.component.html',
@@ -31,8 +32,10 @@ export class AdminAdaugareProdusComponent implements OnInit {
 
   addProduct(name, category, professor_price, student_price, weight, description) {
     if(name == "" || category == "" || professor_price == "" || student_price == "" || weight == ""){
+      this.displayMessage = "none";
       this.displayError = "block";
       this.error = "Nu ați completat toate câmpurile!";
+      window.scroll(0, 0);
     }
     else {
       console.log(this._urlProducts);
@@ -42,11 +45,19 @@ export class AdminAdaugareProdusComponent implements OnInit {
         {
           console.log(data);
           if (data == "succes"){
+            this.displayError = "none";
             this.displayMessage = "block";
             this.message = "Produsul a fost adăugat cu succes!";
+            window.scroll(0, 0);
+            this._UserService.refresh();
           }
+          else {
+            this.displayMessage = "none";
+            this.error = "A intervenit o eroare. Încercați din nou!";
+            this.displayError = "block";
+            window.scroll(0, 0);
 
-          this._UserService.refresh();
+          }
         },
         error => {
         if (error.status == 401) {

@@ -17,22 +17,37 @@ class _RegisterState extends State<Register> {
   TextEditingController confirmPasswordController = TextEditingController();
   bool displayError = false;
   String error = "";
-  String urlRegister = "https://192.168.0.100:5001/api/register";
-
+  String urlRegister = "https://192.168.0.101:5001/api/users";
+  bool professorCheck = false;
+  bool studentCheck = false;
+  bool displayMessage = false;
+  String message = "";
+  ScrollController controller = ScrollController();
   String generateMd5(String input) {
     return md5.convert(utf8.encode(input)).toString();
   }
 
 
-
+  void _goTop(){
+    this.controller.animateTo(0, duration: Duration(microseconds: 500), curve: Curves.easeInOut);
+  }
+  
   Register(String email, String password, String confirmPassword) async {
     print(email);
     print(password);
-    if (password != confirmPassword) {
+    if (this.studentCheck == true && this.professorCheck == true) {
+      setState(() {
+        displayError = true;
+        error = "Please choose only one type!";
+      });
+        _goTop();
+    }
+    else if (password != confirmPassword) {
       setState(() {
         displayError = true;
         error = "Password and confirm password doesn't match";
       });
+      _goTop();
       print(error);
 
     }
@@ -42,6 +57,7 @@ class _RegisterState extends State<Register> {
         error = "Password too long!";
         
       });
+      _goTop();
       print(error);
     }
     else if (password.length < 8) {
@@ -49,9 +65,20 @@ class _RegisterState extends State<Register> {
         displayError = true;
         error = "Password too short";
       });
+      _goTop();
       print(error);
     }
     else {
+      var type;
+      if (this.professorCheck == true){
+        type = "professor";
+      }
+      else if (this.studentCheck == true) {
+        type = "student";
+      }
+      else {
+        type = "normal";
+      }
 
       HttpClient client = new HttpClient();
       client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -60,7 +87,8 @@ class _RegisterState extends State<Register> {
 
       Map data = {
         "email" : email,
-        "password" : password
+        "password" : password,
+        "type" : type
       };
 
       HttpClientRequest request = await client.postUrl(Uri.parse(urlRegister));
@@ -75,16 +103,22 @@ class _RegisterState extends State<Register> {
       String reply = await response.transform(utf8.decoder).join();
       var jsonResponse = jsonDecode(reply);
       if (jsonResponse["response"] == "true") {
-        Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Login()),
-      );
+        setState(() {
+          this.displayError = false;
+          this.displayMessage = true;
+          this.message = "Veți fi redirecționat către pagina de autentificare!";
+        });
+        Future.delayed(Duration(seconds: 3)).then((_) {
+          Navigator.push(context,
+          MaterialPageRoute(builder : (context) => Login()));
+        });
       }
       else {
         setState(() {
           displayError = true;
           error = "Please try again!";
         });
+        _goTop();
       }
 
     }
@@ -101,6 +135,7 @@ class _RegisterState extends State<Register> {
         title: Text("Cantina Gaudeamus")
       ),
       body: SingleChildScrollView(
+              controller: controller,
               reverse: true,
               child: Padding(
                 padding: EdgeInsets.only(
@@ -157,6 +192,20 @@ class _RegisterState extends State<Register> {
                               style: TextStyle(
                                 fontSize:20,
                                 color: Colors.red[800],
+                              )
+                            )
+                          ),
+                        ),
+                        Visibility(
+                            visible: displayMessage,
+                            child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              message, 
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize:20,
+                                color: Colors.blue[800],
                               )
                             )
                           ),
@@ -218,6 +267,42 @@ class _RegisterState extends State<Register> {
                           )
                         ),
                         Container(
+                          child: Row(children: [
+                            Checkbox(
+                              value : this.professorCheck,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  this.professorCheck = value;
+                                });
+                              },
+                            ),
+                            Text(
+                              "Professor",
+                              style:  TextStyle (
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.blue[600],
+                              ),
+                            ),
+                            Checkbox(
+                              value : this.studentCheck,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  this.studentCheck = value;
+                                });
+                              },
+                            ),
+                            Text(
+                              "Student",
+                              style:  TextStyle (
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.blue[600],
+                              ),
+                            )
+                          ],)
+                        ),
+                        Container(
                           height: 50,
                           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: SizedBox(
@@ -233,9 +318,11 @@ class _RegisterState extends State<Register> {
                               onPressed: () {
                                 Register(nameController.text, passwordController.text, confirmPasswordController.text);
                               },
+                              splashColor: Colors.blue[600],
                             ),
                           ),
                         ),
+
                     ],
                   ),
             ),

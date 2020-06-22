@@ -25,7 +25,7 @@ export class AdminCreateMenuComponent implements OnInit {
   public indexes = [];
   public counter_categories = [];
   public list_ids = []
-  private _urlMenus = "https://localhost:5001/api/menus";
+  private _urlMenus = "https://localhost:5001/api/products/menus";
   public date_menu;
   public list_cantities = [];
   public myProducts = {};
@@ -64,11 +64,13 @@ export class AdminCreateMenuComponent implements OnInit {
     if (Object.keys(this.myProducts).length == 0 ) {
       this.displayError = "block";
       this.error = "Nu ați introdus niciun produs! Încercați din nou!";
+      window.scroll(0,0);
     }
     else {
       if (this.date_menu == null) {
         this.displayError = "block";
         this.error = "Va rugăm să selectați data!";
+        window.scroll(0, 0);
       }
       else {
         for (let i = 0; i < this.categories.length; i++)
@@ -81,8 +83,14 @@ export class AdminCreateMenuComponent implements OnInit {
       .subscribe(data =>
         {
           if (data["response"] == "true"){
-            this._UserService.refresh()
-            
+            window.scroll(0, 0)
+            this._UserService.refresh()     
+          }
+
+          else {
+            this.error = "A apărut o eroare! Încercați din nou!";
+            this.displayError = "block";
+            window.scroll(0, 0);
           }
         },
         error => {

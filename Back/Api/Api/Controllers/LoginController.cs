@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Controllers
 {
-    [Route("api/login")]
+    [Route("api/users/login")]
     [ApiController]
     public class LoginController : ControllerBase
     {
@@ -46,7 +46,6 @@ namespace Api.Controllers
             
             List<User> users = _userService.GetUsers();
             String type = request["type"];
-            Console.WriteLine(request["email"] + " " + request["password"]);
             IDictionary<String, String> dict = new Dictionary<String, String>();
             Console.WriteLine(_userService.ComputeSha256(request["password"]));
             if(users.Exists(x => x.email == request["email"] && x.password == _userService.ComputeSha256(request["password"]))){

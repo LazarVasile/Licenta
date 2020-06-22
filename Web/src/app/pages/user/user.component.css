@@ -188,6 +188,11 @@ ul li button {
 
 }
 
+button:hover {
+    background: var(--purple900);
+    box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
+}
+
 .total-price button:hover {
     background: var(--purple900);
     box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);

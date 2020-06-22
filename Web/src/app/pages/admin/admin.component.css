@@ -231,11 +231,12 @@ button.add-button{
     position: relative;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     background-color: white;
-    height: 300px;
-    width: 20%;
+    height: 250px;
+    width: 200px;
     text-align: center;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     display: flex;
+    word-wrap: break-word;
     flex-direction: column;
     margin-bottom: 20px;
     margin-right: 20px;
@@ -248,7 +249,13 @@ button.add-button{
     font-size: 15px;
 }
 
-
+.checkboxes {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 20px;
+}
 
 div.buttons-products { 
     display: flex;

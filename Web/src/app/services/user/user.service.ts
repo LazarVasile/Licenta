@@ -7,8 +7,8 @@ import { Location } from '@angular/common';
   providedIn: 'root'
 })
 export class UserService {
-  public _urlLogin = "https://localhost:5001/api/login";
-  public _urlRegister = "https://localhost:5001/api/register";
+  public _urlLogin = "https://localhost:5001/api/users/login";
+  public _urlRegister = "https://localhost:5001/api/users";
 
   constructor(public http: HttpClient, public _router : Router, public _location : Location) { }
 
@@ -18,9 +18,9 @@ export class UserService {
 
   } 
 
-  register(email, password) : Observable<any> {
-    let data = {"email" : email,  "password" : password};
-    return this.http.put<any>(this._urlRegister, data, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json'}});
+  register(email, password, type) : Observable<any> {
+    let data = {"email" : email,  "password" : password, "type" : type};
+    return this.http.post<any>(this._urlRegister, data, {headers : {'Accept' : 'application/json', 'Content-Type' : 'application/json'}});
   }
 
   loggedIn() {

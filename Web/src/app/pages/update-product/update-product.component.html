@@ -11,6 +11,9 @@
             <div class = "error" [style.display] = "displayError">
                 <p>{{error}}</p>
             </div>
+            <div class = "message"  #error_message [style.display] = "displayMessage">
+                <p>{{message}}</p>
+            </div>
             <div>
                 <label class="fields-inline"><b>Nume produs</b></label>
                 <select #selectProduct>

@@ -10,14 +10,14 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers
 {
-    [Authorize]
-    [Route("api/codes")]
+    //[Authorize]
+    [Route("api/orders")]
     [ApiController]
-    public class CodesController : ControllerBase
+    public class OrdersController : ControllerBase
     {
         private readonly DatabaseService _codesService;
 
-        public CodesController(DatabaseService codesService)
+        public OrdersController(DatabaseService codesService)
         {
             _codesService = codesService;
         }
@@ -36,20 +36,20 @@ namespace Api.Controllers
 
         // GET: api/BuyCodes
         [HttpGet]
-        public List<Codes> Get()
+        public List<Orders> Get()
         {
             return _codesService.GetCodes();
         }
 
         // GET: api/BuyCodes/5
         [HttpGet("{code}", Name = "GetProductsByCode")]
-        public Codes Get(int code)
+        public Orders Get(int code)
         {
             Console.WriteLine(code);
             DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
             Console.WriteLine(dNow);
             Console.WriteLine(dNow);
-            Codes myCode = _codesService.GetCodesByCodeAndDate(code, dNow);
+            Orders myCode = _codesService.GetCodesByCodeAndDate(code, dNow);
             return myCode; 
         }
 
@@ -60,9 +60,9 @@ namespace Api.Controllers
 
             DateTime dNow = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
 
-            IMongoCollection<Codes> collection = _codesService.GetCollectionCodes();
+            IMongoCollection<Orders> collection = _codesService.GetCollectionCodes();
             IDictionary<String, String> dict = new Dictionary<String, String>();
-            List<Codes> codes = _codesService.GetCodes();
+            List<Orders> codes = _codesService.GetCodes();
             int code = RandomCode();
             int count = codes.Count;
             while (codes.Exists(x => x.code == code) == true)
@@ -72,7 +72,7 @@ namespace Api.Controllers
 
             int idUSer = Convert.ToInt32(request["id_user"]);
             double totalPrice = request["total_price"];
-            Codes product = new Codes();
+            Orders product = new Orders();
             Console.WriteLine(count);
             product._id = count + 1;
             product.idUser = idUSer;
@@ -80,7 +80,8 @@ namespace Api.Controllers
             product.code = code;
             product.totalPrice = totalPrice;
             product.idProductsAndAmounts = new Dictionary<String, int>{ };
-            
+            User user = _codesService.GetUserById(Convert.ToInt32(request["id_user"]));
+            product.typeUser = user.type;
             foreach (KeyValuePair<string, double> item in request)
             {
                 if (item.Key != "id_user" && item.Key != "total_price")
@@ -103,16 +104,5 @@ namespace Api.Controllers
             return dict;
         }
 
-        // PUT: api/BuyCodes/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }
