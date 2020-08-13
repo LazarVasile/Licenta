@@ -37,11 +37,15 @@
 .categories {
     
     width: 100%;
-    display: grid;
-    grid-template-rows: repeat(4, auto);
-    grid-gap: 10px;
-    grid-auto-flow: column;
-    border: 1px solid var(--blue900);
+    display: flex;
+    flex-direction: column;
+
+}
+
+.category_and_products {
+    width: 80%;
+    border: 2px solid var(--blue900);
+
 }
 
 
@@ -57,7 +61,7 @@ select {
 .form-fields div input {
     margin-left: 5%;
     background-color: #c9f4f5;
-    width: 40%;
+    width: 30%;
     height: 30px;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     border-radius: 5px;;
@@ -76,7 +80,7 @@ input.input-date {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: black;
     border-radius: 5px;
-    margin-top: 2px;
+    margin-top: 7px;
     margin-bottom: 10px;
 }
 
@@ -97,16 +101,15 @@ input.input-date {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 12px;
     color: #fff;
+    padding-top: 6px;
+
     line-height: 1.2;
-    text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin-left: 10%;
-    width: 40%;
+    margin-left: 40%;
+    width: 20%;
+    text-align: center;
     display: flex;
-    align-self: center;
-    align-items: center;
-    padding: 0 20px;
     height: 42px;
     border: 0px;
     border-radius: 10px;
@@ -116,8 +119,6 @@ input.input-date {
 }
 
 button.create-button {
-    align-self: center;
-    text-align: center;
     margin-left: 35%;
     width: 30%;
     height: 40px;
@@ -131,7 +132,9 @@ button.create-button {
 
 .select-product {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    width: 100%;
+    /* margin-left: 0%; */
 }
 
 .category_and_products {

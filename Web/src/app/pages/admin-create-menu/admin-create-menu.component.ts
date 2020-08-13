@@ -83,8 +83,13 @@ export class AdminCreateMenuComponent implements OnInit {
       .subscribe(data =>
         {
           if (data["response"] == "true"){
-            window.scroll(0, 0)
-            this._UserService.refresh()     
+            window.scroll(0, 0);
+            this.displayError = "none";
+            this.message = "Meniul a fost creat cu succes!";
+            this.displayMessage = "block";
+            setTimeout(()=>{    //<<<---    using ()=> syntax
+              this._UserService.refresh()     
+            }, 3000)
           }
 
           else {

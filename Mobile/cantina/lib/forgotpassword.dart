@@ -17,11 +17,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   String error = "";
   
   sendEmail(email) async {
+    print(email);
     var data = {"email" : email};
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
 
-    HttpClientRequest request = await client.putUrl(Uri.parse(url));
+    HttpClientRequest request = await client.postUrl(Uri.parse(url));
     request.headers.set('content-type', 'application/json');
     request.add(utf8.encode(json.encode(data)));
     HttpClientResponse response = await request.close();
@@ -33,16 +34,29 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       });
     }
     else {
-      String reply2 = await response.transform(utf8.decoder).join();
-      setState(() {
-        this.displayError = false;
-        this.displayMessage = true;
-        this.message = "A fost trimis un link de resetare parolă către adresa dumneavoastră de email!";
-      });
-      Future.delayed(Duration(seconds: 3)).then((_) {
-        Navigator.push(context,
-        MaterialPageRoute(builder : (context) => Login()));
-      });
+
+      String reply = await response.transform(utf8.decoder).join();
+      var jsonResponse = jsonDecode(reply);
+      print(jsonResponse);
+      if (jsonResponse["response"] == "true"){
+        setState(() {
+          this.displayError = false;
+          this.displayMessage = true;
+          this.message = "A fost trimis un link de resetare parolă către adresa dumneavoastră de email!";
+        });
+        Future.delayed(Duration(seconds: 3)).then((_) {
+          Navigator.push(context,
+          MaterialPageRoute(builder : (context) => Login()));
+        });
+      }
+      else {
+        setState(() {
+          this.displayError = true;
+          this.displayMessage = false;
+          this.error = "Adresa de email nu este validă! Vă rugăm să incercați din nou!";
+        });
+      }
+
   }
 }
 

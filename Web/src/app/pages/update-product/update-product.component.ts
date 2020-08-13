@@ -55,8 +55,10 @@ export class UpdateProductComponent implements OnInit {
       .subscribe(data =>{
         this.displayError = "none";
         this.message = "Produsul a fost modificat cu succes!";
-        this.displayMessage = "none";
-        this._UserService.refresh();
+        this.displayMessage = "block";
+        setTimeout(()=>{    //<<<---    using ()=> syntax
+          this._UserService.refresh()     
+        }, 3000)
       },
       error => {
         if (error.status == 401) {

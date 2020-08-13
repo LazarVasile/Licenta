@@ -323,7 +323,7 @@ class _MenuState extends State<Menu> {
                                         child: RaisedButton(
                                         color: Colors.blue[600],
                                         child: Text(
-                                          "Încapoi la meniu",
+                                          "Înapoi la meniu",
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -501,7 +501,7 @@ class _MenuState extends State<Menu> {
                                                                         });
                                                                         // print("minus one");
                                                                       },
-                                                                      splashColor: Colors.purple[600],
+                                                                      splashColor: Colors.purple[900],
                                                                     ),
                                                                   )
                                                                 ),
@@ -550,7 +550,7 @@ class _MenuState extends State<Menu> {
                                                                         print(this.buyProductsNumber);
                                                                         // print("plus one");
                                                                       },
-                                                                      splashColor: Colors.purple[600],
+                                                                      splashColor: Colors.purple[900],
                                                                     ),
                                                                   )
                                                                 )

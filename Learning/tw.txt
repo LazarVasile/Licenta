@@ -1,0 +1,193 @@
+CURS 1 
+    - www - world wide web - spatiu informational comun in care comunicam prin interconectarea
+    si parajarea unor elemente de interes denumite resurse
+    - www bazat pe modelul client - server
+    - resursele sunt identificate prin adresa lor - uri (uniform resource indentifier)
+    - accesul la continutul - reprezentarea - resurselor web se realizeaza printr-un protocol
+        http - hypertext transfer protocol
+    - DNS - nume de domenii - adresa ip
+    - IP - internet protocol - protocol de interconectare a retelelor
+    - TCP - transmision control protocol - control al transmiterii datelor
+    - resursele pot fi reprezentate in format XML sau JSON
+    - hipertext - text non liniar, o forma de document electronic
+    
+    URI - fiecare adresa web este desemnata de indentificatori uniformi de resurse
+        - resurse - lucru care poseda o identitate
+    URI = URL + URN
+    URL - uniform resource  locator
+    Site web
+    Aplicatie web - interactiunea dintre aplicatie si utilizatori are loc via o interfata web
+    sit web = aplicatie web
+
+    Arhitectura unei aplicatii web - front-end --- HTTP---- back-end
+    Utilizatorul interactioneaza cu o clientul (interfata web) si initiaza actiuni - cereri HTTP asincrone
+    - la nivel de back-end pentru a obtine date
+    
+    Aplicatie Web = Interfata + Program + Continut (date)
+
+CURS 2 
+    - o resursa web se intentifica prin URI
+    - interactiunea se face printr-un protocol HTTP
+    - interactiunea dintre client si server are loc print http - are ca temelie stiva TCP / IP
+    Arhitectura HTTP - server Web
+        - client Web
+    Proxy - are rol atat de server cat si de client
+    Gateway - intermediat ce ascunde serverul tinta, clientul nestiind asta
+    Cache - zona locala de stocare pe disc a datelor, a mesajelor
+    Mesaj http - anter + corp
+    HTTP metode : Get, Post, Put, Delete
+    GET - accesul la reprezentarea unei resurse
+    PUT - actualizeaza o reprezentare de resursa sau creeaza o resursa la nivel de server
+    POST - creeaza o resursa
+    DELETE - sterge o resursa
+    Get - safe
+    put, post, delete - not safe 
+    safe -> nu conduce la modificarea starii serverului
+    Reprezentari ale resursei: html, css, js
+    Binar: imagine
+    Server Web - cereri multiple de la clienti
+    Server web are implementare pre forked sau pre threaded
+    Aplicatia web pe partea de server se poate dezvolta cu ajutorul GCI (API)
+    Interfata de programare, independenta de limbaj
+    Coockie - mijloc de stocare a datelor pe masina clientului WEB cu scopul de a fi
+        accesate apoi de un program ruland de pe server
+        utilizari: memorarea preferintor fiecarui utilizator, completarea automata a formularelor
+                    managementul sesiunilor web
+        tipuri: persistente - nu sunt distruse la inchiderea navigatorului web
+                nepersistente - dispar
+                poate fi considerat o variabila
+    
+    set-coockie: nume = valoare; expresie = data; path = cale, domain = demeniu; secure
+    Sesiune: orice vizitatoror al unui site va avea asociat un identificator unic - sesseionid
+    Unei sesiuni i se poate asocia diverse variabile
+
+CURS 3 - dezvoltarea unei aplicatii Web
+    Modelare - se recurge la o metodologie, se prefera abordarile conduse de modele
+    Cerinte, analiza si proiectare, implementare, testare, exploatare, mentenanta, evolutie
+    Aplicatie Web - functionalitate + informatii oferite
+    Aplicatie Web = interfata + program + continut
+    Majoritatea aplicatiilor web sunt dezvoltate conform MVC
+    Controller - responsabil cu preluarea cererilor de la client
+    Model - resursele gestionate de software, utilizatori, au modele specifice
+    View - furnizeaza diverse maniere de prezentare a datelor furnizate de model via controller
+    Arhitectura unei aplicatii web - MVC
+    Biblioteca web - colectie de resurse computationale reutilizabile
+
+    Aplicatie web - interfata + program + continut
+    View - prezentare, model - structura datelor, controller - procesarea datelor
+    Controller - responsabil cu preluarea cererilor de la client
+    Model - resurse gestionate de software - utilziatori, mesaje, prduse, etc
+    Framework - cadru de lucru
+
+
+Curs 4 - server de aplicatii web
+    - limbaj de programare
+    - api de baza
+    - stocare persistenta - folosind sql, xml, nosql
+    - interactiune web (html + css) - transfer asincron de date
+    - spachetti-code - amestecare partea de view cu partea de web
+    
+    Instrumente utile pentru dezvoltatorii web:
+    - framework-uri
+    - micro-framework
+    - pachete
+
+Curs 6 - modelarea datelor
+    - modelarea datelor: xml/json
+    - xml - extensible markup language
+    - xml are suport pentru orice platforma hardware/software
+    - xml atribute: id, text, data
+    - datale stocate de un document xml pot fi accesate cu xpath
+    - xpath - adreseaza parti dintr-un document xml
+
+Curs 7 - procesare xml
+    - procesare manuala
+    - procesare obiectuala - document object model
+    Dom - este o interfata de program a aplicatiilor abastracta pentru xml/html
+    - defineste o structura logica arborescenta a documentelor xml
+    - idl sunt definite prin idl - interface description language
+    - dom are suport pentru html si pentru css
+
+Curs 8 - consultarea documentelor xml/html
+    - sax - consultarea documentelor xml / html fara ca in prealabil sa fie construit arborerele de noduri-obiect
+        - ofera procesare xml secventiala
+        - functiile, metodele de tratare se specifica de catre programator, pentru fiecare tip de constructie xml in parte
+    
+SAX vs DOM
+- dom - documentul este procesat ca si arbore, este necesar incarcarea completa in memorie a documentului html
+- sax - preia fragmente reduse din document, efectuandu-se o prelucrare liniara
+- sax poate fi utilizat pentru generarea de arbori dom
+- in cazul unor structuri xml sofisticate, maniera de procesare sax poate fi inadecvata
+- procesarea xml - cu dom sau sax
+- dom - acces direct in stil pull, acces secvential in stil pus
+
+Servicii web - un sistem sofware construit pentru a suporta interactiunea intre doua masini asupra unei retele
+Implementare servicii web - framework
+    - procesarea datelor din codul html
+    - web scrapping
+    - utilizate la interactiunea dintre aplicatii
+
+SOAP - arhitectura orientate pe servicii
+    - paradigma de dezvoltarea a sofware-ului
+
+Creare servicii fara soap - REST - representationat state transfer
+    - stil arhitectural de dezvoltare a aplicatiilor web axat asupra reprezentarii datelor
+    - este o arhitectura sofware care defineste un set de costrangeri care trebuie utilizate in crearea serviciilor Web
+    - rezultatul unei procesari conduce la obtinerea unei reprezentari a unei resurse
+    - clientii interactioneaza u reprezentarile resurseloe via verbe (get, put, post, delete)
+    
+    Get - acceseaza o reprezentare a unei resurse
+    Head - similiara cu get, dar furnizeaza doar meta-date
+    Put - inlocuieste o reprezentare de resursa sau eventual creeaza o resursa la niver de server web
+    Post - creeaza o sursa
+    Delete
+
+    Transferul se realizeaza prin protocolul http
+
+    Caching - reprezentarile de resurse pot fi stocate temporar
+    Resursele se denumesc folosind URI-uri (url-uri)
+    Pot exista intermediari intre clienti si resurse -> cache, gateway
+    CRUD - create, retrevie, update, delete
+
+    Interactiunea cu un serviciu web dezvoltat in stilul rest se poate face via un API
+    Fiecare resursa are un URI
+    Uri - urile trebuie sa fie simple si intuitive
+
+    Accesul la un micro-servicii are loc uzual pe baza unei interfete de program a aplicatiei (API) - o interfata ce defineste interactiunea dintre multiple componente software
+
+
+    1. HTML - hyper text markup language
+        - limbaj de marcare standar pentru paginile web
+        - fiecare element html are atribute, atribute sunt informatii suplimentare despre fiecare element, atributele sunt perechi de nume-valoare
+        - fiecare element html trebuie sa inceapa cu o declaratie <!doctype html>
+        - fiecare element html incepe cu <html>
+        - structura unui document html - <html><head>title</head>
+                                            <body></body>
+                                                </html>
+
+    2. CSS - cascading style sheets
+        - css descrie cum trebuie sa fie afisate elementele html
+        - constituie dintr-un selector si un bloc de declaratii
+        - <link rel="stylesheet" href = "mystyle.css"
+
+    REST vs SOAP
+
+    Soap - este un protocol folosit pentru comunicare, bazat pe xml
+    REST - este o arhitectura pentru a trimite date prin protocoalele standard
+    Soap - este de incredere, rest nu
+    Soap lucreaza doar cu xml, pe cand rest lucreaza pe xml si json
+    Soap nu suporta manipulare de errori, rest suporta
+
+
+    API - interfata de program a aplicatiilor
+        - reprezinta un set de definitii si de protocoale si unele pentru dezvoltarea aplicatiilor software
+    Un api poate fi un sistem de operare, sistem web, sistem de baze de date
+
+    Un restful api este un api care utilizeaza cereri http pentru operatiile crud
+    Interactiunea cu un serviciu web dezvoltat in stilul rest se poate face via un api
+
+Diferenta intre xml si json: xml - poate fi trimis in soap cat si in rest
+    json - numai in rest
+    Asemenare: ambele sunt moduri de rep a datelor, ofera identificator unic, arborescente
+    In xml poti avea doua elemente cu acelasi identificator, in json nu
+    

@@ -210,7 +210,9 @@ export class AdminComponent implements OnInit {
           this.displayMessage = "block";
           this.message = "Comanda a fost procesată!"
           window.scroll(0, 0);
-          this.refresh();
+          setTimeout(()=>{    //<<<---    using ()=> syntax
+            this._UserService.refresh()     
+          }, 3000)
       
         },
         error => {

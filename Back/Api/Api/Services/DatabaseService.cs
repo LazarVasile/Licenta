@@ -142,7 +142,14 @@ namespace Api
 
             }
             Console.WriteLine(myProducts.Count);
-            myProductsFinal.Add(myProducts[0]);
+            try
+            {
+                myProductsFinal.Add(myProducts[0]);
+            }
+            catch
+            {
+                Console.WriteLine("error");
+            }
             if(myProducts.Count > 0)
             {
                 for(int i = 1; i < myProducts.Count; i++)

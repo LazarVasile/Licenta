@@ -131,6 +131,8 @@ namespace Api.Controllers
                     PrintDocument pd = new PrintDocument();
                     pd.PrintPage += new PrintPageEventHandler(pd_PrintPage);
                     // Print the document.
+
+                    
                     pd.Print();
                 }
                 finally
@@ -143,6 +145,7 @@ namespace Api.Controllers
                 Console.Write(ex.Message);
             }
         }
+
         [HttpPut]
         public History Put([FromBody] IDictionary<String, double> request)
         {

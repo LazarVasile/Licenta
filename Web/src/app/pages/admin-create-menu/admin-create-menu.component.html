@@ -1,6 +1,6 @@
 <div class="header">
     <a routerLink = "../user" class="nav-right">Utilizatori</a>
-    <h1>Cantină Gaudeamus</h1>
+    <h1>Cantină</h1>
     <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
 </div>
 <div class="overlay">
@@ -32,7 +32,7 @@
                             <input placeholder = "Cantitate" type = "number" (change) = "onChangeInput($event, productsToAdd[category][k-1])">
                         </div>
                         
-                        <button class="create-menu-btn" (click) = "addMoreProducts(category)">Adaugă încă un produs</button>
+                        <button class="create-menu-btn" (click) = "addMoreProducts(category)"><p>Adaugă încă un produs</p></button>
                     </div>
                 </div>
                     <br>

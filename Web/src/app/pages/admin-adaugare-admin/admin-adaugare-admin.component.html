@@ -1,6 +1,6 @@
 <div class="header">
-    <a routerLink = "../user" class="nav-right">Users</a>
-    <h1>Cantinaă Gaudeamus</h1>
+    <a routerLink = "../user" class="nav-right">Utilizatori</a>
+    <h1>Cantină</h1>
     <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
 </div>
 
@@ -18,7 +18,7 @@
                 <label class="fields-inline"><b>Adresa de email</b></label>
                 <input type = "text" #email placeholder = "Introduceti email">
             </div>
-            <button onclick = "addAdmin(email.value)">Adaugă admin</button>
+            <button (click) = "addAdmin(email.value)">Adaugă personal</button>
 
         </form>
     </div>

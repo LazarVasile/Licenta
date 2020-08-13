@@ -1,0 +1,301 @@
+CURS 1:
+    - API - application user interface
+    - GUI - graphic user interface
+    - bilbioteca - un set de functii care poate fi folosit de mai multe programe
+    - compiler - un program care transforma codul sura, intr-un cod masina, care nu este inteles (x86, x64, etc)
+    - librariile - dinamice, statice, delayed
+    - cand o aplicatie .exe este rulata, atunci aceasta este copiata in memoria de procese
+    - de asemenea si .dll care sunt in .exe sunt adaugate in memoria de procese
+    
+    - class Program {
+        private:
+            metode, variabile
+        public:
+            metode, variable
+    }
+    void Person::name_method(param){
+        this->
+    }
+
+    - public - permite acces oricui
+    - private - permite accesul doar funciilor care sunt definite de clasa
+    - protected
+    - daca nu declaram tipul, atunci sunt private
+    - static - are aceeasi valoare pentru toate instantele clasei, chiar si cand e modificata
+    - variabilele statice trebuie definite in afara clasei int person::Y = 10;
+    - metodele sunt functii definite intr-o clasa, scopul lor ete de a opera si de a schimba
+        datele membre dintr-o clasa
+    - poate avea  de asemenea modificatori de acces
+    - poate fi statica si poate avea un modificator de acces
+
+CURS 2:
+    Pointeri si referinte
+    - pointer "->", referinta "."
+    - creare: int *p, int &p;
+    - int *p = &i, int &ref = i
+    - pointerii accepta +, -, ++, etc, pe cand referintele nu
+    - unui pointer i se poate schimba tipul, unei referinte nu
+    - un pointer poate face referinta la alt pointer, o referinta doar la o variabila
+    - un pointer poate fi folosit intr-un array si poate fi initializat dinamic, dar o referitna nu
+    
+    Supraincarcare metode - mai multe functii cu acelasi nume, dar parametri diferiti
+    - nu este posibila daca are acelasi nume si aceiasi parametri
+    - parametri variati int nume_clasa::nume_functie(int v1, ...)
+    - verifica daca exista o metoda cu acelasi nume si acelasi tip de parametri
+    - converteste dintr-un tip in altu
+    - poate arunca o eroare de caz ambiguu
+    - se poate face si conversie, ex: de la 1 la char si tot asa
+    - conversia de pointeri este imposibila
+    - un pointer non constant poate fi convertit in void
+    
+    NULL pointer
+    - este definit ca un numar - 0
+    - nullptr - este un pointer
+    
+    Const - specificator
+    - o variabula constanta, nu i se poate modifica valoarea
+    - read-only acces
+    - pentru vectori constainti: ptr = value -> modificam  adresa, *ptr = value, nu se poate
+    
+    Specficatorul friend:
+    - o functie "friend" este o functie care poate accesa metodele si datele membre 
+        cu modiifcatorul de acces "privat" din acea clasa
+    - daca declaram o alta clasa de tip "friend" in interiorul clasei, atunci aceasta poate
+        accesa toate datele din acea clasa
+
+CURS 3 - constructori si liste de initializare
+    - int x[3] = {1,2,3}
+    
+    Constructor:
+    - este e functie cu acelasi nume ca al clasei, dar care nu returneaza nicio valoare
+    - o clasa poate sau nu poate avea constructori, sau poate avea mai multi constructori
+    - constructori default, copy, move
+    - constructor default - constructor fara parametri
+    
+    Constr si referinte - date membe
+    - referintele si constantele trebuie initializate
+    
+    Delegare constructor
+    - un cunstructor poate apela alt cunstructor in timpul initializarii
+
+    Initialization lists for classes:
+    - class array = {{instance1}, {istance2}, etc}
+
+    Copy and move constructors:
+    - copy constructor este un constructor care are un singur parametru si are referinta
+        catre un obiect din acceasi clasa
+        class c = c1
+    
+    Constrangeri
+    Singleton pattern:
+    Daca vrem sa folosim o singura instanta a clasei atunci combinam private cu static
+
+CURS 4  
+    Destructori
+    - un destructor este apelat atunci cand vrem sa eliberam memoria pe care o ocupa un obiect
+    - este doar unul singur fara parametri
+    - nu poate fi static
+    - poate avea diferiti modificateori de acces
+    - ~Destructor()
+    - dealoca memoria care a fost alocata de catre constructor
+    - obiectele sunt sterse in ordinea inversa a creatiiei lor
+    
+
+    Operatori
+    - type class::operator+(class i){
+        return ...
+    }
+
+    - suprascrie metoda + pentru clase
+
+CURS 5
+    Mostenire - procesul prin care o clasa mosteneste proprietatile altei clase
+        - class Derived : public Base
+        - public si protected pot fi accesate din clasa ce mosteneste
+        - protected poate fi folosit doar in metodele clasei si sublclasei
+    
+    Metode virtuale - folosita in clasa de baza, spune ca metoda in clasa de baza va fi
+        inlocuita de cea din clasa ce mosteneste (override - inlocuire)
+        - face o metoda sa fie o parte a instantei
+        - pot fi folosite pentru - polimorfism, delocare de memorie, 
+        - tehnici anti-debugging
+    
+    Polimorfism - abilititatea de a accesa intantele diferitelor clase prin aceeasi interfata
+        - in c++ este abilitatea de a converti automat un pointer al unei clase in clasa sa de baza
+        - suprascriere - de a rescrie o metoda din clasa ce mosteneste
+        - final - folosit pentru a spune ca functia nu poate fi suprascrisa
+    
+    Clase abstracte - interfete
+        - daca o clasa contine o metoda virtuala, acea clasa este o clasa abtracta, care nu poate fi instantiata
+        - in alte limbaje de programare acest concept este cunoscut ca si interfata
+
+CURS 6
+    - este posibil mereu sa convertim din clasa copil in clasa de baza, pentru ca aceasta contine toate metodele
+    - inverse nu este posibil mereu
+
+    Macros - sunt metode care pot fi folosit pentru a modifica codul in c/c++ inainte de compilare
+    - #define BUFFER_SIZE 1024
+    - este mai rapid decat cod inline
+
+    Template - genereaza extrac cod la compilare, mai rapid si mai eficient
+        - template-ul este folosit ca si un tip de data
+        - pentru clase, pentru functii
+        - lucreaza la fel ca un macro
+        - template <class T> 
+        return_type function_name(param)
+        - ca sa poata compila putem pune tipul inainte
+
+CURS 7 - STL - standard template library   
+    - contine containere, iteratori, alogitmi, adaptori, alocatori, altele
+    - vectori
+    - deque
+    - array - un vector de lungime fixa
+    - array si vectori: amandoi pot fi accesati cu [] sau at
+    - lista
+
+    Adaptori: - nu sunt containere, nu au o implementare care poate tepozita anumite informatii
+    - stack - stiva
+    - queque
+
+    Associative containers - pair
+    - struct
+    - map - dicitionar
+    - multimap
+    - set
+    - multiset
+    
+    String
+    Vectori de initializare cu cele de mai sus
+
+    list<int>::iterator it;
+    for(it = a.begin, it!= a.end; it++)
+
+CURS 8 - expresii constante
+    - se definesc cu const
+    - constexpr - pentru expresii
+    
+    Foreach
+        - for(int i: x-lista)
+    
+    Tipul "auto" pentru functii sau pentru variabile
+
+CURS 9
+    - o expresia lambda are abilitatea de a captura starea unei variabile printr-o copie
+    sau referinta si sa foloseasca asta intr-o functie.  Acest lucru se mai numeste si incheire
+    - auto f = [](int x, int y) { return x + y;}
+
+CURS 10
+    - try - block ce contine mai multe declaratii ce ar putea arunca o exceptie
+    - throw - folosit pentru a comunica informatii despre eroare
+    - catch - block implementat imediat dupa un block try.
+
+CURS 12 
+    - un model este o abstractizare a sistemului pentru a putea fi dezvoltat mai usor
+    - un model are 3 caracteristici principale:
+        - mapare, reductie, pargmatism
+    - UML pentru a crea un model
+    
+    Principii OOP - singleton
+        - o clasa trebuie sa aiba un singur motiv pentru a fi modificata, aceasta are un singur job
+        - open - closed principle - o clasa poate fi deschisa pentru extensii, dar inchisa pentru modificari
+
+CURS 13
+    - singleton  - defini o clasa cu un singur obiect (o singura instanta)
+
+
+Recapitulare:
+    O clasa este o colectie de metode si variabile. Este un model ce defineste datele
+        si comportamentul unui tip
+    
+
+Polimorfism - abilitatea unui limbaj de programare orientat obiect de a diferentia entitati cu acleasi nume
+    - polimorfism - cand o clasa contine mai multe metode cu acelasi nume dar tipuri de date diferite
+
+Mostenire - capacitatea unei clase de a mosteni campurile si metodele altei clase
+    - super class - clasa de baza - cea din care se mosteneste
+    - sub class - clasa care mosteneste 
+
+Componentele unei clase: modificatori de acces, numele clasei, superclasa, interfata, corp
+
+Obiect - este o unitate de baza a oop si reprezeinta entitatile din viata reala
+    - stare, comportament, identitate
+
+Metoda - este o colectie de declaratii care fac un anumit task si returneaza un anumit rezultat
+
+Modificatori de acces:
+    - virtual - lasa o clasa sa fie suprascrisa in clasa derivata
+    - override - suprarscrie un membru definit in clasa de baza
+    - abstract - obliga clasa membra sa fie suprascrisa in clasa derivata
+
+Interfata
+    - defineste o serie de proprietati, metode si eveniminte, fara a fi implementate  
+    - pentru a putea implementa o interfata intr-o clasa atunci extindem interfata din acea clasa
+
+Pointer - o variabila ce detine adresa de memorie a altei variabile. Se declara cu *
+Referinta - este un alias, un alt nume pentru o variabila deja existenta
+
+Abstractizare - este un concept de a ascunde complexitatile unui sistem fata de utilizatorul acelui sistem
+Incapsulare
+
+Modificatorul de acces este un cuvant cheie care exprima accesibilitatea unui membru sau a unui tip de date
+Protected - accestul este limitat la clasa ce il contine sau la clasa derivata din clasa de baza
+Internal - accesul este limitat de ansamblul curent
+Private - accesul este limitat la clasa ce il contine
+Readonly  - nu se poate modifica
+Array - o lista de dimensiune fixa
+
+Dictionarul - este o structura de date care ne permite sa accesam o anumita valoare printr-o anumita cheie
+Cheia - trebuie sa fie unica, nu trebuie sa fie modificata
+
+Unit test - este o metoda care instantiaza o portiune mica a aplicatiei si verifica comportamentul acesteia independent fata de alte parti
+
+Incapsulare - atunci cand putem declara o clasa in interiorul altei clase. Procesul permite implementarea unei clase ajutatoare in interiorul altei clase, pe post de prioritate
+Abstractizare - atunci cand folosim o metoda virtuala pura. Abstractizare permite unei clase sa implementeze metodele virtuale ale superclasei(clasa pe care o mosteneste)
+Polimorfism - abilitatea de a accesa instante a unor clase diferite prin aceeasi interfata
+        - diferite clase pot fi accesate folosind acceasi interfata, fiecare clasa avand propria implementare a interfetei
+    
+
+O clasa ce contine numai metode virtuale este considerata o interfata
+Intrebari:
+1. Obiect si clasa
+    Clasa - o colectie de metode si variabile. Este un model ce defineste datele si comportamentul unui tip de date. Poate contine atribute, metode, modificatori de acces, etc
+    O clasa contine - variabile membre, metode, constructori, destructori, operatori
+
+    Obiect - este o unitate de baza a oop si reprezinta entitatile din viata reala, stare, comportament, identitate
+         - un tip de data abstracta creat de catre dezvoltator
+
+2. Incapsulare - este atunci cand in interiorul unei clase este declarata alta clasa. Procesul permite implementarea unei clase in interiorul altei clase, pe post de prioritate
+
+3. Mosteniea - procesul prin care se transfera proprietatile unei clase, denumita clasa de baza catre o alta clasa, denumita clasa ce mosteneste
+
+4. Relatii intre clase - mostenire, asociere (atunci cand dam ca parametru in interiorul unei clase, un obiect de tip alta clasa), compozitie, agregare, este un fel de asociere
+    - substittie - is a
+
+5. Singleton - o clasa trebuie sa aiba o singura instanta, un singur obiect
+    Single responsability principle - o clasa trebuie sa aiba doar un motiv sa se schimbe, si ar trebui sa faca doar un singur lucru
+    Principiul Open-Close - o clasa trebuie sa fie deschisa pentru extensii, dar inchisa pentru modificari
+    Liskov Substitution Principle - S este un subtip a lui T, daca oriunde in loc de T poti folosi S
+    Modulele de nivel inalt nu ar trebui sa depinda de modulele de nivel scazut. Ambele trebuie sa depinda de abstractii
+
+    Singleton - creational - defineste o clasa ce trebuie sa aiba o singura instanta, Ex: file sistem, window manager, web page manager
+    Composite - structural - descrie un grup de obiecte care sunt tratate in acelasi mod ca o singura instanta a aceluiasi tip de obiecte
+            - expresii
+    Visitor - behaviior pattern - o modalitate de a urma principiul open/close
+            - permite definirea de noi operatii fara a schimba clasele elementelor peste care este executat
+        
+    Object factory - creational - metoda de a crea un obiect, fara a specifica clasa exacta a obiectului ce va fi creat
+    Observer - un obiect, denumit subiect, retine o lestine a dependentilor sai, numiti observatori si ii notifica pe acestia in privinta cu orice modificare de stare
+
+6. Functia virtuala pura - este o functie virtuala ce trebuie neaparat implementata de clasa ce o mosteneste, daca clasa derivata nu este abastracta
+
+7. Un pointer este o adresa de memorie a unei variabile, pe cand o referinta este un alias pentru o variabila
+    Referintele nu pot avea valoarea null, pointerii pot
+    Pointerii suporta adunare, scadere, iterare, pe cand referintele nu
+    Un pointer poate face referinta catre alt pointer, pe cand o referinta nu
+    U referinta trebuie sa fie initializata la declarare, pe cand un pointer nu
+    Unui pointer i se poate schimba tipul, dar unei referinte nu
+
+8. Functii friend - functie friend - este o functie ce este definita in afara clasei dar poate accesa toti membrii publici si privati ai clasei
+
+Sabloane de proiectare - rezolvari pentru probleme des intalnite
+

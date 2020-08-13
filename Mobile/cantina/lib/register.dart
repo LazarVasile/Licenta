@@ -33,19 +33,17 @@ class _RegisterState extends State<Register> {
   }
   
   Register(String email, String password, String confirmPassword) async {
-    print(email);
-    print(password);
     if (this.studentCheck == true && this.professorCheck == true) {
       setState(() {
         displayError = true;
-        error = "Please choose only one type!";
+        error = "Trebuie să alegeți o singură categorie de utilizator!";
       });
         _goTop();
     }
     else if (password != confirmPassword) {
       setState(() {
         displayError = true;
-        error = "Password and confirm password doesn't match";
+        error = "Parolele nu se potrivesc!";
       });
       _goTop();
       print(error);
@@ -54,7 +52,7 @@ class _RegisterState extends State<Register> {
     else if (password.length > 16) {
       setState(() {
         displayError = true;
-        error = "Password too long!";
+        error = "Parola este prea lungă! Trebuie să conțină maxim 20 caractere!";
         
       });
       _goTop();
@@ -63,7 +61,7 @@ class _RegisterState extends State<Register> {
     else if (password.length < 8) {
       setState(() {
         displayError = true;
-        error = "Password too short";
+        error = "Parola este prea scurtă! Trebuie să conțină minim 8 caractere.";
       });
       _goTop();
       print(error);
@@ -102,11 +100,12 @@ class _RegisterState extends State<Register> {
       
       String reply = await response.transform(utf8.decoder).join();
       var jsonResponse = jsonDecode(reply);
+      print(jsonResponse);
       if (jsonResponse["response"] == "true") {
         setState(() {
           this.displayError = false;
           this.displayMessage = true;
-          this.message = "Veți fi redirecționat către pagina de autentificare!";
+          this.message = "Te-ai înregistrat cu succes! Vei fi redirecționat către pagina de autentificare.";
         });
         Future.delayed(Duration(seconds: 3)).then((_) {
           Navigator.push(context,
@@ -132,7 +131,7 @@ class _RegisterState extends State<Register> {
       backgroundColor: Colors.purple[800],
       appBar: AppBar(
         backgroundColor: Colors.purple,
-        title: Text("Cantina Gaudeamus")
+        title: Text("Cantină")
       ),
       body: SingleChildScrollView(
               controller: controller,
@@ -160,7 +159,7 @@ class _RegisterState extends State<Register> {
                         Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(10),
-                          child: Text("Register",
+                          child: Text("Înregistrare",
                             style: TextStyle(
                               color: Colors.purple,
                               fontWeight: FontWeight.w500,
@@ -174,7 +173,7 @@ class _RegisterState extends State<Register> {
                           
                           child:Center(
                             child: Text(
-                              'Fill in the fields',
+                              'Completați câmpurile de mai jos',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize:20,
                                 color: Colors.blue[800],
@@ -205,7 +204,7 @@ class _RegisterState extends State<Register> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize:20,
-                                color: Colors.blue[800],
+                                color: Colors.blue[900],
                               )
                             )
                           ),
@@ -225,7 +224,7 @@ class _RegisterState extends State<Register> {
                                 borderSide: BorderSide(color: Colors.blue[800], width:1),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              labelText: 'Username',
+                              labelText: 'Adresa de email',
                               labelStyle: TextStyle(color: Colors.blue[800])
                             )
                           )
@@ -243,7 +242,7 @@ class _RegisterState extends State<Register> {
                                 borderSide: BorderSide(color: Colors.blue[800], width:1),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              labelText: 'Password',
+                              labelText: 'Parolă',
                               labelStyle: TextStyle(color: Colors.blue[800])
                             )
                           )
@@ -261,7 +260,7 @@ class _RegisterState extends State<Register> {
                                 borderSide: BorderSide(color: Colors.blue[800], width:1),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              labelText: 'Confirm password',
+                              labelText: 'Confirmare parolă',
                               labelStyle: TextStyle(color: Colors.blue[800])
                             )
                           )
@@ -277,7 +276,7 @@ class _RegisterState extends State<Register> {
                               },
                             ),
                             Text(
-                              "Professor",
+                              "Profesor",
                               style:  TextStyle (
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -314,7 +313,7 @@ class _RegisterState extends State<Register> {
                               ),
                               textColor: Colors.white,
                               color: Colors.purple,
-                              child: Text("Sign up", style: TextStyle(fontSize: 20)),
+                              child: Text("Înregistrează-te", style: TextStyle(fontSize: 20)),
                               onPressed: () {
                                 Register(nameController.text, passwordController.text, confirmPasswordController.text);
                               },

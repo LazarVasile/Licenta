@@ -1,19 +1,19 @@
 <div class="header">
-    <a routerLink = "../user" class="nav-right">Users</a>
-    <h1>Cantină Gaudeamus</h1>
+    <a routerLink = "../user" class="nav-right">Utilizatori</a>
+    <h1>Cantină</h1>
     <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
 </div>
 
 <div class = "overlay">
     <app-nav-bar></app-nav-bar>
     <div class = "container" id = "cnt">
+        <div class = "error" [style.display] = "displayError">
+            <p>{{error}}</p>
+        </div>
+        <div class = "message" [style.display] = "displayMessage">
+            <p>{{message}}</p>
+        </div>
         <div class="form-fields" id="add_product_fields">
-            <div class = "error" [style.display] = "displayError">
-                <p>{{error}}</p>
-            </div>
-            <div class = "message"  #error_message [style.display] = "displayMessage">
-                <p>{{message}}</p>
-            </div>
             <div>
                 <label class="fields-inline"><b>Nume produs</b></label>
                 <select #selectProduct>
@@ -39,7 +39,7 @@
                 <label class="fields-inline"><b>Descriere</b></label>
                 <textarea placeholder="Descriere / Ingrediente" #product_description></textarea>
             </div>
-            <button (click) = "updateProduct(selectProduct.value, professor_price.value, student_price.value, product_weight.value, product_description.value)">Actualizeaza produs</button>
+            <button (click) = "updateProduct(selectProduct.value, professor_price.value, student_price.value, product_weight.value, product_description.value)">Actualizează produs</button>
 
         </div>
     </div>

@@ -1,0 +1,254 @@
+Curs 1
+    SO - administrator de resurse fizice (CPU, disp periferice, etc)
+            - asigura functionarea lor simulatana, partajarea intre task-uri, performanta relativa
+        - masina abstracta
+            - procese sau threaduri, spatiu de adresare, fisiere, mesaje, etc
+    
+        - clasificare:
+            - mono - tasking, multi-tasking
+            - sisteme seriale (fara interactiune cu utilziatorul)
+            - sisteme interactive - mono-utilizator (CP, DOS), multi-utilizator: UNOX, Max OS, Solaris, Windows
+    
+    Proiectarea SO - sarcina, metrici, resurse hardware -> servicii * api-uri
+
+Curs 2
+    - operatiile cu si i/e se executa in paralel
+    Structura unui SO:
+        - gestiunea proceselor, administrarea memoriei principale, administrarea memoriei secundare
+        - gestiunea sistemului intrare/iesire, gestiunea fisierelor, sistemul de protectie al resurselor
+        - networking (gestiunea legaturii la retea), sistemul de interpretare a comenzilor
+    
+    Proces: un program ce se afla in timp de executie, o entitate activa a so
+    Activitati so: creare, distrugere proces, suspendarea reluarea executiei proceslor,
+            sincronizare procese, cominicatie intre procese, tratarea blocajelor
+    
+    Memorie: un vector foarte mari de octeti, avand fiecare propria adresa
+        - pentrua a putea fi executat un program trebuie sa se afle in memoria principala
+    Activitati so: alocare, dealocare de memorie, gestiunea spatiilor de memorie, decide ce procese
+        sunt urcate in memorie atunci cand un spatiu de memorie devine disponibil
+    
+    Memoria secundara  - dispozitive de stocare
+        - extensie a memoriei principale
+        - pentru stocarea programelor si datelor
+        - harddisct, benzi, cd-rom
+    Activitati so: gestiunea spatiului liber, alocarea spatiului pentru stocare
+
+    Sistemul intrare/iesire - lucreaza pe zone tampon (caching)
+    
+    Fisier - o colectie de informatii definita de creatorul ei
+        - unitate logica de stocare a informatiilor
+    Activitati so: creare/stergere fisier, mapare, back-up
+
+    Sistemul de protectie a accesului: un mecanism care controleaza accesul programelor/utilizatorilor
+        la resursele sistemului de calcul
+    Activitati so: controleaza utilizarea
+
+    Networking: sistem de calcul distribuit
+        - fiecare proces are memoria sa locala
+    Activitati so: ofera acces la resurse partajate
+
+    Sistemul de interpretare a comenzilor - interfata
+        - interpretor linie de comanda, shell
+    Instructiuni: interfata utilizator text, grafica
+
+    Servicii oferite de SO:
+        - executia programelor, operatii intrare-iesire, manipulare fisiere
+        - comunicatii, detectia errorilor, alocare resurse, protecia accesului
+
+    Socket - capat ale canalului de cominicatie dintre doua procese neinrudite
+
+    Fork - creare proces fiu cu o clona a parintelui
+
+    Nucleul - este cea mai importanta componenta a sistemului de operare
+    Activitati: gestiunea proceselor, gestiunea memoriei, gestiunea sistemelor de fisiere,
+        gestiunea perifericelor
+    In nucleu au loc apelurile de sistem
+
+    Nucleu monolotic: toate componentele so-ului ruleaza in kernelspace
+    Micro-nucleu: doar componentele esentiale ruleaza in kernelspace
+    Nucleu hibrid: combinatie intre monolitic si micro
+
+
+Curs 3:
+    - un proces este un program aflat in executie, o entitate activa
+    - un proces isi poate schimba starea
+    - starea unui proces - running, waiting, ready
+
+    PCB - blocul de control al procesului
+        - pastreaza informatii precum: id, pid, starea procesului, drepturile de acces, etc
+        - id-ul, id-ul procesului parinte
+        - PCB este un struct
+    
+    Relatii intre procese: 
+        - un proces poate fi independent - nu este afectat si nu afecteaza alte procese
+        - cooperant - este afectat sau poate afecta alte procese
+        - thread - defineste un singur flux secvential de intructiuni, un singur fir de executie, proces
+    
+    Procese concurente:
+        - multiple - pot fi multiprogramate pe un singur cpu
+        - fork - parintele are control asupra copilului
+    
+    Cozi de planificare a proceselor: pe masura ce procesele intra in sistem, acestea sunt puse
+        intr-o coada de joburi
+
+Curs 4:
+    Planificarea proceselor
+    Algoritmi de planificare a proceslor:
+        First Come, First Served - FIFO
+        Shorted Job First - scoate procesele scurte din asteptare pentru a minimiza numarul de procese aflate in asteptare
+        Planificare cu prioritati, preemtiva si ne-preemtiva 
+        Round Robin - cuanta
+        Planificare cu cozi ready pe nivele multiple
+        Planificare in timp real
+        Planificarea cu procesoare multiple
+
+Curs 5: sincronizarea proceselor
+    Procesarea paralela si concurenta este fundamentul sistemelor de operare multiprogramate
+    Executie ordonata = mecanisme pentru sincroniare si comunicare intre procese
+    Evitare race conditions -> excludere mutuala
+
+    Problema sectiunii critice:
+
+    Interblocaj - o situatie in care doua sau mai multe procese asteapta pe termen
+        nelimitat producerea cate unui eveniment, eveniment cauzat de alte procese care asteapta
+    
+    Blocaj nelimitat/infometarea - o situatie in care un proces asteapta nelimitat
+
+    Probleme clasice de sincronizare:
+        - problema producator - consumator
+        - problema cititori si scriitori
+        - problema cina filozofilor
+        - problema barbierului adormit
+    
+Curs 6:
+    Problema producator - consumator : un proces cu rol de producator, produce informatii
+        (ce le pune intr-un buffer) si ce sunt consumate de un alt proces, numit consumator
+        - doua variante: cu buffer limitat si cu buffer nelimitat
+    
+    Problema cititori si scriitori:
+
+Curs 7 - comunicatii inter-procese (ipc)
+    - proiectarea unor mecanisme care permite comunicatia intre procesele ce doresc
+        sa coopereze
+    - send si receive
+    - comunicatia directa: cu send si receive - problema consumator-producator
+    - mesaje indirecte - mesajele sunt trimise prin intermediul unor cutii postale(porturi)
+    - send(port, mesaj), receive(port, mesaj)
+    - blocante(sincrone), neblocante(asincrone)
+    
+    - pipe-uri - canale anonime
+    - pot fi utilizate doar de catre procese inrudite prin fork
+    - named piep-uri(canale cu nume) - fisiere fifo, mkfifo(), mesaje intre procese oarecare, dar locale
+    - socket-uri, schimb de mesaje intre procese de la distanta
+    - semnale unix
+
+    Interblocaj: doua sau mai multe procese asteapta la infinit producerea unor evenimente
+        ce pot fi cauzate de unul sau mai multe dintre procesele ce asteapta
+    
+    Evitare interblocaj: algoritmul de siguranta EStareSigura()
+    
+    Detectie interblocaj: algoritm de detectie a interblocajului
+
+    Infometare: atunci cand un proces a cerut permisiunea la o resursa si asteapta la infinit
+        primirea acelei resurse
+
+Curs 8 - administrarea memoriei
+    - ierarhii de memorii - memorii cu acces mai rapid, dar realizate in tenhologii mai costisitoare, deci dim mai mica
+        vs memorii cu acces mai lent, dar realizate cu tengolohie mai ieftina, deci dim mai mare
+    - memorie interna - ram, cpu
+    - memorie externa - discuri hard, de arhivare, etc
+
+    Legarea adreselor - necesitate a decide unde vor fi plasate codul executabil si datele
+
+    Adrese de memorie logice (CPU), si fizice (hard, memoria fizica din sc)
+
+    Alocare memorie contigua - pentru un proces (cod + date) se aloca o singura portiune, continua, din memoria fizica
+    Alocare memorie necontigua - pentru un proces (cod + data) se aloca mai multe portiuni separate de memorie fizica
+
+    Memoria reala - spatiu de adresare al proceslor este limitat de capacitatea memoriei interne
+    Memoria virtuala - spatiu de adresare nu este limitat de capactitate memoriei interne (aceasta este suplimentata de cea externa)
+
+    Scheme de alocare contigua:
+        - alocarea unica - cu o singura partitie
+        - alocarea unica - cu doua aprtitii
+        - alocarea memoriei in partitii fixe
+        - alocarea dinamica (in partitii variabile)
+        - alocare prin swapping
+    
+
+    Scheme de alocare neocontigua:
+        - paginarea
+        - segmentarea
+        - segmentarea paginata
+    
+    Paginare hardware - memoria fizica este impartita in blocuri de lungime fixa, numite cadre de pagina(frames)
+
+    Memoria virtuala - pastreaza separarea spatiului de adresare logic(virtual) de cel fizic(real)
+
+Curs 12 - administrarea perifericelor de stocare
+    - periferice de intrare / iesire - pentru schimbul de informatii cu mediul extern
+    - periferice de stocare - pentru pastrearea nevolatila a informatiilor
+    
+    Clasificarea perifericelor dpdv al modului de operare:
+    - periferice dedicate - pot servi un singur proces la un moment dat
+    - periferice partajabile - pot servi mai multe procese simultan
+
+    Clasificare dpdv al modului de transfer si de memorare a informatiei:
+    - periferice bloc - memoreaza informatiile in blocuri de dimensiune fixa, fiecare cu adresa sa
+    - periferice caracter - accepta flux de octeti fara nici o structura de bloc
+    
+    Clasificare dupa variatia timpului de acces:
+    - periferice cu acces secvential - timpul de acces are variatii foarte mari
+    - periferice cu acces complet direct - timpul de acces este constant
+    - periferice cu acces direct - timpul de acces are variatii foarte mici
+
+    Memoria secundara: discul (intern) - hard, ssd
+
+    Viteza discului: timpul de cautare, latenta de rotatie, timpul de transfer, timpul total de acces
+
+    Algoritmi de planificare a accesului la disc:
+    - first come first served
+    - shortest seek time first
+    - scan
+    - c-scan
+    - look
+    - c-look
+
+Curs 11 - administrarea informatiilor
+    - sisteme de fisiere
+    - fisier - zona de stocare a informatiile contigura dpdv logic
+    - continutul unui fisier - date, program
+    - structura unu fisier: nestructurat, structura simpla de tip inregistrare, structura complexa, etc
+    
+    Rolul fisierelor:
+    - persistenta - date cu viata lunga, pentru posteritate
+
+    Atributele unui fisier:
+    - nume, tip, locatie, dimensiune, protectie, timp, data si identificatorul de utilizator
+
+    Operatii pe fisiere: read, write, create, open, repozitionare, stergere, trunchiere, inchidere
+
+    Accesul la fisiere:
+    - acces secvential - acces de la inceput spre sfarsit
+    - acces direct - acces dupa numarul inregistrarii
+    - acces indexat - acces direct prin continut
+
+    Clasificarea fisierelor:
+    - fisiere text, binare, etc
+
+    Sistem de fisiere: o colectie oarecare de fisiere, impreuna cu structura de directoare in care
+        acestea sunt organizate
+    
+    Interfata sistemului de fisiere:w
+    - director - colectie de noduri ce contin informatii despre toate fisierele
+    - director informatii: nume, tip, adresa, lungime curenta, lungime maxima, data ultimului acces, data ultimei actualizari
+        identificatorul proprietarului, informatii pentru protectie
+    - operatii asupra directoarelor: cautare unui fisier, creare fisier, stergere fisier,
+        redenumire fisiere, listarea unui director, traversarea sistemului de fisiere
+    
+    Montarea:
+    - un sistem de fisiere trebuie sa fie montat inainte sa fie accesat
+
+
+
+Problema sectiunii critice: mai multe procese 

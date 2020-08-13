@@ -5,13 +5,13 @@
 <div class="total-price" id="total_price">
     <h3>Preț total</h3>
     <p>{{totalPrice}} lei</p>
-    <button (click) = "buyProducts()">Cumpară</button>
+    <button (click) = "buyProducts()">Cumpără</button>
 
 </div> 
 <!-- <h1> {{categories}} </h1> -->
 <div class="header">
     <a href="#Info" class="nav-right">Info</a>
-    <h1>Cantină Gaudeamus</h1>
+    <h1>Cantină</h1>
     <a class="logout-link" (click) = "_UserService.logout()">Logout</a>
 </div>
 
@@ -31,7 +31,7 @@
                     <div class = "menu">
                         
                         <p class="dish">{{category}}</p>
-                        <ul *ngFor="let product of productsByCategory[category];">
+                        <ul class = "list" *ngFor="let product of productsByCategory[category];">
                             <div *ngIf = "this.buyProductsTotal[product._id.toString()] > 0; then thenBlock2; else elseBlock2"></div>
                             <ng-template #thenBlock2>
                                 <li><p style = "font-weight: 700;">{{product.name}}</p></li>
@@ -44,7 +44,7 @@
                                     <li><p>{{product.professorPrice}} lei</p></li>
                                 </ng-template>
                                 <li><button (click) = "minusProduct(product)"><b>-</b></button></li>
-                                <li>{{buyProductsNumber[product._id.toString()]}}</li>
+                                <li><b>{{buyProductsNumber[product._id.toString()]}}</b></li>
                                 <li><button (click) = "plusProduct(product)"><b>+</b></button></li>
                             </ng-template>
                             <ng-template #elseBlock2></ng-template>

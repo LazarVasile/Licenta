@@ -1,0 +1,23 @@
+Principala problema abordata in cadrul acestei lucrari este cea a timpului de procesare a comenzilor din cadrul unei cantine, o procesare lenta insemanand timp ridicat de asteptare
+Solutia pentru aceasta problema a fost dezvoltarea unei aplicatii web si mobile pentru doua din cele mai cunoscute sisteme de operare androd si iOS ce ofera un sistem de comanda online
+si un sistem de generare automata de comenzi, precum si alte functionalitati de gestiune a comenzilor si produselor din cazul cantinei.
+Arhitectura aplicatiei este una simpla in care avem o interfata web si mobile pentru android si iOS, o baza de date si o poarta de acces ce ajuta la interactiunea din baza de date si interfata
+Baza de date folosita este MongoDB - ce este o baza de date nosql in care informatiile sunt stocate in colectii sub format json. Aceasta permite stocarea unui volum foarte mare de informatii
+intr-un timp scurt comparativ cu o baza de date sql. De asemenea aceasta accepta array si obiecte ca si valori, acestea fiind motivele pentru care am ales sa lucrez cu aceasta tehnologie
+Mediul folosit pentru poarta de acces este ASP.NET core. Am ales sa lucrez cu acest mediu datorita documentatiei foarte dezvoltate si datorite implementarii anumitor functionalitati pe care le importam din biblioteci.
+Pentru partea de interfata am folosit angular framework ce este folosit pentru dezvoltarea aplicatiilor client si foloseste HTML impreuna cu limajul de programare typescript
+Pentru partea de interfata mobile am folosit flutter framework ce este o tehnologie relativ noua, dezvoltata de google ce foloseste limbajul de programare dart, ce este un limbaj orientat-obiect.
+Aceasta ajuta la dezvoltarea aplicatiilor mobile pentru android si iOS folosind acceasi baza de cod.
+In momentul in care un utilizator incepe sa foloseasca aplicatia, acesta va fi intampinat de pagina de autentificare. In cazul in care acesta nu are cont, aplicatia dispune de o pagina de inregistrare
+De asemenea in cazul in care utilizatorul si-a uitat parola, aplicatia dispune de o pagina de recuperare parola. In cadrul acesteia se va introduce adresa de email catre care va fi trimis un link de resetare parola.
+Dupa autentificare, in functie de tipul acestora, utilizatorii se impart in 3 categorii.
+Prima categorie este cea a administratorilor din cadrul cantinei, unde acestea poate crea un meniu pentru ziua curenta alegand pentru fiecare categorie de produse, din lista de produse disponibile.
+De asemenea acestia pot adauga produse noi in cadrul cantinei sau pot modificat anumite informatii despre anumite produse, sau pot adauga personal nou in cadrul cantinei
+
+A doua categorie de utilizatori este cea a personalului din cadrul cantinei. Acestia pot vizualiza meniul din ziua curenta, daca este disponibil, pot selecta sau deselecta anumite produse sau pot genera o anumita comanda manual prin selectarea produselor
+sau automat prin introducerea unui cod de 5 cifre dupa care va fi generata o chitanta care arata asa cum se poate observa in imagine. De asemenea acestia pot vizualiza istoricul vanzarilor si comenzilor dintr-o anumita zi sau pot vizualiza informatii despre anumite produse pe 
+baza unei ferestre de cautare
+
+Ultima categorie de utilizatori este cea a clientilor, a profesirol si a studentilor unde acestia pot vizualiza meniul din ziua curenta, pot selecta anumite produse, dupa pot procesa o anumita comanda in cadrul careia
+va fi generat un cod de 5 cifre care va putea fi folosit ulterior de catre persoanele din cadrul personalului, asa cum am mentionat anterior. De asemenea, pentru aceasta categorie de produse, aplicatia ofera un sistem 
+de recomandare produse pe baza produselor cumparate anterior

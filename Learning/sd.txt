@@ -1,0 +1,100 @@
+Graf - este o pereche ordonata de multimi g = (x, u) - unde x reprezinta multimae muchiilor, iar u reprezinta multimea muchiilor
+Graf - este o multime de noduri, legate intre ele prin muchii
+Graf orientat, graf neorientat
+Incidenta - o muchie este incidenta cu un nod daca aceasta muchie are nodul intr-unul din capete
+Gradul unui nod - numarul de noduri adiacente cu acesta
+Grad interior - ce intra in nod
+Grad exterios - ce intra in nod
+Varf izolat - nod cu gradul 0
+Varf terminal - nod cu gradul 1
+Lant - o secventa de noduri cu prop ca oricare doua noduri adiacente sunt consecutive
+Lant simplu - lant ce contine doar elem distincte
+Lant compus - lant car enu este format doar din muchii distincte
+Ciclu - lant in care primul nod coincide cu ultimul
+Drum - o secventa de varfuri ale unui graf orientat
+Circuit - drum in care primul nod coincide cu ultimul
+
+Graf partial, subgraf, graf regulat
+
+Un arbore este un graf neorientat conex aciclic
+Un arbore binar este un arbore care fiecare nod poate avea maxim 2 descendenti - stang si drept, si fiecare nod in afala de nodul radacina, are un nod parinte
+Graf conex - un graf este conex daca intre oricare doua noduri exista un drum
+
+Un arbore are: radacina, nod intern, nod externm descententi, frati, subarbore
+- adancimea unui arbore, inaltimea unui abore, inaltimea unui nod, etc
+Nodurile fara fii formeaza frontiera arborelui: frunze
+
+Arbore propriu: fiecare nod intern are exact doi fii
+Arbore complet: arbore in care fiecare frunza are aceeasi adancime
+
+Operatii pe arbori: inserare, stergere/eliminare
+
+Parcurgere arbore: preordine (RSD), inordine(SRD), postordine(SDR)
+
+BFS - pargurgere in lungime - se viziteaza varful de start, apoi in ordine toti vecinii nevizitati ai varfului de start, etc
+DFS - pargurere in adancime - se viziteaza varful de start, apoi se viziteaza primul vecin nevizitat al varfului de start, dupa primul vecin iar si tot asa mai departe
+
+Maxheap - eliminare + adaugare
+Maxheap - implementeaza coada cu prioritati
+
+Componenta tare conexa - grafuri neorientate - daca pentru oricare doua noduri din acea componenta exista un drum de la nodul i la nodul j
+Tipuri de graf: -graf partial - se elimina anumite muchii, se pastreaza Nodurile
+    - subgraf - graf ce contine anumite varfuri si muchii din grful de baza
+    - graf complet - oricare doua varfuri sunt adiacente
+    - graf conex - daca intre oricare doua varfuri exista un lant
+
+
+Algoritmi de sortare - bubble sort, algoritm de insertie, algoritmul de selectie naiva, heap-sort,  merge-sort(interclasare), sortare rapida - quick sort, sortare prin numarare, sortare prin distribuire
+
+Algoritmi de cautare - cautare secventiala, cautare binara
+
+Arbori binari de cautare - AVL, Arbori B/2-3-4 arbori, arbori rosu-negru
+Arbori avl - nu exista diferenta mai mare intre nivele de 1
+
+
+
+
+
+Un algoritm este o secventa de instructiuni care rezolva o anumita problema, un algoritm trebuie sa rezolve o problema
+Algoritm: metoda de rezolvare a unei probleme
+Structuri de date: metoda de a reprezenta informatia
+Algoritmi + structuri de date = program
+Algoritmul are ca si proprietati: input, output, terminare, corectitudine
+Un algoritm trebuie sa foloseasca un volum rezonabil de resurse
+
+Limbaj algoritmic: avem nevoie de un limbaj care este simplu de inteles, este expresiv, si abstract
+
+Variabile: nume + adresa + atribut(tip) + instanta
+
+Tipuri de date: elementare -> numere intregi, numere reale, numere boleene, caractere, pointeri
+
+Instructiuni - expresii if, do, while, etc
+
+Complexitate: timp + spatiu
+
+Algoritm eficient: foloseste resurse putine
+
+Notatie asimtotica: atunci cand dimensiunea problemei tinde catre infinit
+
+Rezolvarea recurentelor: 
+    - metoda substitutiei - se ghiceste solutia, se utilizeaza inductia matematica pentru a demonstra constantele si pentru a demonstra ca solutia este corecta
+    - metoda iteratiei - implica ghicirea solutiei
+    - arborele de recursie - permite vizualizarea iterarii unei recurente
+    - T(n) = a + T(n/b) + f(n), a>=1, b>1, f(n) - functie asimptotica pozitiva
+    - sunt 3 cazuri
+
+Liste liniare - elimna, adauga, alklea, etc, lung, poz
+Stiva - push, este vida, top, pop, stivavida
+Cozi - coada vida, este vida, insereaza, elimina, citeste, 
+
+Coada cu prioritati - citeste, elimina, insereaza
+Max-heap - un arbore max-heap are inaltiemea log2n
+Max-heap eliminare - se elimina radacina heapului, se reface proprietatea de heap
+    - inserare
+Colectii de multimi disjuncte 
+Structura union-find: multimea univers este {0,1, ...., n-1}
+    - o submultime este reprezentata de un arbore
+    - o colectie/partitie este o colectie de arbori(padure)
+    - reprezentarea unei paduri se face prin relatia parinte
+
+Limbaj algoritmic: simplu(pentru a fi usor de inteles), expresiv(petru a descrie algoritmi), abastrct(in descrierea algoritmului, accentul cade pe gandirea algoritmica, si nu pe detalii de implementare)

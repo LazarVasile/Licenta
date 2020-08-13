@@ -43,11 +43,11 @@ export class RegisterComponent implements OnInit {
     }
     else if (password.length < 8) {
       this.displayError = "block";
-      this.error = "Parola este prea mică! Trebuie să conțină minim 8 caractere.";
+      this.error = "Parola este prea scurtă! Trebuie să conțină minim 8 caractere.";
     }
     else if (password.length > 16) {
       this.displayError = "block";
-      this.error = "Parola este prea mare! Trebuie să conțină maxim 20 caractere!"
+      this.error = "Parola este prea lungă! Trebuie să conțină maxim 20 caractere!"
     } 
     else {
       var passwordMD5 = Md5.hashStr(password);
@@ -62,13 +62,14 @@ export class RegisterComponent implements OnInit {
           this.message = "Te-ai înregistrat cu succes! Vei fi redirecționat către pagina de autentificare."
           this.displayMessage = "block";
           window.scroll(0, 0);
-
-          this._router.navigate(['/login']);
+          setTimeout(()=>{    //<<<---    using ()=> syntax
+            this._router.navigate(['/login']);
+          }, 3000)
         }
         else if (data["response"] == "false")
         {
           this.displayError = "block";
-          this.error = "Adresa de email deja există!";
+          this.error = "A intervenit o eroare. Incercați din nou!";
         }
       }})
     }

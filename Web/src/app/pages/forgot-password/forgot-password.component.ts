@@ -31,7 +31,7 @@ export class ForgotPasswordComponent implements OnInit {
       .subscribe({ next: data => {
         if (data['response'] == "true"){
           this.displayError = "none";
-          this.message = "A fost trimis un link către pagina de resetare parolă pe adresa dumneavoastră de email!";
+          this.message = "A fost trimis un link de resetare parolă către adresa dumneavoastră de email!";
           this.displayMessage = "block";
           window.scroll(0, 0);
         }

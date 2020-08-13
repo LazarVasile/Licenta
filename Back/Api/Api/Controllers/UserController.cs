@@ -59,7 +59,7 @@ namespace Api.Controllers
             {
                 try
                 {
-                    if (request["email"].Contains("@info.uaic.ro"))
+                    if (request["email"].Contains("@info.uaic.ro") || request["email"].Contains("@gmail.com") || request["email"].Contains("@yahoo.com"))
                     {
                         var user_add = new User();
                         user_add._id = users[users.Count - 1]._id + 1;
@@ -113,7 +113,7 @@ namespace Api.Controllers
                 if (user.type != "normal")
                 {
                     var filter = Builders<User>.Filter.Eq("email", email);
-                    var update = Builders<User>.Update.Combine(Builders<User>.Update.Set("role", "staff"), Builders<User>.Update.Set("type", "admin"));
+                    var update = Builders<User>.Update.Combine(Builders<User>.Update.Set("role", "admin"), Builders<User>.Update.Set("type", "staff"));
                     collection.UpdateOne(filter, update);
                     dict["response"] = "true";
                     return dict;

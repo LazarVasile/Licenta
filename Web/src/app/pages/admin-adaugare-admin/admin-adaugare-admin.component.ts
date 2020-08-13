@@ -41,6 +41,9 @@ export class AdminAdaugareAdminComponent implements OnInit {
           this.displayError = "none";
           this.message = "Admin adăugat cu succes!";
           this.displayMessage = "block";
+          setTimeout(()=>{    //<<<---    using ()=> syntax
+            this._UserService.refresh()     
+          }, 3000)
         }
         else {
           this.displayMessage = "none";

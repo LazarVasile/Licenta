@@ -49,7 +49,9 @@ export class AdminAdaugareProdusComponent implements OnInit {
             this.displayMessage = "block";
             this.message = "Produsul a fost adăugat cu succes!";
             window.scroll(0, 0);
-            this._UserService.refresh();
+            setTimeout(()=>{    //<<<---    using ()=> syntax
+              this._UserService.refresh()     
+            }, 3000)
           }
           else {
             this.displayMessage = "none";

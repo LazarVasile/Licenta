@@ -30,15 +30,15 @@ export class ResetPasswordComponent implements OnInit {
   resetPassword(password, confirmPassword){
     if(password != confirmPassword){
       this.displayError = "block";
-      this.error = "Password and confirm password doesn't match!";
+      this.error = "Parolele nu se potrivesc!";
     }
     else if(password.length > 16) {
       this.displayError = "block";
-      this.error = "Password too long";
+      this.error = "Parolă prea scurtă.";
     }
     else if(password.length < 8) {
       this.displayError = "block";
-      this.error = "Password too short"; 
+      this.error = "Parolă prea lungă."; 
     }
     else {
       var passwordMD5 = Md5.hashStr(password);
@@ -48,10 +48,12 @@ export class ResetPasswordComponent implements OnInit {
       .subscribe( data => { 
         if(data["response"] == "true"){
           this.displayError = "none";
-          this.message = "Te-ai înregistrat cu succes! Vei fi redirecționat către pagina de autentificare."
+          this.message = "Parola a fost modificată cu succes! Vei fi redirecționat către pagina de autentificare."
           this.displayMessage = "block";
           window.scroll(0, 0);
-          this._router.navigate(['/login']);
+          setTimeout(()=>{    //<<<---    using ()=> syntax
+            this._router.navigate(['/login']);
+          }, 3000)
         }
         else {
           this.displayError = "block";
